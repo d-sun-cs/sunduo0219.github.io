@@ -211,3 +211,19 @@ cinema: # 追剧设置
 aplayer:
   meting: true
   asset_inject: false
+
+# Markdown Math
+markdown:
+  plugins:
+    - plugin:
+      name: '@neilsustc/markdown-it-katex'
+      options:
+        strict: false
+# kramed:
+#   gfm: true
+#   pedantic: false
+#   sanitize: false
+#   tables: true
+#   breaks: true
+#   smartLists: true
+#   smartypants: true

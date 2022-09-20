@@ -2,7 +2,7 @@
 title: 用抽象和具体的思维总结计算机知识
 tags:
   - 计算机
-  - 抽象和具体
+  - 抽象与具体
 category: 学习资源
 sticky: 1
 cover: /bgs/bg2.jpg

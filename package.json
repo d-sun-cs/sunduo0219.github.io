@@ -12,6 +12,7 @@
     "version": "6.3.0"
   },
   "dependencies": {
+    "@neilsustc/markdown-it-katex": "^1.0.0",
     "hexo": "^6.3.0",
     "hexo-abbrlink": "^2.2.1",
     "hexo-bilibili-bangumi": "^1.8.2",
@@ -24,8 +25,9 @@
     "hexo-generator-sitemap": "^3.0.1",
     "hexo-generator-tag": "^1.0.0",
     "hexo-helper-live2d": "^3.1.1",
+    "hexo-math": "^4.0.0",
     "hexo-renderer-ejs": "^2.0.0",
-    "hexo-renderer-marked": "^5.0.0",
+    "hexo-renderer-markdown-it": "^6.1.0",
     "hexo-renderer-pug": "^3.0.0",
     "hexo-renderer-stylus": "^2.1.0",
     "hexo-server": "^3.0.0",

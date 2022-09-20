@@ -7,7 +7,7 @@ menu:
   归档: /archives/ || fas fa-archive
   标签: /tags/ || fas fa-tags
   分类: /categories/ || fas fa-folder-open
-  链接||fas fa-list:
+  链接 || fas fa-list:
 #    Music: /music/ || fas fa-music
 #    Movie: /movies/ || fas fa-video
     友情链接: /link/ || fas fa-link
@@ -73,8 +73,8 @@ mathjax:
 
 # KaTeX
 katex:
-  enable: false
-  per_page: false
+  enable: true
+  per_page: true
   hide_scrollbar: true
 
 # Image (圖片設置)
@@ -842,7 +842,7 @@ instantpage: true
 # https://github.com/vinta/pangu.js
 # Insert a space between Chinese character and English character (中英文之間添加空格)
 pangu:
-  enable: true
+  enable: false
   field: site # site/post
 
 # Lazyload (圖片懶加載)
