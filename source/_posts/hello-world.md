@@ -41,3 +41,16 @@ $ hexo deploy
 ```
 
 More info: [Deployment](https://hexo.io/docs/one-command-deployment.html)
+
+
+
+```
+认识事物的基本方法：抽象与具体
+解决问题的基本方法：分而治之
+提升自我的基本方法：反思（思维局限、盲目自信...）
+平衡心态的基本方法：找到合适的度
+保持乐观的基本方法：承认过去，面向未来
+```
+
+
+
