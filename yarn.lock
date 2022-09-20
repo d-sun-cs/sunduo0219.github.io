@@ -2316,6 +2316,11 @@
     "prismjs" "^1.17.1"
     "strip-indent" "^3.0.0"
 
+"hexo-wordcount@^6.0.1":
+  "integrity" "sha512-tbo2P9xRWEKQmRf7+XuPjx9It1MnaE26nA+EEb2DN39gK1x+26W7Nm4Iyp4AugQjBWYYDx7OLn4gp1WFxQpQew=="
+  "resolved" "https://registry.npmjs.org/hexo-wordcount/-/hexo-wordcount-6.0.1.tgz"
+  "version" "6.0.1"
+
 "hexo@^3.0.0":
   "integrity" "sha512-uga6MsxGlD0AeafiObbFkQVWlUO+wWTb/IJVPI3fFpmAJu0PBD//Ek0qVOxHjlzdvFGeW0bYWYqXgDbR7suJng=="
   "resolved" "https://registry.npmjs.org/hexo/-/hexo-3.9.0.tgz"

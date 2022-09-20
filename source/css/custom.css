@@ -187,7 +187,7 @@ div#category {
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #425aef;
+  background-color: #57b2d3;
   border-radius: 2em;
 }
 
@@ -252,6 +252,7 @@ a,
 button:not(:disabled) {
   cursor: url('/img/x2.cur'), auto !important;
 }
+
 /* md网站下划线 */
 #article-container a:hover {
   text-decoration: none !important;
@@ -380,3 +381,5 @@ button:not(:disabled) {
 #article-container figure.highlight {
   border-radius: 10px;
 }
+
+

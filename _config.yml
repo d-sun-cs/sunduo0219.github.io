@@ -103,8 +103,8 @@ theme: butterfly
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
   type: git
-  # repo: https://github.com/SunDocker/SunDocker.github.io.git
-  repo: https://gitee.com/sundocker/sundocker.git
+  repo: https://github.com/SunDocker/SunDocker.github.io.git
+  # repo: https://gitee.com/sundocker/sundocker.git
   branch: main
 # - type: baidu_url_submitter  # 百度主动推送
 
@@ -117,7 +117,9 @@ abbrlink:
 search:
   path: search.xml
   field: all
-  content: true
+#  content: true
+  format: html
+  limit: 10000
 
 # Live2D
 ## https://github.com/EYHN/hexo-helper-live2d
