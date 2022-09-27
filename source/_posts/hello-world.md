@@ -54,3 +54,8 @@ More info: [Deployment](https://hexo.io/docs/one-command-deployment.html)
 
 
 
+工科学习思维：
+
+- <u>深入理解</u>**是什么、有什么用、怎么用**
+- 在有必要时<u>简单了解</u>**为什么**
+
