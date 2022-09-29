@@ -509,6 +509,8 @@ default:
 
 ## 3 数组、切片、map
 
+### 3.1 数组
+
 *数组的声明和定义*：
 
 - 声明数组，元素为默认值：`var arr [len]type`
@@ -558,9 +560,7 @@ default:
   >
   > > 注意，如果是二维数组，第二个维度的长度不能省略
 
----
-
-*切片概述*：
+### 3.2 切片
 
 - 切片是有**相同类型**元素的**可变长**序列
 - 引用数据类型
@@ -589,6 +589,10 @@ default:
     > 前面字符串的部分讲过
 
   - :star:`make([]T, size, cap)`函数创建切片
+  
+    - `size`：元素个数
+    - `cap`：底层数组容量
+  
 
 *访问切片*：
 
@@ -632,17 +636,19 @@ default:
   - `sort.Sort(sort.Reverse(sort.Float64Slice(floatList)))`
   - `sort.Sort(sort.Reverse(sort.StringSlice(stringList)))`
 
----
+### 3.3 map
+
+`map `是一种无序的基于`key-value`的数据结构，Go语言中的`map`是**引用类型**
 
 *`map`创建*：
 
 - `make(map[keyType]valueType)`
 
-  > 后面可以再跟一个参数代表**长度**
+  > 后面可以再跟一个参数代表**长度**；`map`默认值为`nil`
 
 - `var mp = map[keyType]valueType{key1:value1, key2:value2, key3:value3,}`
 
-*`map`访问*：
+*`map`访问：*
 
 - 格式化输出：`%v`
 
@@ -657,23 +663,109 @@ default:
 
 - 删除键值对：`delete(mp, key)`
 
-  
+
+*`map`与切片：*
+
+- 元素为`map`类型的切片：
+  - `make([]map[keyType]valueType, size, cap)`
+- 值为切片类型的`map`
+  - `make(map[keyType][]valueType)`
+
+
+
+## 4 函数、指针、结构体
+
+### 4.1 函数
+
+*定义函数*：
+
+```go
+func 函数名(参数列表)(返回值列表) {
+    函数体
+}
+```
+
+- 参数列表：`argName argType, argName argType, ...`
+
+  - 如果所有参数的类型都相同：`arg1, arg2, arg3 sameType`
+
+  - 如果是**可变参数**，则必须是参数列表的最后一个，且只能有一个：`variableArg ...type`
+
+    > 本质是用一个**切片**接收
+
+- 返回值列表：`retType, retType, ...`
+
+  - 如果只有一个返回值可以不要**括号**
+
+  - 返回值命名：`retName retType, retName retType`
+
+    > 相同类型也可以`ret1, ret2, ret3 sameType`
+
+    - 相当于已经**声明**好了，可以直接在函数体内使用
+    - 返回的时候一行`return`就够了，其他的不用加
+    - 命名与不命名不要混用
+
+*变量/常量的作用域：*
+
+- 全局变量：全局变量是定义在**函数外部**的变量，它在**程序整个运行周期内**都有效。在函数中可以访问到全局变量
+- 局部变量：局部变量是**函数内部**定义的变量， 函数内定义的变量无法在该函数外使用
+  - 如果局部变量和全局变量重名，**优先访问局部变量**
+  - **语句块中定义的变量**也只在该语句块中生效（块作用域）
+
+*自定义类型与变量：*
+
+- 自定义函数类型：`type 函数类型名 func(参数列表)(返回值列表)`
+
+- 自定义函数类型变量的使用：
+
+  ```go
+  type calculation func(int, int) int
+  func add(x, y int) int {
+      return x + y
+  }
+  func sub(x, y int) int {
+      return x - y
+  }
+  func main() {
+      var c calculation // 声明一个calculation 类型的变量c
+      c = add // 把add 赋值给c
+      fmt.Printf("type of c:%T\n", c) // type of c:main.calculation
+      f := sub // 将函数add 赋值给变量f1
+      fmt.Printf("type of f:%T\n", f) // type of f:func(int, int) int
+  }
+  ```
+
+  - 注意，**自定义**函数类型和类型**自动推导**的函数类型是不完全一样的
+
+- 自定义数据类型：`type 数据类型名 基本数据类型名`
+
+*函数作为参数和返回值：*
 
 
 
 
 
-## 4 函数与结构体
+### 4.2 指针
 
 
+
+### 4.3 结构体
 
 
 
 ## 5 包与接口
 
+### 5.1 包
+
+
+
+### 5.2 接口
+
 
 
 ## 6 goroutine
+
+
 
 
 
