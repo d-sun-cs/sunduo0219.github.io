@@ -4,6 +4,7 @@ category: 学习资源
 tags:
   - 计算机
   - go
+  - golang
 abbrlink: af1c25a3
 date: 2022-09-28 09:45:40
 ---
@@ -31,6 +32,8 @@ go语言项目：
 
   > 不需要非得把项目放到GOPATH指定目录下，Go1.13以后可以彻底不要GOPATH了
 
+
+
 ### 1.2 基础代码编写
 
 ```go
@@ -52,7 +55,7 @@ func main(){ // 与包同名，为入口函数
 - `fmt.Println("xxx", "yyy", ...)`：输出若干个字符串，**中间用一个空格连接**，并在最后**换行**
 - `fmt.Print("xxx", "yyy", ...)`：**连接**并输出若干个字符串
 - `fmt.Printf("format string", format, ...)`：格式化输出
-  - `%v`：自动推导类型后的**数据**
+  - `%v`：**数据值**
   - `%d`：整型**数据**
   - `%T`：输出**数据类型**
 
@@ -68,12 +71,8 @@ func main(){ // 与包同名，为入口函数
 
     - 可以一行**声明或定义**<u>同类型</u>的多个变量：`var id1, id2 type = exp1, exp2`
 
-      > 如果声明后不初始化，值为空
-      >
-      > > 打印出来什么都不显示
-
     - 一行**定义**类型可以不一致的多个变量：`var id1, id2 = exp1, exp2`
-
+    
   - 批量**声明或定义**<u>类型可以不一致</u>的变量
 
     ```go
@@ -84,9 +83,9 @@ func main(){ // 与包同名，为入口函数
         id1, id2 类型
     )
     ```
-
+  
     > `类型`可以省略，自动推导，但声明时如果不赋值，则**必须指定类型**
-
+  
 - :star:`变量名1, 变量名2, 变量名3 := 表达式1, 表达式2, 表达式3`
 
   > 这叫作“短变量声明法”；
@@ -149,6 +148,8 @@ func main(){ // 与包同名，为入口函数
 
 - 单行注释：`//`
 - 多行注释：`/* */`
+
+
 
 ## 2 基础语法
 
@@ -287,7 +288,7 @@ func main(){ // 与包同名，为入口函数
 - 遍历字符串：
   - `for i`：以`byte`类型遍历字符串，字符串可以直接用下标索引访问`str[i]`，但不能修改（can not assign）
   - `for range`：以`rune`类型遍历字符串
-- 修改字符串：转换成数组，用下标索引的方式修改，再用`string(arr)`转换回来
+- 修改字符串：转换成切片，用下标索引的方式修改，再用`string(arr)`转换回来
   - 只有ASCII码表中的字符的字符串：转换为`[]byte(str)`
   - 含有ASCII码表以外字符的字符串：转换为`[]rune(str)`
 
@@ -324,6 +325,8 @@ func main(){ // 与包同名，为入口函数
       > 转换失败返回0；`err`代表转换失败，可以用`_`忽略
 
     - `floatVal, err := strconv.ParseFloat(s string, bitSize int)`
+
+
 
 ### 2.2 运算符
 
@@ -383,6 +386,8 @@ func main(){ // 与包同名，为入口函数
 |   <<   |              左移n位               |
 |   >>   |            算术右移n位             |
 
+
+
 ### 2.3 流程控制
 
 *`if`条件判断*：
@@ -404,6 +409,8 @@ if exp1 {
   >也就是说，可以在`if`表达式之前添加一个赋值语句，再根据变量值进行判断；注意必须是`:=`赋值，`var`和其他语句都不行
   >
   >在这种情况下，`stmt`会位于**`if…else…`内部的作用域**
+
+---
 
 *`for`循环*：
 
@@ -432,6 +439,8 @@ for [:=assginStmt]; exp; eachEndStmt {
   }
   ```
 
+---
+
 *`for range`键值循环：*
 
 ```go
@@ -444,6 +453,8 @@ for key, val := range enumerate {
 - `map`返回**键和值**
 - 通道（`channel`）只返回**通道内的值**
 
+---
+
 *`switch case`*：
 
 ```go
@@ -451,7 +462,7 @@ switch [:=assginStmt; ]var_ {
 case val1, val2:
     stmt
     [break]
-case val3:
+case val3, val33, val333:
     stmt
 case val4:
     stmt
@@ -461,16 +472,210 @@ default:
 }
 ```
 
-- Go语言中每个`case`语句中可以不写`break`，不会出现穿透的现象，如果想要穿透，可以在一个`case`的末尾加上一行`fallthrough`
-- 
+- Go语言中每个`case`语句中可以不写`break`，不会出现穿透的现象。如果想要穿透，可以在一个`case`的末尾加上一行`fallthrough`，穿透一层
+
+- `case`分支上还可以使用表达式，表达式和值可以混用？？：
+
+  ```go
+  switch {
+  case exp1:
+      stmt
+  case exp2:
+      stmt
+  default:
+      stmt
+  }
+  ```
+
+  - 此时`switch`后不需要接标识符
+
+---
+
+*`break continue goto`*：
+
+- `break`：
+
+  - 用于循环语句中**跳出<u>当前</u>整个循环**
+
+  - 在**多重循环**中，可以用标号`label`标出想`break`的循环：`break label`
+
+    > 在语句的前一行左顶格加上一行`labelName:`即可用给该语句打上标签
+
+- `continue`：只在`for`循环中使用，结束本次循环，开始下一次循环，也可以`continue label`
+
+- `goto`：语句通过`label`进行代码间的**无条件跳转**
 
 
 
-## 3 数组与切片
+## 3 数组、切片、map
+
+*数组的声明和定义*：
+
+- 声明数组，元素为默认值：`var arr [len]type`
+
+  - `type`：数组中元素**数据类型**
+
+  - `len`：数组**长度**
+
+    > 长度不同，类型也不同；
+
+- 定义数组：
+
+  - `var arr = [len][type]{elem1, elem2, others}`
+
+  - `arr := [len][type]{elem1, elem2, others}`
+
+  - `arr := [len][type]{idx1: elem1, idx2: elem2, idx3: elem3, others}`
+
+    > 指定索引，中间未指明的是默认值
+
+  > 数组长度可以自动推断：`var arr = [...]type{elems}`，这个`...`就是**三个点的语法**
+
+*访问数组*：
+
+- 格式化输出：`%v`
+
+- 获取或修改数组元素：`arr[idx]`
+
+- 获得数组长度：`len(arr)`
+
+- 遍历：
+
+  - `for i := 0; i < len(arr); i++ {...}`
+  - `for idx, val := range arr {...}`
+
+- **数组名不是引用**，数组互相赋值时会直接复制一个新数组
+
+  > Go中**基本数据类型和<u>数组</u>**都是值类型
+
+*多维数组*：
+
+- `var arr [len1][len2]type`
+
+- `var arr = [len1][len2]type{{...},{...},...}`
+
+  > 长度自动推导：`var arr = [...][len2]type{{...},{...},...}`
+  >
+  > > 注意，如果是二维数组，第二个维度的长度不能省略
+
+---
+
+*切片概述*：
+
+- 切片是有**相同类型**元素的**可变长**序列
+- 引用数据类型
+- 切片的本质是对底层数组的封装，包括底层数组的指针、切片的长度、切片的容量
+
+*切片声明与定义*：
+
+- 声明：`var slc []type`
+
+  > 切片默认值为`nil`
+
+- 定义：
+
+  - `var slc = []type{elems}`
+
+  - `var slc = []type{idx1: elem1, idx2: elem2, idx3: elem3, others}`
+
+  - :star:基于数组定义切片：`arr[startIdx:endIdxExclude]`
+
+    > `startIdx`、`startIdx:endIdxExclude`可以省略，代表取到头
+
+  - 基于切片定义切片：类似
+
+  - 基于字符串定义切片：`[]byte(str)`和`[]rune(str)`
+
+    > 前面字符串的部分讲过
+
+  - :star:`make([]T, size, cap)`函数创建切片
+
+*访问切片*：
+
+- 输出、访问元素、遍历与数组类似
+- 切片长度/元素个数：`len(slc)`
+- 切片容量/**<u>切片第一个</u>元素**到**底层数组元素<u>末尾</u>**的元素个数：`cap(slc)`
+
+*切片扩容*：
+
+> Go中不能通过下标给切片扩容
+
+- 追加元素：`append(slc, newElems)`
+
+- 合并切片：`append(slc, anotherSlc...)`
+
+  > 这个`...`是三个点的语法
+
+- 切片扩容策略：有较为复杂的策略
+
+- 切片删除元素：Go中没有专门删除切片元素的api，可以用`append`自己构造
+
+*切片复制*：
+
+- `copy(dst []Type, src []Type)`
+
+---
+
+***`sort`包**数组切片排序*
+
+- 升序排序
+
+  - `sort.Ints(arrOrSlc)`
+  - `sort.Float64s(arrOrSlc)`
+  - `sort.Strings(arrOrSlc)`
+
+- 降序排序
+
+  > 使用`sort.Reverse(arrOrSlc)` 来调换`slice.Interface.Less `,也就是比较函数
+
+  - `sort.Sort(sort.Reverse(sort.IntSlice(intList)))`
+  - `sort.Sort(sort.Reverse(sort.Float64Slice(floatList)))`
+  - `sort.Sort(sort.Reverse(sort.StringSlice(stringList)))`
+
+---
+
+*`map`创建*：
+
+- `make(map[keyType]valueType)`
+
+  > 后面可以再跟一个参数代表**长度**
+
+- `var mp = map[keyType]valueType{key1:value1, key2:value2, key3:value3,}`
+
+*`map`访问*：
+
+- 格式化输出：`%v`
+
+- 获取值、添加/修改键值对：`mp[key]`、`mp[key] = value`
+
+- 循环遍历：`for key, value := range mp {...}`
+
+- 查找键是否存在并尝试获取值：`value, isExist := mp[key]`
+
+  - 如果不存在，`value`为默认值，`isExist`为`false`
+  - 如果存在，`value`为`key`对应值，`isExist`为`true`
+
+- 删除键值对：`delete(mp, key)`
+
+  
 
 
 
-## 4 
+
+
+## 4 函数与结构体
+
+
+
+
+
+## 5 包与接口
+
+
+
+## 6 goroutine
+
+
 
 
 
