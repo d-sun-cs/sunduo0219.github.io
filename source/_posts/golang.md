@@ -1321,11 +1321,12 @@ type interface3 interface {
 
 - 声明管道：`var chVar chan typeName`
 
-  >   这个声明不是必要的，直接按下面的方法创建也可以
+  >   这个声明不是必要的，直接按下面的方法创建也可以；
+  >
+  >   默认是双向的
 
 - 创建管道：`chVar = make(chan typeName, cap)`
 
-  >   一般为全局变量
 
 ---
 
@@ -1336,7 +1337,12 @@ type interface3 interface {
     -   `<- chVar`：接收值后忽略
 -   关闭管道：`close(chVar)`
     -   管道是可以被**垃圾回收机制**回收的
-    -   只有在通知接收方所有的数据都发送完毕的时候才有必要`close`关闭管道
+    -   在通知接收方所有的数据都发送完毕的时候可以`close`关闭管道
+    -   当管道被关闭时，再往该管道发送值会引发`panic`
+-   循环从管道取值：`for val:= range chVar {}`
+    -   注意管道没有key，只有value
+    -   这种用法下**<u>必须关闭管道</u>**，不然会出现阻塞问题
+
 
 ---
 
@@ -1346,10 +1352,61 @@ type interface3 interface {
 >
 >   有缓冲管道：创建管道的时候指定了容量
 
--   写管道阻塞：管道容量已满，依然写入数据
--   读管道阻塞：管道已空，依然读出数据
+-   写管道阻塞：管道容量已满且不再被读出时，依然写入数据
+-   读管道阻塞：管道已空且不再被写入时，依然读出数据
 
 >   如果管道阻塞发生在主线程中，则会引发`deadlock`错误
+
+---
+
+*goroutine结合channel：*素数统计的例子
+
+---
+
+*单向管道：*
+
+- 定义：
+
+  - 只写管道：`chVar := make(chan<- typeName, cap)`
+  - 只读管道：`chVar := make(<-chan typeName, cap)`
+
+  > 当然也有类似的`var`语法，这里不列出了
+
+- 应用：限制协程**函数的参数**，表示该协程对该管道只读或只写
+
+  - `func fn(ch chan<- typeName)`
+  - `func fn(ch <-chan typeName)`
+
+### 6.3 select多路复用
+
+`select`主要用于在一个函数体中**并发读取多个管道**，而不是串行地读完一个管道再读另一个
+
+```go
+for {
+    select{
+        case v := <-ch1:
+        	stmt
+        case v := <-ch2:
+        	stmt
+        case v := <-ch3:
+        	stmt
+        default:
+        	stmt
+        	break
+    }
+}
+```
+
+- 注意退出循环
+- 使用多路复用时不需要`close`，如果非要`close`反而会有问题
+
+### 6.4 goroutine错误处理
+
+默认情况下，一个goroutine出错了，其他goroutine都会跟着结束
+
+可以在协程函数中使用`defer recover`处理错误`panic`
+
+
 
 ## 7 反射、文件
 
