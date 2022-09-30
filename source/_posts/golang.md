@@ -32,7 +32,11 @@ go语言项目：
 
   > 不需要非得把项目放到GOPATH指定目录下，Go1.13以后可以彻底不要GOPATH了
 
-
+> 修改GOPATH：
+>
+> 1. 新建系统环境变量GOPATH，设置为指定的路径
+> 2. 删除用户变量中的GOPATH和PATH中的%USERPROFILE%\go\bin
+> 3. 确保系统环境变量中有配置*\go\bin
 
 ### 1.2 基础代码编写
 
