@@ -1469,6 +1469,329 @@ for {
 
 
 
+## 8 Go网络编程
+
+> https://www.mszlu.com/go/base/12/12.html
+
+### 8.1 socket编程
+
+*TCP编程：*
+
+- 服务端：
+
+  1. 监听端口：`listen, err := net.Listen("tcp", "127.0.0.1:20000")`
+
+  2. 接收客户端请求**建立连接**：`for { conn, err = listen.Accept() }`
+
+  3. 创建**goroutine处理连接**：`for { go process(conn) }`
+
+     1. 读取数据：
+
+        `reader := bufio.NewReader(conn)`
+
+        `var buf [128]byte`
+
+        `n, err := reader.Read(buf[:])`
+
+     2. 发送数据：`conn.Write([]byte(recvStr))`
+
+     3. 关闭连接：`defer conn.Close() // 关闭连接`
+
+  4. 结束监听：`defer listen.Close()`
+
+  ```go
+  func main() {
+  	listen, err := net.Listen("tcp", "127.0.0.1:20000")
+  	if err != nil {
+  		fmt.Println("listen failed, err:", err)
+  		return
+  	}
+  	for {
+  		conn, err := listen.Accept() // 建立连接
+  		if err != nil {
+  			fmt.Println("accept failed, err:", err)
+  			continue
+  		}
+  		go process(conn) // 启动一个goroutine处理连接
+  	}
+  }
+  // 处理函数
+  func process(conn net.Conn) {
+  	defer conn.Close() // 关闭连接
+  	for {
+  		reader := bufio.NewReader(conn)
+  		var buf [128]byte
+  		n, err := reader.Read(buf[:]) // 读取数据
+  		if err != nil {
+  			fmt.Println("read from client failed, err:", err)
+  			break
+  		}
+  		recvStr := string(buf[:n])
+  		fmt.Println("收到client端发来的数据：", recvStr)
+  		conn.Write([]byte(recvStr)) // 发送数据
+  	}
+  }
+  ```
+
+- 客户端：
+
+  1. 建立与服务端的连接：`conn, err := net.Dial("tcp", "127.0.0.1:20000")`
+
+  2. 进行数据收发：
+
+     `n, err = conn.Write([]byte(inputInfo))`
+
+     `n, err := conn.Read(buf[:])`
+
+  3. 关闭连接：`defer conn.Close()`
+
+  ```go
+  // 客户端
+  func main() {
+      conn, err := net.Dial("tcp", "127.0.0.1:20000")
+      if err != nil {
+          fmt.Println("err :", err)
+          return
+      }
+      defer conn.Close() // 关闭连接
+      inputReader := bufio.NewReader(os.Stdin)
+      for {
+          input, _ := inputReader.ReadString('\n') // 读取用户输入
+          inputInfo := strings.Trim(input, "\r\n")
+          if strings.ToUpper(inputInfo) == "Q" { // 如果输入q就退出
+              return
+          }
+          _, err = conn.Write([]byte(inputInfo)) // 发送数据
+          if err != nil {
+              return
+          }
+          buf := [512]byte{}
+          n, err := conn.Read(buf[:])
+          if err != nil {
+              fmt.Println("recv failed, err:", err)
+              return
+          }
+          fmt.Println(string(buf[:n]))
+      }
+  }
+  ```
+
+---
+
+*UDP编程：*
+
+- 服务端：
+
+  1. 监听端口：`listen, err := net.ListenUDP("udp", &net.UDPAddr{IP: new.IPv4(0, 0, 0, 0), Port: 3000,})`
+  2. 接收数据：`n, addr, err := listen.ReadFromUDP(data[:])`
+  3. 发送数据：`n, err = listen.WriteToUDP(data[:n], addr)`
+  4. 结束监听：`defer listen.Close()`
+
+  ```go
+  // UDP server端
+  func main() {
+      listen, err := net.ListenUDP("udp", &net.UDPAddr{
+          IP: net.IPv4(0, 0, 0, 0),
+          Port: 30000,
+      })
+      if err != nil {
+          fmt.Println("listen failed, err:", err)
+          return
+      }
+      defer listen.Close()
+      for {
+          var data [1024]byte
+          n, addr, err := listen.ReadFromUDP(data[:]) // 接收数据
+          if err != nil {
+              fmt.Println("read udp failed, err:", err)
+              continue
+          }
+          fmt.Printf("data:%v addr:%v count:%v\n", string(data[:n]), addr, n)
+          _, err = listen.WriteToUDP(data[:n], addr) // 发送数据
+          if err != nil {
+              fmt.Println("write to udp failed, err:", err)
+              continue
+          }
+      }
+  }
+  ```
+
+- 客户端
+
+  1. 与服务端建立连接：`socket, err := net.DialUDP("udp", nil, &net.UDPAddr{IP: net.IPv4(0, 0, 0, 0), Port: 30000,})`
+
+  2. 收发数据：
+
+     ` n, err = socket.Write(sendData)`
+
+     `n, remoteAddr, err := socket.ReadFromUDP(data)`
+
+  ```go
+  // UDP 客户端
+  func main() {
+      socket, err := net.DialUDP("udp", nil, &net.UDPAddr{
+          IP: net.IPv4(0, 0, 0, 0),
+          Port: 30000,
+      })
+      if err != nil {
+          fmt.Println("连接服务端失败，err:", err)
+          return
+      }
+      defer socket.Close()
+      sendData := []byte("Hello server")
+      _, err = socket.Write(sendData) // 发送数据
+      if err != nil {
+          fmt.Println("发送数据失败，err:", err)
+          return
+      }
+      data := make([]byte, 4096)
+      n, remoteAddr, err := socket.ReadFromUDP(data) // 接收数据
+      if err != nil {
+          fmt.Println("接收数据失败，err:", err)
+          return
+      }
+      fmt.Printf("recv:%v addr:%v count:%v\n", string(data[:n]), remoteAddr, n)
+  }
+  ```
+
+### 8.2 HTTP编程
+
+*HTTP协议工作流程：*
+
+1. 客户机通过TCP/IP协议建立到服务器的**TCP连接**
+2. 客户端向服务器发送**HTTP协议请求包**，请求服务器里的资源
+3. 服务器向客户机发送**HTTP协议应答包**
+4. 客户机与服务器断开
+
+---
+
+*HTTP服务端：*
+
+1. 定义处理请求的逻辑
+
+   1. handler函数：`func myHandler(w http.ResponseWriter, r *http.Request) {...}`
+
+   2. 注册handler：`http.HandleFunc("/path", myHandlerFunc)`
+
+      - 也可以调用`http.Handle("/path", &myHandler)`，但这需要传入实现了`http.Handler`接口的结构体变量，用`handlerFunc`就可以自动通过**普通函数**转换成处理器，当然这个函数的**参数列表**是有要求的
+
+        > 见下面的例子：`w http.ResponseWriter, r *http.Request`
+
+2. 创建服务器并监听端口：
+
+   - 方式一：`http.ListenAndServe("127.0.0.1:8000", nil)`
+
+     - `nil`表示使用**默认的多路复用服务器**
+
+   - 方式二：实例化`http.Server`结构体，并调用`s.ListenAndServe()`方法
+
+     ```go
+     type Server struct {
+     	// in the form "host:port". If empty, ":http" (port 80) is used.
+     	Addr string
+     	    
+     	// handler to invoke, http.DefaultServeMux if nil
+     	Handler Handler 
+     
+     	TLSConfig *tls.Config
+     
+     	// ReadTimeout is the maximum duration for reading the entire
+     	// request, including the body. A zero or negative value means
+     	// there will be no timeout.
+     	ReadTimeout time.Duration
+     
+     	ReadHeaderTimeout time.Duration
+     
+     	// WriteTimeout is the maximum duration before timing out
+     	// writes of the response. 
+     	// A zero or negative value means there will be no timeout.
+     	WriteTimeout time.Duration
+     
+     	IdleTimeout time.Duration
+     
+     	// MaxHeaderBytes controls the maximum number of bytes the
+     	// server will read parsing the request header's keys and
+     	// values, including the request line. It does not limit the
+     	// size of the request body.
+     	// If zero, DefaultMaxHeaderBytes is used.
+     	MaxHeaderBytes int
+     
+     	TLSNextProto map[string]func(*Server, *tls.Conn, Handler)
+     
+     	ConnState func(net.Conn, ConnState)
+     
+     	// If nil, logging is done via the log package's standard logger.
+     	ErrorLog *log.Logger
+     
+     	BaseContext func(net.Listener) context.Context
+     
+     	ConnContext func(ctx context.Context, c net.Conn) context.Context
+     }
+     ```
+
+   - 方式三：
+
+     `mux := http.NewServerMux()`
+
+     `mux.HandleFunc("/path", handler)`
+
+     `http.ListenAndServe("ip:port", mux)`
+
+```go
+func main() {
+    //http://127.0.0.1:8000/go
+    // 单独写回调函数
+    http.HandleFunc("/go", myHandler)
+    // addr：监听的地址
+    // handler：回调函数
+    http.ListenAndServe("127.0.0.1:8000", nil)
+}
+// handler函数
+func myHandler(w http.ResponseWriter, r *http.Request) {
+    fmt.Println(r.RemoteAddr, "连接成功")
+    // 请求方式：GET POST DELETE PUT UPDATE
+    fmt.Println("method:", r.Method)
+    // /go
+    fmt.Println("url:", r.URL.Path)
+    fmt.Println("header:", r.Header)
+    fmt.Println("body:", r.Body)
+    // 回复
+    w.Write([]byte("你好，码神之路"))
+}
+```
+
+---
+
+*HTTP客户端：*
+
+- 发起请求
+- 接收数据
+- 关闭
+
+```go
+func main() {
+    resp, _ := http.Get("http://127.0.0.1:8000/go")
+    defer resp.Body.Close()
+    // 200 OK
+    fmt.Println(resp.Status)
+    fmt.Println(resp.Header)
+    buf := make([]byte, 1024)
+    for {
+        // 接收服务端信息
+        n, err := resp.Body.Read(buf)
+        if err != nil && err != io.EOF {
+            fmt.Println(err)
+            return
+        } else {
+            fmt.Println("读取完毕")
+            res := string(buf[:n])
+            fmt.Println(res)
+            break
+        }
+    }
+}
+```
+
 
 
 
