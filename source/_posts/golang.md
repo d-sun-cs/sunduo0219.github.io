@@ -1377,6 +1377,8 @@ type interface3 interface {
   - `func fn(ch chan<- typeName)`
   - `func fn(ch <-chan typeName)`
 
+
+
 ### 6.3 select多路复用
 
 `select`主要用于在一个函数体中**并发读取多个管道**，而不是串行地读完一个管道再读另一个
@@ -1400,11 +1402,42 @@ for {
 - 注意退出循环
 - 使用多路复用时不需要`close`，如果非要`close`反而会有问题
 
+
+
 ### 6.4 goroutine错误处理
 
 默认情况下，一个goroutine出错了，其他goroutine都会跟着结束
 
 可以在协程函数中使用`defer recover`处理错误`panic`
+
+
+
+### 6.5 并发安全与锁
+
+> 通过`go build -race main.go`编译然后运行`main.exe`可以知道哪里存在竞争
+
+*互斥锁：*
+
+- 应用
+  - `var mutex sync.Mutex`
+  - `mutex.Lock()`
+  - `mutex.Unlock()`
+- 使用互斥锁能够保证同一时间有且只有一个goroutine进入临界区，其他的goroutine则在等待锁；多个goroutine同时等待一个锁时，**唤醒的策略是随机的**。
+- 虽然使用互斥锁能解决**资源争夺问题**，但降低了程序的并发性能，尤其是很多协程只是“**读**”，少数协程才“**写**”时，效率会降低很多
+
+---
+
+*读写锁：*
+
+- 读写锁可以让多个读操作并发，同时读取，但是对于写操作与其他操作是完全互斥的
+- 应用
+  - `var rwMutex sync.RWMutex`
+  - 写锁定：`rwMutex.Lock()`
+  - 写解锁：`rwMutex.Unlock()`
+  - 读锁定：`rmMutex.RLock()`
+  - 读解锁：`rmMutex.RUnLock()`
+
+
 
 
 
