@@ -56,11 +56,13 @@ func main() {
 
 在gin中我们要实现热加载可以借助**第三方工具**
 
--   `go get github.com/pilu/fresh`
+- ` go install github.com/pilu/fresh@latest`
 
-    `fresh`
+  `go get github.com/pilu/fresh`
 
-    >   https://github.com/gravityblast/fresh
+  `fresh`
+
+  >   https://github.com/gravityblast/fresh
 
 -   `go get -u github.com/codegangsta/gin`
 
@@ -485,7 +487,7 @@ func AdminRoutesInit(router *gin.Engine) {
     >
     >   如果没有`c.Next()`，则会在执行完中间件中的所有语句后再响应请求
 
--   在中间件中，也可以调用`c.Abort()`，直接不处理请求，返回空。但`c.Abort()`后的语句会正常执行
+-   在中间件中，也可以调用`c.Abort()`，说明直接不再执行后续的中间件和业务逻辑处理请求，返回空。但同一中间件中`c.Abort()`后的语句会正常执行。
 
 ```go
 //main.go
@@ -498,6 +500,7 @@ func initMiddleware1(ctx *gin.Context) {
 func initMiddleware2(ctx *gin.Context) { 
     fmt.Println("中间件2---before request process") 
     ctx.Next()
+    // ctx.Abort()
     fmt.Println("中间件2---after request process") 
 }
 
@@ -513,15 +516,35 @@ func main() {
 }
 ```
 
+---
 
+*全局中间件：*
 
+- 上面讲的路由中间件是针对**单独一个路由**的，可以理解成不是全局的
+- **全局中间件的注册**方法：`r.Use(middleWare1, middleWare2, ...)`
+  - 这样在匹配所有路由时都会执行
 
+---
+
+*路由分组中间件：*
+
+- 方式一：`r.Group("/path", middleWare1, middleWare2)`
+- 方式二：`groupRouter.Use(middleWare1, middleWare2)`
+
+---
+
+*中间件、控制器数据共享：*
+
+- 设置值：`ctx.Set("key", "value")`
+- 获取值：`ctx.Get("key", "value")`
+
+…
 
 
 
 ## 5 Cookie与Session
 
-
+…
 
 
 
