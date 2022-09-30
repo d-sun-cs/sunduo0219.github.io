@@ -387,16 +387,42 @@ func NewsMethod(c *gin.Context) {
 
 *控制器继承：*
 
+-   就是把函数挂载到**结构体的方法**上
+
+```go
+// xxxBaseController.go
+package admin 
+
+import (
+    "net/http" "github.com/gin-gonic/gin" 
+)
+
+type BaseController struct {}
+
+func (c BaseController) Success(ctx *gin.Context) { 
+    ctx.String(http.StatusOK, "成功") 
+}
+
+func (c BaseController) Error(ctx *gin.Context) { 
+    ctx.String(http.StatusOK, "失败") 
+}
+```
+
 ```go
 // xxxController.go
 package xxx
 /*...*/
 type UserController struct{
     // 继承的结构体controller
+    BaseController
 }
 
 func (ucon UserController) User(c *gin.Context) { 
-    c.String(http.StatusOK, "用户") 
+    if xxx {
+	    c.String(http.StatusOK, "用户")    
+    } else {
+        ucon.Error(c)
+    }
 }
 
 func (ucon UserController) News(c *gin.Context) { 
@@ -426,11 +452,70 @@ func AdminRoutesInit(router *gin.Engine) {
 
 
 
-
-
-
-
 ### 4.2 中间件
+
+*中间件概述：*
+
+-   Gin 框架允许开发者在处理请求的过程中，加入用户自己的钩子（Hook）函数。这个钩子函数就叫中间件
+
+    >   中间件适合处理一些公共的业务逻辑，比如登录认证、权限校验、数据分页、记录日志、耗时统计等
+
+-   通俗的讲：中间件就是**请求处理前后（但都是<u>正式响应之前</u>）**执行的一系列操作
+
+    >   有点像**切面AOP**
+
+---
+
+*路由中间件：*
+
+-   在路由函数中加入多个回调函数，最后一个回调函数用于处理请求并响应，前面的回调函数都是**中间件**
+
+    >   例如GET方法：
+    >
+    >   ```go
+    >   func (group *RouterGroup) GET(relativePath string, handlers ...HandlerFunc) IRoutes {...}
+    >   ```
+
+-   在中间件中，可以调用`c.Next()`，直接去执行下一个处理程序，
+
+    -   它可能是**下一个中间件**，即**中间件**会按照在路由函数中注册的顺序**依次执行**
+    -   也可能**就是最后一个回调函数**，即对**请求的处理**（但<u>没有正式响应</u>），然后再回到中间件执行`c.Next()`后的语句
+
+    >   也就是在**处理请求的业务逻辑前后**分别执行语句，然后再返回
+    >
+    >   如果没有`c.Next()`，则会在执行完中间件中的所有语句后再响应请求
+
+-   在中间件中，也可以调用`c.Abort()`，直接不处理请求，返回空。但`c.Abort()`后的语句会正常执行
+
+```go
+//main.go
+func initMiddleware1(ctx *gin.Context) { 
+    fmt.Println("中间件1---before request process") 
+    ctx.Next()
+    fmt.Println("中间件1---after request process") 
+}
+
+func initMiddleware2(ctx *gin.Context) { 
+    fmt.Println("中间件2---before request process") 
+    ctx.Next()
+    fmt.Println("中间件2---after request process") 
+}
+
+func main() { 
+    r := gin.Default() 
+    r.GET("/", initMiddleware1, initMiddleware2, func(ctx *gin.Context) { 
+        ctx.String(200, "首页--中间件演示") 
+    })
+    r.GET("/news", initMiddleware1, func(ctx *gin.Context) { 
+        ctx.String(200, "新闻页面--中间件演示") 
+    })
+    r.Run(":8080") 
+}
+```
+
+
+
+
 
 
 
