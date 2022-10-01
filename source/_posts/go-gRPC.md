@@ -53,6 +53,14 @@ profobuf是二进制数据格式，需要编码和解码，数据本身不具有
 - `protoc --go_out=./xxxDir --go-grpc_out=./xxxDir ./pbfile/xxx.proto`
 
   > 这个会生成两个文件，一个对应`message`，一个对应`service`
+  >
+  > 这样写的话服务端需要额外实现一个接口，生成的proto文件里已经提供了默认实现类：
+  >
+  > ```go
+  > type grpcServer struct {
+  > 	pb.UnimplementedXxxServer
+  > }
+  > ```
 
 - `protoc --go_out=plugins=grpc:./ ./xxx.proto `
 
@@ -120,6 +128,21 @@ message {
   |   fixed64   | 总是8个字节，如果数值总是比总是比256大的话，这个类型会比uint64高效。 |  uint64   |
   |  sfixed32   |                         总是4个字节                          |   int32   |
   |  sfixed64   |                         总是8个字节                          |   int64   |
+
+> `enum`类型：
+>
+> 和`message`一样定义在外面
+>
+> ```protobuf
+> enum enumType {
+> 	enumElement0 = 0
+> 	enumElement1 = 1
+> 	enumElement2 = 2
+> 	...
+> }
+> ```
+>
+> 
 
 > 默认值：
 >

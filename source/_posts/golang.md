@@ -666,6 +666,8 @@ default:
 
 - 查找键是否存在并尝试获取值：`value, isExist := mp[key]`
 
+  > 注意这种特殊的用法，也就是`mp[key]`返回的`isExist`可以接收也可以完全不接收
+
   - 如果不存在，`value`为默认值，`isExist`为`false`
   - 如果存在，`value`为`key`对应值，`isExist`为`true`
 
@@ -1390,7 +1392,7 @@ type interface3 interface {
 
   > 当然也有类似的`var`语法，这里不列出了
 
-- 应用：限制协程**函数的参数**，表示该协程对该管道只读或只写
+- 应用：限制(协程)**函数的参数**，表示该协程对该管道只读或只写
 
   - `func fn(ch chan<- typeName)`
   - `func fn(ch <-chan typeName)`
@@ -1625,7 +1627,10 @@ for {
 
       - `q := r.URL.Query()`
         - `q.Get("key")`
-      - `r.URL.Path`
+      - `r.URL.EscapedPath()`：大部分情况下直接用这个得**资源路径字符串**（`/`分隔的）
+      - `w.Header().Add("key", "value")`、`w.Header().Set("key", "value")`
+      - `w.WriteHeader(statusCode)`
+      - `w.Write([]byte)`
 
    2. 注册handler：`http.HandleFunc("/path", myHandlerFunc)`
 
@@ -1678,8 +1683,12 @@ for {
 
       > The Content-Type header is set to application/x-www-form-urlencoded
 
-  - 任意请求：`resp, err := http.NewRequest("GET", "urlStr", body io.Reader)`
+  - 任意请求：
 
+    `client := http.Client{}`
+    
+    `resp, err := http.NewRequest("GET", "urlStr", body io.Reader)`
+    
     > 关于`url.Values`：
     >
     > `data := url.Values{}`
@@ -1695,7 +1704,6 @@ for {
 - **关闭**
 
   - `defer resp.Body.close()`
-
 
 
 
