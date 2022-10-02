@@ -578,7 +578,7 @@ default:
 
 - 声明：`var slc []type`
 
-  > 切片默认值为`nil`
+  > 切片默认值为`nil`，因为是引用类型
 
 - 定义：
 
@@ -613,6 +613,8 @@ default:
 > Go中不能通过下标给切片扩容
 
 - 追加元素：`append(slc, newElems)`
+
+  > `append`是返回一个新的切片，并不是直接修改`slc`
 
 - 合并切片：`append(slc, anotherSlc...)`
 
@@ -1627,7 +1629,7 @@ for {
 
       - `q := r.URL.Query()`
         - `q.Get("key")`
-      - `r.URL.EscapedPath()`：大部分情况下直接用这个得**资源路径字符串**（`/`分隔的）
+      - `r.URL.EscapedPath()`：大部分情况下直接用这个得到**资源路径字符串**（`/`分隔的）
       - `w.Header().Add("key", "value")`、`w.Header().Set("key", "value")`
       - `w.WriteHeader(statusCode)`
       - `w.Write([]byte)`
@@ -1687,7 +1689,13 @@ for {
 
     `client := http.Client{}`
     
-    `resp, err := http.NewRequest("GET", "urlStr", body io.Reader)`
+    `req, err := http.NewRequest("GET", "urlStr", body io.Reader)`
+    
+    > `io.Reader`可以通过`bytes.NewReader([]byte)`构造
+    
+    `req.Header.Set("key", "value")`
+    
+    `resp, err := client.Do(req)`
     
     > 关于`url.Values`：
     >
