@@ -109,21 +109,99 @@ date: 2022-10-10 11:40:02
 
 ## 3 进程与线程
 
-### 3.1 进程相关概念
+### 3.1 进程相关信息
 
 *进程控制块PCB：*
 
-- Linux内核的进程控制块是task_struct结构体
+- Linux内核的进程控制块是`task_struct`结构体
 
   > `/usr/src/linux-headers-3.16.0-30/include/linux/sched.h`文件中可以查看`struct task_struct`结构体定义
 
+- `task_struct`结构体重要成员
+    -   进程**描述**信息：
+        -   进程标识符（**PID**）：系统中每个进程都有**唯一**的id，用`pid_t`表示其**类型**，本质是非负整数
 
+            >   Unix系统的第一个进程**init进程的pid为1**
+
+        -   用户id和组id
+
+    -   进程**控制和管理**信息：
+        -   进程当前**状态**
+        -   **信号**相关的信息
+        -   **会话**（Session）和**进程组**
+
+    -   **资源分配**清单：
+        -   描述**虚拟地址空间**的信息
+
+        -   进程可以使用的**资源上限**（Resource Limit）
+
+            >   `ulimit -a`命令可以查看一些资源上限
+
+    -   **处理机**相关信息：
+
+        -   进程**切换**时需要保存和恢复的**寄存器**
+        -   描述**控制终端**的信息
+        -   当前**工作目录**位置
+        -   `umask`掩码
+        -   **文件描述符**表
+
+---
 
 *环境变量：*
 
+-   操作系统中用来**指定运行环境**的一些参数
 
+-   特征：
+
+    -   本质是**字符串**
+    -   统一的格式：`名=值1:值2:值3`
+    -   描述**进程环境信息**
+
+-   **shell进程**的常见环境变量
+
+    -   PATH：记录**可执行**程序的**搜索路径**
+
+    -   SHELL：记录当前所使用的**命令解析器**
+
+    -   HOME：当前用户家目录
+
+    -   LANG：当前使用的语言和本地信息
+
+        >   决定了字符编码、时间、货币等信息的显示格式
+
+    -   TERM：当前终端类型
+
+-   在c程序中使用环境变量：
+
+    -   存储形式：`char *[]`数组，数组名为`environ`，内部存储字符串，`NULL`作为哨兵结尾
+
+    -   加载位置：位于用户区，高于stack的起始位置
+
+    -   引入环境变量表：`extern char **environ`
+
+    -   相关函数
+
+        -   `char *getenv(const char *name);`
+        -   `int setenv(const char *name, const char *value, int overwrite)`
+        -   `int unsetenv(const char *name);`
+
+        >   `man getenv`、`man setenv`、`man unsetenv`
 
 ### 3.2 进程控制
+
+*创建进程：*
+
+-   方式一：**运行可执行程序**时，就会创建进程
+
+-   方式二：`pid_t fork(void);`
+
+    >   `#include <unistd.h>`：Unix系统标准头文件
+
+    -   获得进程id：`pid_t getpid(void);`
+
+    -   获得父进程id：`pid_t getppid(void);`
+
+        >   一般可执行程序对应进程的父进程是`bash`
 
 
 
