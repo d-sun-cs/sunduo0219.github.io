@@ -187,25 +187,166 @@ date: 2022-10-10 11:40:02
 
         >   `man getenv`、`man setenv`、`man unsetenv`
 
+
+
 ### 3.2 进程控制
 
 *创建进程：*
 
--   方式一：**运行可执行程序**时，就会创建进程
+- 方式一：**运行可执行程序**时，就会创建进程
+
+  > 一般可执行程序对应进程的<u>父进程是`bash`/shell进程</u>，
+  > shell进程会将前台交给该进程，自己到后台去，直到该进程结束，再回到前台
 
 -   方式二：`pid_t fork(void);`
 
     >   `#include <unistd.h>`：Unix系统标准头文件
 
-    -   获得进程id：`pid_t getpid(void);`
+    -   创建n个进程：
 
-    -   获得父进程id：`pid_t getppid(void);`
+        ```c
+        int i;
+        for (i = 0; i < n; i++) {
+            pid_t pid = fork();
+            if (pid == 0) {
+                break;
+            }
+        }
+        if (i < n) {
+            // child process
+        } else {
+            // parent process
+        }
+        ```
+    
+    -   刚fork之后：
+    
+        - 父子相同处：全局变量、.data、.text、栈、堆、环境变量、用户ID、宿主目录、进程工作目录、信号处理方式...
+        - 父子不同处：进程ID、fork返回值、父进程ID、进程运行时间、闹钟(定时器)、未决信号集
+    
+    -   **读时共享写时复制**
+    
+        -   共享的是**物理地址空间**，虚拟的地址空间当然可以直接复制多个
+    
+    -   父子进程的共享资源
+    
+        -   文件描述符
+    
+            > 打开文件的结构体
+    
+        -    mmap建立的映射区
 
-        >   一般可执行程序对应进程的父进程是`bash`
+---
 
+*进程描述信息：*
 
+- 进程id相关
+  - 获得进程id：`pid_t getpid(void);`
+  - 获得父进程id：`pid_t getppid(void);`
+- 用户id相关
+  - 获取当前进程实际用户ID：`uid_t getuid(void);`
+  - 获取当前进程有效用户ID：`uid_t geteuid(void);`
+  - 获取当前进程使用用户组ID：`gid_t getgid(void);`
+  - 获取当前进程有效用户组ID：`gid_t getegid(void);`
+
+---
+
+*`exec`函数族：*
+
+- fork创建的子进程往往要调用一种exec函数以执行另一个程序。当进程调用一种exec函数时，该进程的用户空间**代码和数据**完全被新程序**替换**，从新程序的**启动例程**开始执行
+
+  > 启动例程：调用`main`函数的函数
+  >
+  > 调用exec并**不创建新进程**，所以调用exec前后该**进程的id并未改变**
+  >
+  > 一个程序调用了`exec`之后，在不出错的情况下，不再有返回值，原程序后续代码不会执行，若出错了才有返回值，并执行原程序后续代码
+
+- :star:`int execlp(const char *file, const char *arg, ...);`
+
+  > l：list，p：path
+
+  - 加载一个进程，需要借助PATH环境变量
+  - `file`：可执行程序名
+  - `arg, ...`：命令行参数，从`argv[0]`开始，可变参要以`NULL`结尾
+
+  > 举例：`execlp("ls", "ls", "-l", "-F", NULL);`
+
+- :star:`int execl(const char *path, const char *arg, ...);`
+
+  - 加载一个进程， 通过`路径+程序名`来加载，不需要环境变量
+
+  > 举例：`execl("/bin/ls", "ls", "-l", "-F", NULL);`
+
+- `int execle(const char *path, const char *arg, ..., char *const envp[]);`
+
+  - 需要引入新的环境变量表
+
+- `int execv(const char *path, char *const argv[]);`
+
+  > v：vector
+
+- `int execvp(const char *file, char *const argv[]);`
+
+- `int execve(const char *path, char *const argv[], char *const envp[]);`
+
+  - 只有`execve`是真正的系统调用
+
+---
+
+*回收子进程：*
+
+- 孤儿进程：父进程先于子进程结束，则子进程成为孤儿进程，子进程的父进程成为init进程
+
+  > “init进程”可能是整个系统的init进程，也可能是用户的init进程
+
+- 僵尸进程：进程终止，父进程尚未回收，子进程**残留资源（PCB）**存放于内核中，变成僵尸（Zombie）进程。
+
+- `pid_t wait(int *status)`
+
+  - 三个功能
+
+    - **阻塞**并等待一个子进程退出
+    - **回收**子进程残留资源
+    - 获取子进程结束**状态**(退出原因)
+
+  - 返回-1代表出错（无子进程）
+
+  - 用`status`结合**宏函数**判断子进程终止原因
+
+    - :star:`WIFEXITED(status)`：返回值非0代表子进程**正常结束**
+
+      如上宏为真可以使用此宏`WEXITSTATUS(status)`：获取进程**退出状态**(`exit`的参数)
+
+    - :star:`WIFSIGNALED(status)`：返回值非0代表**异常结束**
+
+      > Linux中所有异常结束都是因为收到了**信号**
+
+      如上宏为真可以使用此宏`WTERMSIG(status)`：取得使子进程终止的那个**信号的编号**
+
+    - `WIFSTOPPED(status)`：返回值非0代表子进程处于**暂停状态**
+
+      如上宏为真可以使用此宏`WSTOPSIG(status)`：获取使子进程暂停的那个**信号的编号**
+
+      > `WIFCONTINUED(status)`为真 → 子进程暂停后已经继续运行
+
+- `pid_t waitpid(pid_t pid, int *status, int options);`
+
+  - `pid`：要回收的子进程id
+    - :star:大于0则回收指定id子进程
+    - :star:为-1则回收任意子进程（相当于`wait`）
+    - 为0则回收和当前调用waitpid的进程同一个**进程组**的所有子进程
+    - 小于-1则回收指定**进程组**内的任意子进程
+  - `options`：若指定为0则**阻塞**；若指定为`WNOHANG`则**不阻塞**，只是检查子进程是否结束，结束则回收，否则**返回0**并继续运行
 
 ### 3.3 进程间通信
+
+*管道：*
+
+
+
+---
+
+*`mmap`*：
 
 
 
@@ -330,6 +471,8 @@ date: 2022-10-10 11:40:02
 - 命令产生
 
   - `kill -信号编号 进程ID`：给对应ID的进程发送信号
+
+    > 默认发送的是 ***15) SIGTERM***
 
 - 系统调用产生
 
