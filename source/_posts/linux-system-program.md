@@ -372,7 +372,7 @@ date: 2022-10-10 11:40:02
 
     > 采用与**硬件中断**类似的异步模式。但信号是**软件层面**上实现的**中断**，早期常被称为“软中断”
 
-  - **每个进程收到的所有信号，都是由<u>内核负责产生并发送</u>的，<u>内核处理</u>**
+  - :star:**每个进程收到的所有信号，都是由<u>内核负责产生并发送</u>的，<u>内核处理</u>**:star:
 
 - 信号**产生**的五种方式：
 
@@ -523,11 +523,13 @@ date: 2022-10-10 11:40:02
       > > 计算占用cpu及执行系统调用的时间
 
     - `man setitimer`学习其他参数
+    
+      > 可以设置周期定时
 
 
 ---
 
-*信号集：*
+*信号集操作：*
 
 - 信号屏蔽字
 - 未决信号集
@@ -536,8 +538,38 @@ date: 2022-10-10 11:40:02
 
 *信号的捕捉：*
 
-- 注册信号捕捉函数
-- sigaction
+- `sigset_t set;      // typedef unsigned long sigset_t;`
+
+- 设置自定义信号集
+
+  - `int sigemptyset(sigset_t *set);`：将某个信号集清0
+
+    > 返回值：成功0、失败-1，下面3个函数返回值也一样
+
+  - `int sigfillset(sigset_t *set);`：将某个信号集全部置1
+
+  - `int sigaddset(sigset_t *set, int signum);`：将某个信号加入信号集
+
+  - `int sigdelset(sigset_t *set, int signum);`：将某个信号清出信号集
+
+  - `int sigismember(const sigset_t *set, int signum);`：判断某个信号是否在信号集中
+
+    > 返回值：在集合1、不在：0、出错：-1
+
+- 改变进程的信号屏蔽字
+
+  - :star:`int sigprocmask(int how, const sigset_t *set, sigset_t *oldset);`
+
+    - `how`
+
+      `SIG_BLOCK`：`set`表示需要屏蔽的信号
+
+      `SIG_UNBLOCK`：`set`表示需要解除屏蔽的信号
+
+      `SIG_SETMASK`：`set`表示用于替代原始屏蔽及的新屏蔽集
+
+    - 
+
 
 
 
