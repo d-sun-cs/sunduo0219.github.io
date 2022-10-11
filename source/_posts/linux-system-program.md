@@ -372,7 +372,7 @@ date: 2022-10-10 11:40:02
 
     > 采用与**硬件中断**类似的异步模式。但信号是**软件层面**上实现的**中断**，早期常被称为“软中断”
 
-  - **每个进程收到的所有信号，都是由<u>内核负责产生并发送</u>的，<u>内核处理</u>**
+  - :star:**每个进程收到的所有信号，都是由<u>内核负责产生并发送</u>的，<u>内核处理</u>**:star:
 
 - 信号**产生**的五种方式：
 
@@ -468,37 +468,136 @@ date: 2022-10-10 11:40:02
 
     > 例如：内存对齐出错
 
-- 命令产生
+- **命令**产生
 
-  - `kill -信号编号 进程ID`：给对应ID的进程发送信号
+  - :star:`kill -信号编号 进程ID`：给对应ID的进程发送信号
 
     > 默认发送的是 ***15) SIGTERM***
 
-- 系统调用产生
+- **系统调用**产生
 
-  - `int kill(pid_t pid, int sig);`
+  - :star:`int kill(pid_t pid, int sig);`：给对应ID的进程发送信号
 
     > `man 2 kill`查看相关文档
 
-  - 
+  - `int raise(int sig);`：给当前进程自己发送信号
 
-- alarm
+    `raise(signo) == kill(getpid(), signo);`
 
-- setitimer
+  - `void abort(void);`：给当前进程自己发送异常终止信号
+
+    ***6\) SIGABRT*** 信号，终止并产生core文件
+
+- 软件条件产生
+
+  - :star:`unsigned int alarm(unsigned int seconds);`：设置定时器(闹钟)。在指定seconds后，内核会给当前进程发送 ***14) SIGALRM*** 信号
+
+    > 进程收到该信号，默认动作终止
+
+    - **每个进程都有且只有<u>唯一</u>个定时器**
+
+    - 调用`alarm`后会取消旧闹钟，并返回旧闹钟余下秒数
+
+      > `alarm(0)`取消闹钟
+
+    - 定时**与进程状态无关**(自然定时法)
+
+    > 使用time命令查看**程序执行的时间**：
+    >
+    > 实际执行时间 = 系统时间 + 用户时间 + **等待**时间
+    >
+    > > IO往往会造成较长的等待时间，程序运行的瓶颈在于IO，优化程序，首选优化IO
+
+  - `int setitimer(int which, const struct itimerval *new_value, struct itimerval *old_value);`
+
+    - `which`：指定定时方式
+
+      > 自然定时：ITIMER_REAL → ***14）SIGLARM***
+      >
+      > 虚拟空间计时(用户空间)：ITIMER_VIRTUAL → ***26）SIGVTALRM***
+      >
+      > > 只计算进程占用cpu的时间
+      >
+      > 运行时计时(用户+内核)：ITIMER_PROF → ***27）SIGPROF***
+      >
+      > > 计算占用cpu及执行系统调用的时间
+
+    - `man setitimer`学习其他参数
+    
+      > 可以设置周期定时
 
 ---
 
-*信号集：*
+*信号集操作：*
 
-- 信号屏蔽字
-- 未决信号集
+- `sigset_t set;      // typedef unsigned long sigset_t;`
+
+- 设置自定义信号集
+
+  - `int sigemptyset(sigset_t *set);`：将某个信号集清0
+
+    > 返回值：成功0、失败-1，下面3个函数返回值也一样
+
+  - `int sigfillset(sigset_t *set);`：将某个信号集全部置1
+
+  - `int sigaddset(sigset_t *set, int signum);`：将某个信号加入信号集
+
+  - `int sigdelset(sigset_t *set, int signum);`：将某个信号清出信号集
+
+  - `int sigismember(const sigset_t *set, int signum);`：判断某个信号是否在信号集中
+
+    > 返回值：在集合1、不在：0、出错：-1
+
+- 信号屏蔽字与未决信号集的操作
+
+  - :star:`int sigprocmask(int how, const sigset_t *set, sigset_t *oldset);`：屏蔽信号或解除屏蔽
+
+    - `how`
+
+      `SIG_BLOCK`：`set`表示需要屏蔽的信号
+
+      `SIG_UNBLOCK`：`set`表示需要解除屏蔽的信号(set位为1代表解除屏蔽)
+
+      `SIG_SETMASK`：`set`表示用于替代原始屏蔽及的新屏蔽集
+
+    - 成功返回0，失败返回-1
+
+  - `int sigpending(sigset_t *set);`：读取当前进程的**未决**信号集
+
+    - 成功返回0，失败返回-1
+
 
 ---
 
-*信号的捕捉：*
+*信号捕捉：*
 
-- 注册信号捕捉函数
-- sigaction
+- `sighandler_t signal(int signum, sighandler_t handler);`：注册一个信号捕捉函数
+
+  > `typedef void (*sighandler_t)(int);`
+
+  - 返回值为`sighandler_t `，若是`SIG_ERR`则代表出错，若不是则代表该信号之前的捕捉函数
+  - `handler`是要注册的处理函数，也可赋值为`SIG_IGN`表**忽略**或`SIG_DFL`表执行**默认动作**
+
+- :star:`int sigaction(int signum, const struct sigaction *act, struct sigaction *oldact);`
+
+  - 成功：0；失败：-1
+
+  - `struct sigaction`结构体重要成员
+
+    - `sa_handler`成员：要注册的处理函数
+
+    - `sigset_t sa_mask`：信号处理函数执行期间进程的**信号屏蔽字**
+
+      > 仅在处理函数被调用期间屏蔽生效，是临时性设置
+
+    - `int sa_flags`：通常设置为0，表使用默认属性，处理函数执行期间被捕捉信号再次到来时**自动屏蔽**，而且阻塞的常规信号不支持排队，产生多次**只记录一次**
+
+- 内核实现信号捕捉的过程
+
+  1. 进程收到成功递达的信号，陷入内核
+  2. 内核处理信号，如果有注册处理函数，则回到用户态执行处理函数
+  3. 处理函数执行完后，执行特殊的系统调用函数`sigreturn`，再次回到内核
+  4. 最后回到用户态继续向后执行
 
 
 
