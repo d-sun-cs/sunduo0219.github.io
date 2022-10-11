@@ -526,17 +526,9 @@ date: 2022-10-10 11:40:02
     
       > 可以设置周期定时
 
-
 ---
 
 *信号集操作：*
-
-- 信号屏蔽字
-- 未决信号集
-
----
-
-*信号的捕捉：*
 
 - `sigset_t set;      // typedef unsigned long sigset_t;`
 
@@ -556,20 +548,56 @@ date: 2022-10-10 11:40:02
 
     > 返回值：在集合1、不在：0、出错：-1
 
-- 改变进程的信号屏蔽字
+- 信号屏蔽字与未决信号集的操作
 
-  - :star:`int sigprocmask(int how, const sigset_t *set, sigset_t *oldset);`
+  - :star:`int sigprocmask(int how, const sigset_t *set, sigset_t *oldset);`：屏蔽信号或解除屏蔽
 
     - `how`
 
       `SIG_BLOCK`：`set`表示需要屏蔽的信号
 
-      `SIG_UNBLOCK`：`set`表示需要解除屏蔽的信号
+      `SIG_UNBLOCK`：`set`表示需要解除屏蔽的信号(set位为1代表解除屏蔽)
 
       `SIG_SETMASK`：`set`表示用于替代原始屏蔽及的新屏蔽集
 
-    - 
+    - 成功返回0，失败返回-1
 
+  - `int sigpending(sigset_t *set);`：读取当前进程的**未决**信号集
+
+    - 成功返回0，失败返回-1
+
+
+---
+
+*信号捕捉：*
+
+- `sighandler_t signal(int signum, sighandler_t handler);`：注册一个信号捕捉函数
+
+  > `typedef void (*sighandler_t)(int);`
+
+  - 返回值为`sighandler_t `，若是`SIG_ERR`则代表出错，若不是则代表该信号之前的捕捉函数
+  - `handler`是要注册的处理函数，也可赋值为`SIG_IGN`表**忽略**或`SIG_DFL`表执行**默认动作**
+
+- :star:`int sigaction(int signum, const struct sigaction *act, struct sigaction *oldact);`
+
+  - 成功：0；失败：-1
+
+  - `struct sigaction`结构体重要成员
+
+    - `sa_handler`成员：要注册的处理函数
+
+    - `sigset_t sa_mask`：信号处理函数执行期间进程的**信号屏蔽字**
+
+      > 仅在处理函数被调用期间屏蔽生效，是临时性设置
+
+    - `int sa_flags`：通常设置为0，表使用默认属性，处理函数执行期间被捕捉信号再次到来时**自动屏蔽**，而且阻塞的常规信号不支持排队，产生多次**只记录一次**
+
+- 内核实现信号捕捉的过程
+
+  1. 进程收到成功递达的信号，陷入内核
+  2. 内核处理信号，如果有注册处理函数，则回到用户态执行处理函数
+  3. 处理函数执行完后，执行特殊的系统调用函数`sigreturn`，再次回到内核
+  4. 最后回到用户态继续向后执行
 
 
 
