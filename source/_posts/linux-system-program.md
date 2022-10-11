@@ -468,23 +468,62 @@ date: 2022-10-10 11:40:02
 
     > 例如：内存对齐出错
 
-- 命令产生
+- **命令**产生
 
-  - `kill -信号编号 进程ID`：给对应ID的进程发送信号
+  - :star:`kill -信号编号 进程ID`：给对应ID的进程发送信号
 
     > 默认发送的是 ***15) SIGTERM***
 
-- 系统调用产生
+- **系统调用**产生
 
-  - `int kill(pid_t pid, int sig);`
+  - :star:`int kill(pid_t pid, int sig);`：给对应ID的进程发送信号
 
     > `man 2 kill`查看相关文档
 
-  - 
+  - `int raise(int sig);`：给当前进程自己发送信号
 
-- alarm
+    `raise(signo) == kill(getpid(), signo);`
 
-- setitimer
+  - `void abort(void);`：给当前进程自己发送异常终止信号
+
+    ***6\) SIGABRT*** 信号，终止并产生core文件
+
+- 软件条件产生
+
+  - :star:`unsigned int alarm(unsigned int seconds);`：设置定时器(闹钟)。在指定seconds后，内核会给当前进程发送 ***14) SIGALRM*** 信号
+
+    > 进程收到该信号，默认动作终止
+
+    - **每个进程都有且只有<u>唯一</u>个定时器**
+
+    - 调用`alarm`后会取消旧闹钟，并返回旧闹钟余下秒数
+
+      > `alarm(0)`取消闹钟
+
+    - 定时**与进程状态无关**(自然定时法)
+
+    > 使用time命令查看**程序执行的时间**：
+    >
+    > 实际执行时间 = 系统时间 + 用户时间 + **等待**时间
+    >
+    > > IO往往会造成较长的等待时间，程序运行的瓶颈在于IO，优化程序，首选优化IO
+
+  - `int setitimer(int which, const struct itimerval *new_value, struct itimerval *old_value);`
+
+    - `which`：指定定时方式
+
+      > 自然定时：ITIMER_REAL → ***14）SIGLARM***
+      >
+      > 虚拟空间计时(用户空间)：ITIMER_VIRTUAL → ***26）SIGVTALRM***
+      >
+      > > 只计算进程占用cpu的时间
+      >
+      > 运行时计时(用户+内核)：ITIMER_PROF → ***27）SIGPROF***
+      >
+      > > 计算占用cpu及执行系统调用的时间
+
+    - `man setitimer`学习其他参数
+
 
 ---
 
