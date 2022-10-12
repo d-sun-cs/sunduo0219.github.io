@@ -864,13 +864,25 @@ date: 2022-10-10 11:40:02
 
 -   `pthread_t pthread_self(void);`：获取线程ID
     -   `pthread_t`在Linux中本质是无符号整数
+    
     -   该函数调用不会失败，返回的就是线程ID
+    
+        >   线程ID和LWP线程号不是同一个东西
+    
 -   `int pthread_create(pthread_t *thread, const pthread_attr_t *attr, void *(*start_routine) (void *), void *arg);`：
     -   `thread`：是传出参数，代表创建的线程ID
+    
     -   `attr`：线程属性，默认可以传NULL
+    
     -   `start_routine`：线程的主控函数
+    
     -   `arg`：主控函数的参数
+    
     -   成功返回0，失败直接返回error number
+    
+        >   Linux环境下所有线程API都是这样的返回
+    
+    -   循环创建多个线程
 
 ---
 
