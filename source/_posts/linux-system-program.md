@@ -1054,9 +1054,49 @@ date: 2022-10-10 11:40:02
 
 ---
 
-*读写锁：*
+*读写锁`rwlock`：*
 
--   
+-   `rwlock`特性
+
+    -   :star:写独占、读共享
+    -   :star:写锁优先级高
+
+-   `rwlock`相关函数
+
+    >   这些函数均是成功返回0，失败返回错误号。用法与`mutex`很相似
+
+    -   `int pthread_rwlock_init(pthread_rwlock_t *restrict rwlock, const pthread_rwlockattr_t *restrict attr);`：初始化一把读写锁
+        -   `attr`：传入`NULL`代表使用默认属性
+    -   `int pthread_rwlock_destroy(pthread_rwlock_t *rwlock);`：销毁一把读写锁
+    -   ` int pthread_rwlock_rdlock(pthread_rwlock_t *rwlock);`：请求读锁
+    -   `int pthread_rwlock_wrlock(pthread_rwlock_t *rwlock);`：请求写锁
+    -   `int pthread_rwlock_unlock(pthread_rwlock_t *rwlock);`：解锁
+    -   `int pthread_rwlock_tryrdlock(pthread_rwlock_t *rwlock);`：非阻塞请求读锁
+    -   `int pthread_rwlock_trywrlock(pthread_rwlock_t *rwlock);`：非阻塞请求写锁
+
+-   `rwlock`的应用：`pthread_rwlock t rwlock;`
+
+    >   与`mutex`很相似
+
+---
+
+*条件变量`cond`：*
+
+-   特点：
+
+    -   条件变量本身不是锁！但它也可以造成线程阻塞。
+    -   通常与互斥锁配合使用，给多线程提供一个会合的场所。
+
+-   `cond`相关函数：
+
+    >   这些函数均是成功返回0，失败返回错误号。
+
+    -   `int pthread_cond_init(pthread_cond_t *restrict cond, const pthread_condattr_t *restrict attr);`：初始化一个条件变量
+    -   `int pthread_cond_destroy(pthread_cond_t *cond);`：销毁一个条件变量
+    -   :star:`int pthread_cond_wait(pthread_cond_t *restrict cond, pthread_mutex_t *restrict mutex);`：阻塞等待一个条件变量满足
+        -   `mutex`：需要传入一个也初始化好的`mutex`，并且已经对其**加锁**了
+        -   会释放已掌握的互斥锁（**解锁互斥量**），相当于`pthread_mutex_unlock(&mutex)`
+        -   当被**唤醒**，函数返回即将时，会解除阻塞并重新申请**获取互斥锁**，相当于`pthread_mutex_lock(&mutex)`
 
 
 
