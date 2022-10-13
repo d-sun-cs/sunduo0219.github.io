@@ -301,6 +301,8 @@ date: 2022-10-10 11:40:02
 
 - 僵尸进程：进程终止，父进程尚未回收，子进程**残留资源（PCB）**存放于内核中，变成僵尸（Zombie）进程。
 
+    >   所谓回收就是在**回收PCB**
+
 - `pid_t wait(int *status)`
 
   - 三个功能
@@ -870,23 +872,79 @@ date: 2022-10-10 11:40:02
 
 -   `pthread_t pthread_self(void);`：获取线程ID
     -   `pthread_t`在Linux中本质是无符号整数
-    
+
     -   该函数调用不会失败，返回的就是线程ID
-    
-        >   线程ID和LWP线程号不是同一个东西
-    
+
+        >   线程ID和LWP线程号不是同一个东西，**LWP线程号**是**CPU给线程分配时间片**的依据
+
 -   `int pthread_create(pthread_t *thread, const pthread_attr_t *attr, void *(*start_routine) (void *), void *arg);`：
     -   `thread`：是传出参数，代表创建的线程ID
-    
+
     -   `attr`：线程属性，默认可以传NULL
-    
+
     -   `start_routine`：线程的主控函数
-    
+
     -   `arg`：主控函数的参数
-    
+
     -   成功返回0，失败直接返回error number
-    
+
         >   Linux环境下所有线程API都是这样的返回
+        
+    -   循环创建多个子线程
+
+        `pthread_create(&tid, NULL, thrd_func, (void *)arg)`
+
+        -   子线程中`arg`可能的使用方式：`(int)arg`
+
+        -   如果使用`(void *)&arg`这种方式，传入的是父线程的地址空间，可能会造成问题
+
+            >   这种情况下可能的使用方式：`*((int *)arg)`
+
+-   `void pthread_exit(void *retval);`
+
+    -   `retval`表示线程退出状态，通常传`NULL`
+
+    -   用`pthread_exit`退出主控线程或子线程，若**进程内还有其他线程**存在，则进程不会结束
+
+        >   如果在主控线程或子线程中使用`exit`函数退出，会直接退出整个进程；
+        >
+        >   如果在主控线程中使用`return`退出，会直接退出整个进程；
+        >
+        >   如果在子线程的主控函数中使用`return`退出，相当于用`pthread_exit`退出
+
+-   `int pthread_join(pthread_t thread, void **retval);`：**阻塞**等待线程退出，获取线程退出状态
+
+    -   `retval`：存储线程结束状态，指向的是`pthread_exit`函数的入参，所以是`void**`类型
+    -   可能的使用方式：`pthread_join(tid, (void **)&retval)`，`retval`是**一级指针**
+    -   与进程的区别是，线程与线程之间也可以调用`pthread_join`来“回收”
+    -   成功返回0，失败返回error number
+
+-   `int pthread_detach(pthread_t thread);`：分离线程
+
+    -   线程分离状态：线程与主控线程断开关系，结束后**自动释放**（清理PCB）
+    -   如果用`pthread_join`回收分离的线程，会出错，返回22
+    -   成功返回0，失败返回error number
+
+-   `int pthread_cancel(pthread_t thread);`：杀死(取消)线程
+
+    -   线程的取消并不是实时的，需要等待线程到达某个**<u>取消点(检查点)</u>**
+
+        -   取消点：线程检查是否被取消，并按请求进行动作的一个位置，通常是某些系统调用
+
+            >   `man 7 pthreads`可以查看具备取消点的系统调用列表
+
+        -   自行添加取消点：`pthread_testcancel();`
+
+    -   如果用`pthread_join`回收取消的线程，会出错，返回-1
+
+        >   `pthread.h: #define PTHREAD_CANCELED ((void *) -1)`
+
+    -   成功返回0，失败返回error number
+
+-   `int pthread_equal(pthread_t t1, pthread_t t2);`：比较两个线程ID是否相等
+
+    -   当然，目前`pthread_t`就是整型，可以直接用`==`判等，之后如果改成其他的比如结构体类型，就需要用`pthread_equal`了
+
 
 ---
 
