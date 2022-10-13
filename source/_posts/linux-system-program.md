@@ -836,15 +836,15 @@ date: 2022-10-10 11:40:02
 
 
 
-### 3.7 线程
+### 3.7 线程基础
 
 *线程资源：*
 
 -   共享资源
 
-    -   内存地址空间 (.text/.data/.bss/heap/共享库)、文件描述符表
+    -   大部分内存地址空间 (.text/.data/.bss/heap/共享库)、文件描述符表
 
-        >   除了**栈**和errno变量不共享，其他的包括**全局变量**都共享
+        >   除了**栈**和errno变量不共享，其他的包括**全局变量**都共享，所以可以在一个线程中释放其他线程的申请的空间（`malloc`、`mmap`）
 
     -   当前工作目录、用户ID和组ID
 
@@ -854,13 +854,13 @@ date: 2022-10-10 11:40:02
 
     - 线程id
     
-    - 处理器现场和栈指针(内核栈)、独立的栈空间(用户空间栈)
+    - 处理器现场和栈指针(内核栈)、独立的**栈空间**(用户空间栈)
     
       > 同一进程各线程栈的空间地址值是互相不冲突、不相同的
     
     - errno变量
     
-    - 信号屏蔽字
+    - **信号屏蔽字**
     
     -   调度优先级
 
@@ -868,7 +868,7 @@ date: 2022-10-10 11:40:02
 
 *线程操作原语：*
 
->   编译链接时要加`-pthread`才可以链接到这些函数
+>   编译链接时要加`-pthread`才可以链接到这些函数，同时注意版本`getconf GNU_LIBPTHREAD_VERSION`
 
 -   `pthread_t pthread_self(void);`：获取线程ID
     -   `pthread_t`在Linux中本质是无符号整数
@@ -876,7 +876,9 @@ date: 2022-10-10 11:40:02
     -   该函数调用不会失败，返回的就是线程ID
 
         >   线程ID和LWP线程号不是同一个东西，**LWP线程号**是**CPU给线程分配时间片**的依据
-
+        >
+        >   >   `ps -Lf 进程ID`可以查看线程LWP号
+    
 -   `int pthread_create(pthread_t *thread, const pthread_attr_t *attr, void *(*start_routine) (void *), void *arg);`：
     -   `thread`：是传出参数，代表创建的线程ID
 
@@ -927,7 +929,7 @@ date: 2022-10-10 11:40:02
 
 -   `int pthread_cancel(pthread_t thread);`：杀死(取消)线程
 
-    -   线程的取消并不是实时的，需要等待线程到达某个**<u>取消点(检查点)</u>**
+    -   线程的取消并不是实时的，需要等待线程**到达**某个**<u>取消点(检查点)</u>**时
 
         -   取消点：线程检查是否被取消，并按请求进行动作的一个位置，通常是某些系统调用
 
@@ -997,6 +999,64 @@ date: 2022-10-10 11:40:02
     -   `int pthread_attr_getstacksize(pthread_attr_t *attr, size_t *stacksize);`：获取栈大小
 
 
+---
+
+*线程使用注意事项：*
+
+-   线程库版本问题`getconf GNU_LIBPTHREAD_VERSION`
+-   避免僵尸线程，要么`join`回收，要么`detach`分离（或者修改线程属性使其分离）
+-   尽量避免在多线程模型中使用`fork`。`fork`后子进程中只存在调用`fork`的“线程”，其他“线程”都退出了
+-   尽量避免在多线程模型中使用信号机制
+
+
+
+### 3.8 线程和进程的同步与互斥
+
+*互斥量`mutex`：*
+
+-   `pthread_mutex_t`本质是结构体，可以简单认为其只有0、1两种取值
+
+-   `mutex`相关函数
+
+    >   这些函数均是成功返回0，失败返回错误号
+
+    -   `int pthread_mutex_init(pthread_mutex_t *restrict mutex, const pthread_mutexattr_t *restrict attr);`：初始化一个互斥锁
+        -   可以理解为`mutex = 1`
+        -   `restrict`关键字：所有修改**该指针指向内存**的操作，只能通过本指针完成，不能通过除本指针以外的其他变量或指针修改
+        -   `attr`：互斥锁的属性，传入`NULL`为默认属性
+    -   `int pthread_mutex_destroy(pthread_mutex_t *mutex);`：销毁一个互斥锁
+    -   `int pthread_mutex_lock(pthread_mutex_t *mutex);`：上锁
+        -   可理解为`mutex--`
+        -   锁被占用则阻塞，直到成功获得锁
+    -   `int pthread_mutex_unlock(pthread_mutex_t *mutex);`：解锁
+        -   可理解为`mutex++`
+    -   `int pthread_mutex_trylock(pthread_mutex_t *mutex);`：尝试上锁
+        -   锁被占用不阻塞，返回`EBUSY`代表无法获得锁
+
+-   `mutex`的应用
+
+    1.   定义锁：`pthread_mutex_t mutex;`
+         -   一般为**全局变量**
+    2.   初始化锁
+    3.   上锁
+    4.   解锁
+
+    >   锁的**粒度**应当尽量小
+
+-   死锁
+
+    -   两种产生情况
+        -   不可重入锁
+        -   两把锁
+    -   对应解决方法
+        -   可重入锁
+        -   `trylock`失败则释放锁
+
+---
+
+*读写锁：*
+
+-   
 
 
 
