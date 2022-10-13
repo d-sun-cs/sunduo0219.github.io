@@ -950,7 +950,51 @@ date: 2022-10-10 11:40:02
 
 *线程属性：*
 
+-   `pthread_attr_t `结构体的重要成员
 
+    -   `int etachstate;   //线程的分离状态`
+
+    -   `size_t stacksize;     //线程栈的大小`
+
+        >   线程栈默认大小是**均分进程栈（8MB）**
+
+    -   `size_t guardsize;    //线程栈末尾的警戒缓冲区大小`
+
+        >   警戒区用于防止线程栈溢出
+
+-   线性属性初始化与销毁
+
+    -   `int pthread_attr_init(pthread_attr_t *attr);`：初始化线程属性
+        -   应先初始化线程属性，再`pthread_create`创建线程。当然这个函数只是初始化，不是设置属性
+        -   成功返回0，失败返回错误号
+    -   `int pthread_attr_destroy(pthread_attr_t *attr);`：销毁线程属性所占用的资源
+        -   成功返回0，失败返回错误号
+
+-   线程分离的属性
+
+    -   `int pthread_attr_setdetachstate(pthread_attr_t *attr, int detachstate);`：设置线程的分离属性
+
+        -   `detachstate`
+
+            `PTHREAD_CREATE_DETACHED`：分离
+
+            `PTHREAD _CREATE_JOINABLE`：不分离
+
+    -   `int pthread_attr_getdetachstate(pthread_attr_t *attr, int *detachstate);`：获取线程的分离属性
+
+    >   如果设置一个线程为分离线程，而这个线程运行又非常快，它很可能在`pthread_create`函数返回之前就终止了，终止后可能将**线程号和系统资源**移交给其他的线程使用，这样调用`pthread_create`的线程就得到了**错误的线程号**。可以用线程同步的手段解决这个问题。
+
+-   线程的栈空间属性
+
+    -   `int pthread_attr_setstack(pthread_attr_t *attr, void *stackaddr, size_t stacksize);`：设置栈地址和大小
+
+        >   可以将线程的栈地址设置到**堆**中（`malloc`）
+
+    -   `int pthread_attr_getstack(pthread_attr_t *attr, void **stackaddr, size_t *stacksize);`：获取栈地址和大小
+
+    -   `int pthread_attr_setstacksize(pthread_attr_t *attr, size_t stacksize);`：设置栈大小
+
+    -   `int pthread_attr_getstacksize(pthread_attr_t *attr, size_t *stacksize);`：获取栈大小
 
 
 
