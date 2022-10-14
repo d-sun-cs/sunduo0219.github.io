@@ -1169,12 +1169,73 @@ date: 2022-10-10 11:40:02
     >   这些函数都是成功返回0， 失败返回-1，同时设置errno
 
     -   `int sem_init(sem_t *sem, int pshared, unsigned int value);`：初始化一个信号量
-        -   `pshared`：0表示只用于线程间，非0表示可用于进程间
-        -   `value`：信号量初值
-    -   `int sem_destroy(sem_t *sem);`：销毁一个信号量
-    -   `int sem_wait(sem_t *sem);`：给信号量加锁（`sem--`）
-    -   `int sem_post(sem_t *sem);`：给信号量解锁（`sem++`）
-    -   `int sem_trywait(sem_t *sem);`：尝试对信号量加锁
+        - `pshared`：0表示只用于线程间，非0表示可用于进程间
+        
+        - `value`：信号量初值
+        
+          > **信号量的初值决定了占用信号量的线程/进程个数**
+        
+    - `int sem_destroy(sem_t *sem);`：销毁一个信号量
+
+    - `int sem_wait(sem_t *sem);`：给信号量加锁（`sem--`）
+
+    - `int sem_post(sem_t *sem);`：给信号量解锁（`sem++`）
+
+    - `int sem_trywait(sem_t *sem);`：尝试对信号量加锁
+
+    -   `int sem_timedwait(sem_t *sem, const struct timespec *abs_timeout);`：限时尝试对信号量加锁
+
+-   信号量的特点：可以由多个线程/进程占用
+
+---
+
+*进程间同步：*
+
+- 通过互斥量`mutex`实现：指定初始化时的属性`pthread_mutexattr_t mattr attr`
+
+  - `int pthread_mutexattr_init(pthread_mutexattr_t *attr);`：初始化一个**`mutex`属性**对象
+
+  - `int pthread_mutexattr_destroy(pthread_mutexattr_t *attr);`：销毁**`mutex`属性**对象
+
+  - `int pthread_mutexattr_setpshared(pthread_mutexattr_t *attr, int pshared);`：修改`mutex`的共享属性
+
+    - `PTHREAD_PROCESS_PRIVATE`：进程间私有，即线程锁
+
+      > 也是默认属性
+
+    - `PTHREAD_PROCESS_SHARED`：进程锁
+
+- 借助文件锁实现：`int fcntl(int fd, int cmd, ... /* arg */ );`
+
+  - `cmd`：函数操作类型
+
+    - `F_SETLK`：设置文件锁（trylock）
+
+    - `F_SETLKW`：设置文件锁（lock、unlock）
+
+      > 通过下面结构体的`l_type`成员指定
+
+    - `F_GETLK`：获取文件锁
+
+  - 可变参：`struct flock`
+
+    `struct flock {`
+
+    ​       `short l_type;       锁的类型：F_RDLCK 、F_WRLCK 、F_UNLCK`
+
+    ​       `short l_whence;     偏移位置：SEEK_SET、SEEK_CUR、SEEK_END `
+
+    ​       `off_t l_start;        起始偏移：1000`
+
+    ​       `off_t l_len;         长度：0表示整个文件加锁`
+
+    ​       `pid_t l_pid;        持有该锁的进程ID：(F_GETLK only)`
+
+    ​    ` };`
+
+    > 提供了读锁和写锁，也允许只锁一个文件的**一部分**
+
+  > 多线程同步不能使用文件锁，因为同一个进程中的多线程共享文件描述符，也共享相应的文件结构体
 
 
 
