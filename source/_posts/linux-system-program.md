@@ -484,6 +484,8 @@ date: 2022-10-10 11:40:02
 
     > `man 2 kill`查看相关文档
 
+    - 成功返回0，失败返回-1并设置`errno`
+
   - `int raise(int sig);`：给当前进程自己发送信号
 
     `raise(signo) == kill(getpid(), signo);`
