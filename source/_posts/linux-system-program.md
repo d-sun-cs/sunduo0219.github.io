@@ -1022,14 +1022,24 @@ date: 2022-10-10 11:40:02
 
     -   `int pthread_mutex_init(pthread_mutex_t *restrict mutex, const pthread_mutexattr_t *restrict attr);`：初始化一个互斥锁
         -   可以理解为`mutex = 1`
+        
         -   `restrict`关键字：所有修改**该指针指向内存**的操作，只能通过本指针完成，不能通过除本指针以外的其他变量或指针修改
+        
         -   `attr`：互斥锁的属性，传入`NULL`为默认属性
+        
+        -   也可以使用**宏**直接初始化：（静态初始化）
+        
+            `pthead_mutex_t muetx = PTHREAD_MUTEX_INITIALIZER;`
+        
     -   `int pthread_mutex_destroy(pthread_mutex_t *mutex);`：销毁一个互斥锁
+
     -   `int pthread_mutex_lock(pthread_mutex_t *mutex);`：上锁
         -   可理解为`mutex--`
         -   锁被占用则阻塞，直到成功获得锁
+        
     -   `int pthread_mutex_unlock(pthread_mutex_t *mutex);`：解锁
         -   可理解为`mutex++`
+        
     -   `int pthread_mutex_trylock(pthread_mutex_t *mutex);`：尝试上锁
         -   锁被占用不阻塞，返回`EBUSY`代表无法获得锁
 
@@ -1067,16 +1077,28 @@ date: 2022-10-10 11:40:02
 
     -   `int pthread_rwlock_init(pthread_rwlock_t *restrict rwlock, const pthread_rwlockattr_t *restrict attr);`：初始化一把读写锁
         -   `attr`：传入`NULL`代表使用默认属性
+        
+        -   也可以使用**宏**直接初始化：（静态初始化）
+        
+            `pthread_rwlock_t rwlock = PTHREAD_RWLOCK_INITIALIZER;`
+        
     -   `int pthread_rwlock_destroy(pthread_rwlock_t *rwlock);`：销毁一把读写锁
+
     -   ` int pthread_rwlock_rdlock(pthread_rwlock_t *rwlock);`：请求读锁
+
     -   `int pthread_rwlock_wrlock(pthread_rwlock_t *rwlock);`：请求写锁
+
     -   `int pthread_rwlock_unlock(pthread_rwlock_t *rwlock);`：解锁
+
     -   `int pthread_rwlock_tryrdlock(pthread_rwlock_t *rwlock);`：非阻塞请求读锁
+
     -   `int pthread_rwlock_trywrlock(pthread_rwlock_t *rwlock);`：非阻塞请求写锁
 
 -   `rwlock`的应用：`pthread_rwlock t rwlock;`
 
     >   与`mutex`很相似
+
+-   `rwlock`的优点：适合读多写少的场景，减少不必要的竞争
 
 ---
 
@@ -1092,11 +1114,65 @@ date: 2022-10-10 11:40:02
     >   这些函数均是成功返回0，失败返回错误号。
 
     -   `int pthread_cond_init(pthread_cond_t *restrict cond, const pthread_condattr_t *restrict attr);`：初始化一个条件变量
+
+        -   也可以使用**宏**直接初始化：（静态初始化）
+
+            `pthread_cond_t cond = PTHREAD_COND_INITIALIZER;`
+
     -   `int pthread_cond_destroy(pthread_cond_t *cond);`：销毁一个条件变量
+
     -   :star:`int pthread_cond_wait(pthread_cond_t *restrict cond, pthread_mutex_t *restrict mutex);`：阻塞等待一个条件变量满足
         -   `mutex`：需要传入一个也初始化好的`mutex`，并且已经对其**加锁**了
+
         -   会释放已掌握的互斥锁（**解锁互斥量**），相当于`pthread_mutex_unlock(&mutex)`
+
+            >   **检查条件变量是否满足与加锁**的操作是不可分割的
+
         -   当被**唤醒**，函数返回即将时，会解除阻塞并重新申请**获取互斥锁**，相当于`pthread_mutex_lock(&mutex)`
+
+    -   `int pthread_cond_signal(pthread_cond_t *cond);`：唤醒**至少一个**阻塞在条件变量上的线程
+
+    -   `int pthread_cond_broadcast(pthread_cond_t *cond);`：唤醒**全部**阻塞在条件变量上的线程
+
+    -   `int pthread_cond_timedwait(pthread_cond_t *restrict cond, pthread_mutex_t *restrict mutex, const struct timespec *restrict abstime);`：限时等待一个条件变量
+
+        -   也会释放锁和申请锁
+
+        -   `abstime`：绝对时间，是相对于`1970-1-1 00:00:00`的时间
+
+            >   可以在`man sem_timedwait`中找到对应结构体的定义
+
+            >   正确用法：
+            >
+            >   `time_t cur = time(NULL);`
+            >
+            >   `struct timespec t;`
+            >
+            >   `t.tv_sec = cur + 1`
+            >
+            >   `pthread_cond_timedwait(&cond, &mutex, &t)`
+
+-   条件变量的优点：相比于`mutex`，可以减少不必要的竞争，提高效率
+
+    >   例如生产者与消费者模型中，在没有产品时，使用条件变量，消费者就**不必互相竞争，而是都等待**
+
+---
+
+*信号量`semaphore`：*
+
+-   `semaphore.h`，信号量，可以理解成互斥锁的“加强版”，可以进一步细化锁，保证互斥与同步，又提高并发度
+
+-   主要应用函数（注意，没有`pthread`前缀，进程线程都可以用）
+
+    >   这些函数都是成功返回0， 失败返回-1，同时设置errno
+
+    -   `int sem_init(sem_t *sem, int pshared, unsigned int value);`：初始化一个信号量
+        -   `pshared`：0表示只用于线程间，非0表示可用于进程间
+        -   `value`：信号量初值
+    -   `int sem_destroy(sem_t *sem);`：销毁一个信号量
+    -   `int sem_wait(sem_t *sem);`：给信号量加锁（`sem--`）
+    -   `int sem_post(sem_t *sem);`：给信号量解锁（`sem++`）
+    -   `int sem_trywait(sem_t *sem);`：尝试对信号量加锁
 
 
 
