@@ -194,6 +194,16 @@ date: 2022-10-10 11:40:02
 
 > 编译时需要加`-g`选项，通过`gdb 可执行程序`可以开启gdb调试
 
+- 工作目录
+
+  - `pwd`：查看当前工作目录
+  - `cd`：切换工作目录
+
+- 运行时参数
+
+  - `set args 参数1 参数2 ...`：指定运行时参数
+  - `show args`：查看设置好的运行时参数
+
 - 查看源代码
 
   > l：list，列出10行
@@ -272,23 +282,66 @@ date: 2022-10-10 11:40:02
   - `i b`：查看断点信息
   - `i display`：查看被追踪的表达式信息
 
+
+
 ### 1.3 makefile
 
 *一个规则：*
 
+- makefile文件命名规则：
 
+  - `makefile`
+  - `Makefile`
+
+- 运行makefile：`make`
+
+- 规则三要素：目标、依赖、命令
+
+  ```makefile
+  # 如下方式定义一条“规则”
+  目标: 依赖的所有文件
+  	gcc命令
+  ```
+
+  - 注意命令前必须有一个`tab`缩进
+  - 默认从当前目录中寻找依赖文件，否则就要指定路径
+
+  ```makefile
+  app: main.o add.o sub.o mul.o
+      gcc main.o add.o sub.o mul.o -o app
+  
+  main.o: main.c
+      gcc -c main.c
+  
+  add.o: add.c
+      gcc -c add.c
+  
+  mul.o: mul.c
+      gcc -c mul.c
+  
+  sub.o: sub.c
+      gcc -c sub.c
+  ```
+
+  - 如果有多条规则，默认第1条规则的目标为终极目标，后面的规则都是为此服务的
+  - 如上所示分开生成`.o`文件，则执行`make`时**只会编译修改过的文件**
+
+  
 
 ---
 
 *两个函数：*
 
-
+- `wildcard`
+- `patsubst`
 
 ---
 
 *三个变量：*
 
-
+- `$<`
+- `$@`
+- `$^`
 
 ---
 
