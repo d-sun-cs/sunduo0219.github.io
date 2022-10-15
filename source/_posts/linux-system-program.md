@@ -293,7 +293,10 @@ date: 2022-10-10 11:40:02
   - `makefile`
   - `Makefile`
 
-- 运行makefile：`make`
+- 运行makefile：
+
+  - `make`：生成终极目标
+  - `make xxx`：生成`xxx`目标，运行对应规则的命令
 
 - 规则三要素：目标、依赖、命令
 
@@ -324,15 +327,25 @@ date: 2022-10-10 11:40:02
   ```
 
   - 如果有多条规则，默认**第1条规则**的目标为**终极目标**，后面的规则都是为此服务的
-  
+
     > 终极目标可以向下查找依赖项的生成，然后从下向上执行
-  
+
   - 如上所示分开生成`.o`文件，则执行`make`时**只会编译修改过的文件**
-  
+
     > 终极目标是`app`，其他的可以不变；
     >
     > 当**依赖的更新时间**晚于**目标的更新时间**时，会再次执行**命令**
-  
+
+- `clean`规则与伪目标
+
+  ```makefile
+  .PHONY: clean
+  clean:
+      rm $(obj) $(target) -f
+  ```
+
+  - `make clean`即可运行命令
+  - 解决目录下有名为`clean`的文件的问题：声明伪目标`.PHONY`
 
 ---
 
@@ -383,14 +396,35 @@ ${target}: ${obj}
 
 *两个函数：*
 
-- `wildcard`
-- `patsubst`
+- `wildcard`：
+
+  `src = $(wildcard 某目录下用*匹配的文件)`
+
+- `patsubst`：
+
+  `obj = $(patsubst 某目录下用%匹配的文件, 保留%后要替换成的样子, $(src))`
+
+```makefile
+target = app 
+src = $(wildcard ./*.c)
+obj = $(patsubst ./%.c, ./%.o, $(src))
+
+${target}: ${obj} 
+    gcc ${obj} -o ${target}
+
+%.o: %.c 
+    gcc -c $< -o $@
+
+.PHONY: clean
+clean:
+    rm $(obj) $(target) -f
+```
 
 ---
 
 
 
-## 2 系统调用函数
+## 2 文件系统
 
 ### 2.1 IO
 
