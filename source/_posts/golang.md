@@ -1536,6 +1536,24 @@ for {
 
 
 
+---
+
+*压缩与解压缩：*
+
+zip格式：`archive/zip`包
+
+-   `zipReader, err := zip.OpenReader("path")`
+
+-   `for _, eachFile := range zipReader.File {}`
+
+    -   `eachFile.FileInfo().isDir()`
+
+    -   `eachFile.Name`
+
+    -   `fileReader, err := eachFile.OpenRaw`
+
+        >   `archive/zip`包中的`File`类型继承了`FileHeader`
+
 
 
 ## 8 Go网络编程
