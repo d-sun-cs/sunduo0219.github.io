@@ -224,17 +224,19 @@ r.GET("/JSONP", func(c *gin.Context) {
 
 *绑定到结构体：*
 
--   可以提取**JSON、form表单、QueryString类型**的参数到结构体中，key需要和结构体的字段对应
+- 可以提取**JSON、form表单、QueryString类型**的参数到结构体中，key需要和结构体的字段对应
 
-    ```go
-    //注意首字母大写 
-    type Userinfo struct { 
-        Username string `form:"username" json:"user"` 
-        Password string `form:"password" json:"password"` 
-    }
-    ```
+  ```go
+  //注意首字母大写 
+  type Userinfo struct { 
+      Username string `form:"username" json:"user"` 
+      Password string `form:"password" json:"password"` 
+  }
+  ```
 
-    >   这里主要是`form`标签在起作用，`json`只是结构体转换成JSON后的key
+  >   这里主要是`form`标签在起作用，`json`只是结构体转换成JSON后的key
+  >
+  >   > 无论是`form`还是`json`，结构体成员都要有公开访问权限
 
 -   GET传值绑定到结构体：注意要传**地址**
 

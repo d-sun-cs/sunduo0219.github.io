@@ -266,6 +266,10 @@ func main(){ // 与包同名，为入口函数
 
   - 子串
 
+    - 截取：`str[begin:end]`
+
+      > `begin`或`end`可以省略
+
     - 子串出现的位置：
 
       `strings.Index(s, substr string)`
@@ -277,9 +281,9 @@ func main(){ // 与包同名，为入口函数
     - 是否有**前后缀**：
 
       `strings.HasPrefix(s, prefix string)`
-
+  
       `strings.HasSuffix(s, suffix string)`
-
+  
   - 转换为字符串：`string(var)`
 
 ---
@@ -527,11 +531,11 @@ default:
 
 - 定义数组：
 
-  - `var arr = [len][type]{elem1, elem2, others}`
+  - `var arr = [len]type{elem1, elem2, others}`
 
-  - `arr := [len][type]{elem1, elem2, others}`
+  - `arr := [len]type{elem1, elem2, others}`
 
-  - `arr := [len][type]{idx1: elem1, idx2: elem2, idx3: elem3, others}`
+  - `arr := [len]type{idx1: elem1, idx2: elem2, idx3: elem3, others}`
 
     > 指定索引，中间未指明的是默认值
 
@@ -542,6 +546,8 @@ default:
 - 格式化输出：`%v`
 
 - 获取或修改数组元素：`arr[idx]`
+
+- 截取数据：`arr[begin:end]`
 
 - 获得数组长度：`len(arr)`
 
@@ -1524,7 +1530,9 @@ for {
 
 *目录操作：*
 
-……
+- 创建文件夹：
+  - `err := Mkdir("path", os.ModePerm)`
+  - `err := MkdirAll("path", os.ModePerm)`：允许直接递归创建
 
 
 
