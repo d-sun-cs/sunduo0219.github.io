@@ -435,7 +435,10 @@ footer:
   owner:
     enable: true
     since: 2020
-  custom_text: Nice to meet you !
+  custom_text: 
+    - Nice to meet you !
+    - <a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral"><span>本网站由<img class="cdn-icon" src="/bgs/bg5.jpg">提供CDN加速/云存储服务</span></a>
+    - <a href="icp链接"><img  class="icp-icon"  src="icp图片"><span>备案号:xxxxxx</span></a>
   copyright: false # Copyright of theme and framework
 
 # Analysis
@@ -576,7 +579,7 @@ activate_power_mode:
 
 # Mouse click effects: fireworks (鼠標點擊效果: 煙火特效)
 fireworks:
-  enable: true
+  enable: false
   zIndex: 9999 # -1 or 9999
   mobile: false
 
