@@ -106,7 +106,7 @@ deploy:
   repo: 
     github: https://github.com/SunDocker/SunDocker.github.io.git
     gitee: https://gitee.com/sundocker/sundocker.git
-    coding: https://EoNhzMOvoT:6829c286c7b9abce761614d1848193d954d446b4@e.coding.net/serverless-100025791419/blog/blog.git
+    # coding: https://EoNhzMOvoT:6829c286c7b9abce761614d1848193d954d446b4@e.coding.net/serverless-100025791419/blog/blog.git
   branch: main
 # - type: baidu_url_submitter  # 百度主动推送
 
