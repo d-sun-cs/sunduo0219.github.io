@@ -436,7 +436,7 @@ footer:
     enable: true
     since: 2020
   custom_text: Nice to meet you !<br>
-    <a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral"><span>本网站由<img class="cdn-icon" src="/bgs/又拍云_logo6.png" width="3%">提供CDN加速/云存储服务</span></a><br>
+    <a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral"><span>本网站由<img class="cdn-icon" src="/bgs/又拍云_logo6.png" width="2.5%">提供CDN加速/云存储服务</span></a><br>
     <a href="icp链接"><img  class="icp-icon"  src="icp图片"><span>备案号:xxxxxx</span></a><br>
   copyright: false # Copyright of theme and framework
 
