@@ -802,26 +802,44 @@ T形图：
 
 *声明语句的SDT：*
 
-- 文法符号与综合属性
+- <u>文法符号与综合属性</u>
 
   - `P`：开始符号
+
   - `D`：声明语句
+
   - `T`：标识符类型
+
     - `T.type`：类型表达式
     - `T.width`：类型宽度
+
   - `B`：基本类型
+
     - `B.type`：基本类型
     - `B.width`：基本类型宽度
+
   - `C`：数组标志
+
     - `C.type`：数组类型
     - `C.width`：数组类型宽度
+
+  - `id`：标识符
+
+    - `id.lexeme`：构成标识符的字符序列
+
+      > 是词法分析器提供的词法值
+
   - `num`：整数的正则定义
+
     - `num.val`：整数值
+
   - `int`：整型
+
   - `real`：实型
+
   - `↑`：指针标志
 
-- 特殊变量
+- <u>特殊变量</u>
 
   - `offset`：下一个可用的**相对地址**，有初始值，可设为0
 
@@ -829,15 +847,34 @@ T形图：
 
     > 最终其实是传递到`T`了
 
-- 副作用`enter(name, type, offset)`：在符号表中为标识符`name`创建记录，将`name`的类型设置为`type`，相对地址设置为`offset`
+- <u>副作用</u>
 
-- 语法规则和语义动作
+  - `enter(name, type, offset)`：在符号表中为标识符`name`创建记录，将`name`的类型设置为`type`，相对地址设置为`offset`
 
-  - 开始：$P\rarr\{offset=0\}D$
+- <u>语法规则和语义动作</u>
+
+  - 开始：$P\rarr\{a_1\}D$
+    $$
+    \begin{align}
+    &a_1:\{\\
+    &~~~~offset=0\\
+    &\}
+    \end{align}
+    $$
+
+    > 声明语句形成前要将`offset`置为初始值
 
   - **声明语句**的生成：
 
-    - $D\rarr T~id;\{enter(id.lexem,~T.type,~offset);offset=offset+T.width\}D$
+    - $D\rarr T~id;\{a_1\}D$
+      $$
+      \begin{align}
+      &a_1:\{\\
+      &~~~~enter(id.lexem,~T.type,~offset);\\
+      &~~~~offset=offset+T.width;\\
+      &\}
+      \end{align}
+      $$
 
       > 一条完整声明语句形成后要在符号表创建记录，并后移`offset`
 
@@ -845,35 +882,87 @@ T形图：
 
   - **标识符类型**的形成：
 
-    - $T\rarr B\{t=B.type;w=B.width;\}C\{T.type=C.type;T.width=C.width\}$
+    - $T\rarr B\{a_1\}C\{a_2\}$
+      $$
+      \begin{align}
+      &a_1:\{\\
+      &~~~~t=B.type;\\
+      &~~~~w=B.width;\\
+      &\}\\
+      &a_2:\{\\
+      &~~~~T.type=C.type;\\
+      &~~~~T.width=C.width;\\
+      &\}
+      \end{align}
+      $$
 
       > **基本类型**分析完后要用`t`和`w`记录**类型和宽度**，以便向后传递；
       >
       > 一个**完整标识符类型**形成后要设置类型的**类型表达式和类型宽度**
 
-    - $T\rarr\uarr T_1\{T.type=pointer(T_1.type);T.width=4;\}$
+    - $T\rarr\uarr T_1\{a_1\}$
+      $$
+      \begin{align}
+      &a_1:\{\\
+      &~~~~T.type=pointer(T_1.type);\\
+      &~~~~T.width=4;\\
+      &\}
+      \end{align}
+      $$
 
-      > 形成指针后要设置其类型和宽度
+      > 形成指针后要设置其**类型和宽度**
 
   - **基本类型**的形成：
 
-    - $B\rarr int\{B.type=int;B.width=4;\}$
+    - $B\rarr int\{a_1\}$
+      $$
+      \begin{align}
+      &a_1:\{\\
+      &~~~~B.type=int;\\
+      &~~~~B.width=4;\\
+      &\}
+      \end{align}
+      $$
 
       > 形成整型后要设置其类型和宽度
 
-    - $B\rarr real\{B.type=real;B.width=8;\}$
+    - $B\rarr real\{a_1\}$
+      $$
+      \begin{align}
+      &a_1:\{\\
+      &~~~~B.type=real;\\
+      &~~~~B.width=8;\\
+      &\}
+      \end{align}
+      $$
 
       > 形成实型后要设置其类型和宽度
 
   - **数组标志**的形成：
 
-    - $C\rarr\epsilon\{C.type=t;C.width=w;\}$
+    - $C\rarr\epsilon\{a_1\}$
+      $$
+      \begin{align}
+      &a_1:\{\\
+      &~~~~C.type=t;\\
+      &~~~~C.width=w;\\
+      &\}
+      \end{align}
+      $$
 
       > 数组标志开始形成时要从`t`和`w`中读取信息，以便后续**数组类型和宽度**的计算
       >
       > > 从推导和归约不同的角度讲，这条产生式可能代表数组标志的开始或结束，但**类型和宽度的计算逻辑**是相同的，思维要灵活一点
 
-    - $C\rarr[num]C_1\{C.type=array(num.val,C_1.type);C.width=num.val*C_1.width;\}$
+    - $C\rarr[num]C_1\{a_1\}$
+      $$
+      \begin{align}
+      &a_1:\{\\
+      &~~~~C.type=array(num.val,C_1.type);\\
+      &~~~~C.width=num.val*C_1.width;\\
+      &\}
+      \end{align}
+      $$
 
       > 形成数组标志时要用**数组构造符**其设置类型并**计算宽度**
 
@@ -885,11 +974,181 @@ T形图：
 
 - 生成**对表达式求值**的三地址码
 
+  > 三地址码中地址不直接参与运算，而是**存放在所指向地址的值参与运算**。
+  >
+  > 例如下文中经常出现的`E.addr`，如果放到运算表达式中，其实代表的是存放在所指向地址的值
+
+- 正确处理**数组元素**等复杂表达式
+
+  > 对于**数组元素**要计算其**地址索引**：
+  >
+  > $addr(a[i_1][i_2]...[i_k])=base+i_1\times w_1+i_2\times w_2+...+i_k\times w_k$
+
 ---
 
 *简单赋值和运算语句的SDT：*
 
+- <u>文法符号与综合属性</u>
 
+  - `S`**：开始**符号，同时也代表**完整的赋值语句**
+    - `S.code`：存放完整**赋值过程**的所有三地址码
+  - `E`：表达式
+    - `E.code`：存放**表达式之间赋值**的三地址码
+    - `E.addr`：表达式**值的存放地址**
+  - `id`：标识符
+    - `id.lexeme`：构成标识符的字符序列
+  - `L`：**数组元素**
+    - `L.type`：数组元素的**类型**
+    - `L.offset`：数组元素的**地址偏移量**
+    - `L.array`：数组**入口地址**，也是数组标识符在符号表中记录的地址
+
+- <u>副作用</u>
+
+  - `lookup(lexeme)`：查询符号表中**标识符**指向的**地址**
+
+    - `lookup(id.lexeme).type.elem`：（如果`id`是数组标识符）数组元素类型
+    - `lookup(id.lexeme).type.elem.width`：数组元素类型的宽度
+
+  - `newtemp()`：生成临时变量并返回其地址
+
+    > 这里虽然叫做“临时变量”，但这个变量依然会被写进**三地址码**中，只是在逻辑上起**临时记录值**的作用
+
+  - `gen(code)`：生成新的**三地址码**（并拼接已生成的三地址码，赋值给综合属性）
+
+    > 增量翻译：在语义动作中简化类似`E.code=E1.code||E2.code||gen(xxx)`的代码，直接写成`gen(xxx)`，这样代表了**生成三地址码**后自动将子结点的`code`属性与之**顺序拼接**并赋值给父节点的`code`属性
+
+- <u>语法规则和语义动作</u>
+
+  - 开始/**完整赋值语句**的形成：
+
+    - $S\rarr id=E;\{a_1\}$
+      $$
+      \begin{align}
+      &a_1:\{\\
+      &~~~~p=lookup(id.lexeme);\\
+      &~~~~if~p==nil~then~error;\\
+      &~~~~gen(p=E.addr);\\
+      &\}
+      \end{align}
+      $$
+
+      > 形成**单一标识符**赋值语句时生成**给目标标识符赋值**的三地址码
+
+    - $S\rarr L=E;\{a_1\}$
+      $$
+      \begin{align}
+      &a_1:\{\\
+      &~~~~gen(L.array[L.offset]=E.addr);\\
+      &\}
+      \end{align}
+      $$
+
+      >形成**数组元素**赋值语句时生成**元素地址索引并给其赋值**的三地址码
+
+  - **算术表达式**的形成
+
+    - $E\rarr E_1+E_2\{a_1\}$
+      $$
+      \begin{align}
+      &a_1:\{\\
+      &~~~~E.addr=newtemp();\\
+      &~~~~gen(E.addr=E_1.addr+E_2.addr);\\
+      &\}
+      \end{align}
+      $$
+
+      > 形成加法运算表达式时生成用**临时变量存放运算结果**的三地址码
+
+    - $E\rarr E_1*E_2\{a_1\}$
+      $$
+      \begin{align}
+      &a_1:\{\\
+      &~~~~E.addr=newtemp();\\
+      &~~~~gen(E.addr=E_1.addr*E_2.addr);\\
+      &\}
+      \end{align}
+      $$
+
+      > 形成乘法运算表达式时生成用**临时变量存放运算结果**的三地址码
+
+    - $E\rarr-E_1\{a_1\}$
+      $$
+      \begin{align}
+      &a_1:\{\\
+      &~~~~E.addr=newtemp();\\
+      &~~~~gen(E.addr=uminus~E_1.addrr);\\
+      &\}
+      \end{align}
+      $$
+
+      > 形成取相反数运算表达式时生成用**临时变量存放运算结果**的三地址码
+
+    - $E\rarr(E_1)\{a_1\}$
+      $$
+      \begin{align}
+      &a_1:\{\\
+      &~~~~E.addr=E_1.addr;\\
+      &\}
+      \end{align}
+      $$
+
+      > 形成括号运算表达式时生成用**临时变量存放运算结果**的三地址码
+
+    - $E\rarr id\{a_1\}$
+      $$
+      \begin{align}
+      &a_1:\{\\
+      &~~~~E.addr=lookup(id.lexeme);\\
+      &~~~~if~E.addr==nil~then~error;\\
+      &\}
+      \end{align}
+      $$
+
+      > 由标识符形成表达式时要**记录标识符地址**
+
+  - **数组元素表达式**的形成
+
+    - $E\rarr L\{a_1\}$
+      $$
+      \begin{align}
+      &a_1:\{\\
+      &~~~~E.addr=newtemp();\\
+      &~~~~gen(E.addr=L.array[L.offset]);\\
+      &\}
+      \end{align}
+      $$
+
+      > 形成**完整数组元素表达式**时生成用**临时变量存放数组元素地址索引**的三地址码
+
+    - $L\rarr id[E]\{a_1\}$
+      $$
+      \begin{align}
+      &a_1:\{\\
+      &~~~~L.array=lookup(id.lexeme);\\
+      &~~~~if~L.array==nil~then~error;\\
+      &~~~~L.type=L.array.type.elem;\\
+      &~~~~L.offset=newtemp();\\
+      &~~~~gen(L.offset=E.addr*L.type.width);\\
+      \}
+      \end{align}
+      $$
+
+      > 确定数组元素**维度**和数组**标识符**后，记录数组**基址**和数组元素**类型**，并生成 用类型**宽度**和表达式值计算**偏移量** 的三地址码
+
+    - $L\rarr L_1[E]\{a_1\}$
+      $$
+      \begin{align}
+      &a_1:\{\\
+      &~~~~;\\
+      &~~~~;\\
+      &~~~~;\\
+      &~~~~;\\
+      &~~~~;\\
+      \}
+      \end{align}
+      $$
+
+      > 更高维数组元素
 
 ### 6.3 控制流语句的翻译
 
