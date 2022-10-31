@@ -1,9 +1,10 @@
 ---
 title: MIT操作系统实验
-date: 2022-10-23 22:15:02
 tags:
   - 操作系统
   - 计算机
+abbrlink: 9ede7bd8
+date: 2022-10-23 22:15:02
 ---
 
 ## Lab 3: page tables
