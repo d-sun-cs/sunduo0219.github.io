@@ -2072,7 +2072,7 @@ T形图：
 
 
 
-### 7.3 栈式存储分配与调用返回
+### 7.3 栈式存储分配与调用返回序列
 
 *栈式存储分配与活动树：*
 
@@ -2309,42 +2309,145 @@ T形图：
 
 -   <u>寻址模式</u>：
 
+    > `contents(x)`表示取出地址`x`上的数据，`conteents(R)`表示取出寄存器`R`中的数据（有时也可以直接用`R`代替）
+
     -   **变量名**：直接用一个变量名表示**地址**
-
-        >   `contents(x)`表示取出地址`x`上的数据
-        >
-        >   例：`LD R1, a`，`R1 = contents(a)`
-
+    
+        >   例：`LD R1, a // R1 = contents(a)`
+        
     -   偏移：用`基址(偏移量)`的方式表示地址
 
         -   `a(r)`：`a`是变量，`r`是寄存器
 
-            >   例：`LD R1 a(R2)`，`R1 = contents(a + contens(R2))`
+            >   例：`LD R1 a(R2) // R1 = contents(a + contens(R2))`
 
         -   `c(r)`：`a`是常整数，`r`是寄存器
 
-            >   例：`LD R1 100(R2)`，`R1 = contents(100 + contens(R2))`
+            >   例：`LD R1 100(R2) // R1 = contents(100 + contens(R2))`
 
-    -   间接：**指出的地址**中并不存放目标数据，而是又**存放着目标数据所在地址**
+    - 间接：**指出的地址**中并不存放目标数据，而是又**存放着目标数据所在地址**
 
-        -   `*r`：在寄存器`r`指示的地址中存放着目标数据所在地址
+      > `*`运算符可以理解成把地址中存放的数据取出来。在寻址模式中意思就是，**指出的地址中存放的数据**是真正要访问的地址
 
-            >   例：`LD R1, *R2`，`R1 = contents(contents(R2))`
+      -   `*r`：在寄存器`r`指示的地址中存放着目标数据所在地址
 
-        -   `*c(r)`：寄存器`r`中的值再加上常整数`c`所指示的地址中存放着目标数据所在地址
+          >   例：`LD R1, *R2 // R1 = contents(contents(R2))`
 
-            >   例：`LD R1, *100(R2)`，`R1 = contents(contents(100 + contents(R2)))`
+      -   `*c(r)`：寄存器`r`中的值再加上常整数`c`所指示的地址中存放着目标数据所在地址
+
+          >   例：`LD R1, *100(R2) // R1 = contents(contents(100 + contents(R2)))`
 
     -   立即数：`#c`表示立即数整数`c`
-
-        >   例：`LD R1, #100`，`R1 = 100`
+    
+        >   例：`LD R1, #100 // R1 = 100`
 
 ---
 
 *指令选择：*
 
--   运算指令
+-   **运算**三地址语句：`x = y - z`
 
+    -   目标代码：
 
+        `LD R1, y`
+
+        `LD R2, z`
+
+        `SUB R1, R1, R2`
+
+        `ST x, R1`
+
+        > 上面列出的4条指令一定能实现运算语句，但在特定情况下可以省略一些指令，例如：
+        >
+        > - 所需的运算分量已经在寄存器中了
+        > - 运算结果不需要放回内存
+
+-   **数组寻址**三地址语句：
+
+    > `a`是一个实数数组，每个实数占8字节
+
+    -   `b = a[i]`的目标代码：
+
+        `LD R1, i`
+
+        `MUL R1, R1, 8`
+
+        `LD R2, a(R1) // R2 = contents(a + contents(R1))`
+
+        `ST b, R2`
+
+    -   `a[j] = c`的目标代码：
+
+        `LD R1, c`
+
+        `LD R2, j`
+
+        `MUL R2, R2, 8`
+
+        `ST a(R2), R1 // contents(a + contents(R2)) = R1`
+
+-   **指针存取**三地址语句：
+
+    -   `x = *p`的目标代码：
+
+        `LD R1, p`
+
+        `LD R2, 0(R1) // R2 = contents(0 + contents(R1))`
+
+        `ST x, R2`
+
+    -   `*p = y`的目标代码：
+
+        `LD R1, p`
+
+        `LD R2, y`
+
+        `ST 0(R1), R2 // contents(0 + contents(R1)) = R2`
+
+-   **条件跳转**三地址语句：`if x < y goto L`
+
+    `LD R1, x`
+
+    `LD R2, y`
+
+    `SUB R1, R1, R2`
+
+    `BLTZ R1, M`
+
+    > `M`是标号为`L`的三地址语句所产生的若干条目标代码中的第一条指令标号
+
+-   **过程调用**三地址语句
+
+    -   静态存储分配：`call callee`的目标代码
+
+        `ST callee.staticArea, #here + 20 // 存放返回地址`
+
+        `BR callee.codeArea // 控制流转向被调用过程`
+
+        > `callee.staticArea`：`callee`的活动记录在静态区中的起始位置
+        >
+        > `callee.codeArea`：`callee`的目标代码在静态代码区中的起始位置
+
+    -   栈式存储分配：`call callee`的目标代码
+
+        `ADD SP, SP, #caller.recordsize`
+
+        `ST 0(SP), #here + 16`
+
+        `BR callee.codeArea`
+
+-   **返回**三地址语句
+
+    -   静态存储分配：`return`的目标代码
+
+        `BR *callee.staticArea`
+
+    -   栈式存储分配：`return`的目标代码
+
+        `BR *0(SP) // 由被调用者执行`
+
+        `SUB SP, SP, #caller.recoredsize // 由调用者执行`
+
+    
 
 ​	
