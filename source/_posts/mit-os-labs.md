@@ -177,10 +177,62 @@ date: 2022-10-23 22:15:02
 
 > 参考资料：
 >
-> 
+> - http://t.csdn.cn/LMWwm
+>   - xv6中的三种trap
+>     - 系统调用
+>     - 程序异常
+>     - 设备中断
+>   - 对于来自用户空间的trap、来自内核空间的trap、定时器中断采用三种不同的汇编向量和 C trap 处理程序
 
 ### Task1: RISC-V assembly
 
+- Q：Which registers contain arguments to functions? For example, which register holds 13 in main's call to `printf`?
+
+  A：a0-a7寄存器保存了函数调用的参数；`main`函数调用`printf`时，13对应的参数保存在a2寄存器中。
+
+- Q：Where is the call to function `f` in the assembly code for main? Where is the call to `g`? (Hint: the compiler may inline functions.)
+
+  A：在`main`的汇编代码中找不到直接调用`f`函数的代码，因为`g`函数被内联到`f`函数中，`f`函数又被内联到了`main`函数中
+
+- Q：At what address is the function `printf` located?
+
+  A：0000000000000628
+
+- Q：What value is in the register `ra` just after the `jalr` to `printf` in `main`?
+
+  A：0x38，即题述`jalr`指令的下一条汇编指令地址
+
+- Q：What is the output? If the RISC-V were instead big-endian what would you set `i` to in order to yield the same output? Would you need to change `57616` to a different value?
+
+  A：`HE110 World`；如果RISC-V是大端序，即高位字节在低地址，应当将`i`设置为`0x726c6400`；不需要修改`57616`的值，因为无论怎样的端序，它都代表十六进制的`E110`
+
+- Q：In the following code, what is going to be printed after `'y='`? (note: the answer is not a specific value.) Why does this happen?
+
+  `printf("x=%d y=%d", 3);`
+
+  A：输出的是一个不确定的值，本质上是寄存器a2中的值，而这个值取决于之前运行的代码。
+
 ### Task2: Backtrace
+
+目标分析：
+
+
+
+---
+
+实施方案：
+
+- 声明与调用
+
+  - 声明：kernel/defs.h
+  - 调用：kernel/sysproc.c
+
+- 实现
+
+  - 栈桢的获取：根据指导书提示，在kernel/riscv.h中定义函数`r_fp`，利用内联汇编，从寄存器s0中读取并返回
+
+    > 由risc-v手册也可知，s0就代表了栈帧fp
+
+  - 
 
 ### Task3: Alarm
