@@ -680,7 +680,7 @@ clean:
 
   > l：list，p：path
 
-  - 加载一个进程，需要借助PATH环境变量
+  - 加载一个进程，要依赖系统当前的PATH环境变量
   - `file`：可执行程序名
   - `arg, ...`：命令行参数，从`argv[0]`开始，可变参要以`NULL`结尾
 
@@ -688,7 +688,7 @@ clean:
 
 - :star:`int execl(const char *path, const char *arg, ...);`
 
-  - 加载一个进程， 通过`路径+程序名`来加载，不需要环境变量
+  - 加载一个进程， 通过`路径+程序名`来加载，不需要依赖系统当前的PATH环境变量
 
   > 举例：`execl("/bin/ls", "ls", "-l", "-F", NULL);`
 
