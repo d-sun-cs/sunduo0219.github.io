@@ -782,9 +782,9 @@ date: 2022-10-31 17:52:08
 
 # 建模与设计
 
-## 1 xxx
+## 1 Data Modeling
 
-Three worlds with levels of abstraction
+### 1.1 Three worlds with levels of abstraction
 
 -   Real world
 
@@ -812,6 +812,21 @@ Three worlds with levels of abstraction
     >   -   **Logic level**, which contains **data model**
     >   -   **Physical level**
 
-    
+
+### 1.2 Entity-Relationship Model
+
+
+
+### 1.3 IDEF1x
+
+
+
+
+
+## 2 Database Design
+
+
+
+
 
 # 管理与技术
