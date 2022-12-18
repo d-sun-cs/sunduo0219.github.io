@@ -180,29 +180,32 @@ date: 2022-10-31 17:52:08
   - 数据模型是**对模式的抽象**
   - 数据模型规定了**模式统一描述方式**，包括数据结构、操作和约束
 
-- **<u>关系模型</u>**：
+- <u>数据模型的常见种类</u>：
 
-  - 以表的形式组织数据
-  - 规定所有模式都遵循**表的数据结构**，每个具体的模式都是拥有某些**属性**的表
-  - 规定对表形式**数据的操作和约束**
+  - **<u>关系模型</u>**：
 
-- <u>层次模型</u>：
+      - 以表的形式组织数据
+      - 规定所有模式都遵循**表的数据结构**，每个具体的模式都是拥有某些**属性**的表
+      - 规定对表形式**数据的操作和约束**
 
-  - 以树的形式组织数据
+  - <u>层次模型</u>：
 
-  - 用**实体型**作为数据记录
+      - 以树的形式组织数据
 
-    > 相当于树中的结点
+      - 用**实体型**作为数据记录
 
-  - 用**系型**表示数据之间的联系，由**指针**实现
+        >   相当于树中的结点
 
-    > 相当于树中的边
+      - 用**系型**表示数据之间的联系，由**指针**实现
 
-  - 规定所有模式都要描述**实体型的含义**并规定**实体型之间的系型**
+        >   相当于树中的边
 
-- <u>网状模型</u>：
+      - 规定所有模式都要描述**实体型的含义**并规定**实体型之间的系型**
 
-  - 以图的形式组织数据，同样有实体型和系型
+  - <u>网状模型</u>：
+
+      - 以图的形式组织数据，同样有实体型和系型
+
 
 ---
 
@@ -779,6 +782,36 @@ date: 2022-10-31 17:52:08
 
 # 建模与设计
 
+## 1 xxx
 
+Three worlds with levels of abstraction
+
+-   Real world
+
+    -   **Comprehension and Expression** of demand
+    -   Comprehension of **Data** demand and **Processing Rules** demand
+
+    >   Convenient for humans
+
+-   Conceptual / Information world
+
+    -   Arrived from real world through **data modeling**, abstraction of **conceptual level**
+    -   **Conceptual model**
+        -   representing the **essential relationship of information**
+        -   independent of computer system
+
+-   Data / Computer world
+
+    -   Arrived from conceptual world through **database design**, abstraction of **implement level**
+    -   **Data model**
+        -   independent of physical system
+        -   Convenient for machines
+
+    >   Actually, in the computer world, there are tow levels:
+    >
+    >   -   **Logic level**, which contains **data model**
+    >   -   **Physical level**
+
+    
 
 # 管理与技术
