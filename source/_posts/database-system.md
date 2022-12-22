@@ -147,7 +147,7 @@ date: 2022-10-31 17:52:08
 
     > 可以简称为**模式**
 
-    - 局部/外部/外/用户/子 模式(Conceptual View)：**全局**管理的**数据**
+    - 全局/概念/逻辑 视图(Conceptual View)：**全局**管理的**数据**
 
   - 内部/物理 模式(Internal Schema)：**存储**在介质上的**数据的结构描述**
 
@@ -155,7 +155,7 @@ date: 2022-10-31 17:52:08
 
 - **<u>两层映像</u>**：
 
-  - E-C Mapping (External Schem-Conceptual Schema Mapping)
+  - E-C Mapping (External Schema-Conceptual Schema Mapping)
     - 概念：将**外部模式**映射为**概念模式**，从而实现**概念视图**向**外部视图**的转换
     - 优点：便于**用户**观察和使用
   - C-I Mapping (Conceptual Schem-Internal Schema Mapping)
@@ -205,6 +205,8 @@ date: 2022-10-31 17:52:08
   - <u>网状模型</u>：
 
       - 以图的形式组织数据，同样有实体型和系型
+  
+  - Object-Orien
 
 
 ---
@@ -407,9 +409,9 @@ date: 2022-10-31 17:52:08
 ```
 关系代数的基本操作
 	- 并相容性
-	- 交
+	- 并
 	- 差
-	- 连接
+	- 笛卡尔积
 	- 选择
 	- 投影
 	- 更名
@@ -786,44 +788,144 @@ date: 2022-10-31 17:52:08
 
 ### 1.1 Three worlds with levels of abstraction
 
--   Real world
+#### *Real world:*
+
+-   <u>Abstraction level</u>: No Abstraction
+
+-   <u>Key</u> of this level: **Demand**
 
     -   **Comprehension and Expression** of demand
-    -   Comprehension of **Data** demand and **Processing Rules** demand
 
-    >   Convenient for humans
+    -   The kinds of demand:
 
--   Conceptual / Information world
+        -   **Data** demand
 
-    -   Arrived from real world through **data modeling**, abstraction of **conceptual level**
-    -   **Conceptual model**
-        -   representing the **essential relationship of information**
-        -   independent of computer system
+            >   **Data demand** is even more essential
 
--   Data / Computer world
+        -   **Processing Rules** demand
 
-    -   Arrived from conceptual world through **database design**, abstraction of **implement level**
-    -   **Data model**
-        -   independent of physical system
-        -   Convenient for machines
 
-    >   Actually, in the computer world, there are tow levels:
-    >
-    >   -   **Logic level**, which contains **data model**
-    >   -   **Physical level**
+---
+
+#### *Conceptual / Information world:*
+
+-   <u>Ways abstracting</u> from real world to conceptual world: **Data Modeling**
+
+-   <u>Abstraction level</u>: **Conceptual** Level
+
+-   <u>Key</u> of this level: **Conceptual Data Model**
+
+    -   **Concept** of conceptual model: the model **expressing information world**
+
+        >   Conceptual model is short for conceptual data model
+
+    -   Independence: independent of **computer system**
+
+    -   Representing the **essential relationship of information**
+
+
+---
+
+#### *Data / Computer world:*
+
+-   <u>Ways abstracting</u> from real world to conceptual world: **Database Design**
+-   <u>Abstraction level</u>: **Implement** Level
+-   <u>Key</u> of this level: **Data Model**
+    -   **Concept** of data model: the model **expressing computer world**
+    -   Independence: independent of **physical system**
+-   Two levels in computer world itself:
+    -   **Logic level**, which contains **data model**
+    -   **Physical level**, arrived from logic level
+
+
+>   Some thoughts about abstraction:
+>
+>   -   Comprehend, Distinguish, Name, Express
+>   -   Methodology and methodology application
+>   -   Model and meta model
 
 
 ### 1.2 Entity-Relationship Model
+
+#### *Overview / Conceptual Framework:*
+
+
+
+---
+
+#### *Chen Method:*
+
+
+
+---
+
+#### *Crow’s Foot Method:*
 
 
 
 ### 1.3 IDEF1x
 
+#### *Overview / Conceptual Framework:*
 
+
+
+---
+
+#### *Entities and Keys:*
+
+
+
+---
+
+#### *Connection Relationship:*
+
+
+
+---
+
+#### *Non-Specific Relationship:*
+
+
+
+---
+
+#### *Categorization Relationship:*
 
 
 
 ## 2 Database Design
+
+### 2.1 Process of Database Design
+
+#### *Demand Analysis：*
+
+
+
+---
+
+#### *Conceptual Database Design:*
+
+
+
+---
+
+#### *Logical Database Design:*
+
+
+
+---
+
+#### *Physical Database Design:*
+
+
+
+---
+
+#### *Database Design Theories:*
+
+
+
+### 2.2 Function Dependency with Its Axiom and Theorem
 
 
 
