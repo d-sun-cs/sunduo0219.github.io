@@ -4,7 +4,6 @@ tags:
   - 计算机
   - 抽象与具体
 category: 学习资源
-sticky: 1
 cover: /bgs/bg2.jpg
 abbrlink: 594cff7c
 date: 2022-09-20 08:52:52
