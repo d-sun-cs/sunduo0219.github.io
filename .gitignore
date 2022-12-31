@@ -11,5 +11,3 @@ _multiconfig.yml
 /.idea/
 .deploy_git*/
 .idea
-themes/butterfly/.git
-themes/yilia/.git
