@@ -5,17 +5,23 @@
   font-weight: lighter;
 } */
 @font-face {
-  font-family: ZhuZiAYuanJWD;
+  font-family: 'ZhuZiAYuanJWD';
   src: url(https://npm.elemecdn.com/anzhiyu-blog@1.1.6/fonts/ZhuZiAWan.woff2);
   font-display: swap;
   font-weight: lighter;
 }
 
+/*added by myself*/
+body {
+  font-family: 'ZhuZiAYuanJWD';
+}
+/*added by myself*/
+
 div#menus {
   font-family: 'ZhuZiAYuanJWD';
 }
 h1#site-title {
-  font-family: ZhuZiAYuanJWD;
+  font-family: 'ZhuZiAYuanJWD';
   font-size: 3em !important;
 }
 a.article-title,
