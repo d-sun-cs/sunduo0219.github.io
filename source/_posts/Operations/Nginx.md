@@ -1,11 +1,11 @@
 ---
-title: nginx
-tags:
-  - 计算机
-  - nginx
-category: 学习资源
+title: Nginx
 abbrlink: a477be03
 date: 2022-09-22 20:55:17
+tags:
+  - Computer
+  - Nginx
+category: Operations
 ---
 
 ## 1 概述

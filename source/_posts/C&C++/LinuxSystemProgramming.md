@@ -1,10 +1,11 @@
 ---
 title: Linux系统编程
-tags:
-  - linux
-  - 计算机
 abbrlink: '72802800'
 date: 2022-10-10 11:40:02
+tags:
+  - Computer
+  - Linux
+category: C & C++
 ---
 
 ## 1 常用工具

@@ -3,12 +3,13 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: SunDocker
+title: SunDocker's Personal Blog
 subtitle: 'whoami'
-description: 'Be the best actor in life play'
-keywords: '博客,SunDocker,计算机,工程'
+description: 'Knowledge Repository<br> 
+              Life Sharing'
+keywords: 'SunDocker,Blog,Computer,Learning,HITSZ,博客,计算机,工程,学习,资料,哈工大'
 author: SunDocker
-language: zh-CN
+language: default
 timezone: 'Asia/Shanghai'
 
 # URL
@@ -102,13 +103,12 @@ theme: butterfly
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
-  type: git
-  repo: 
-    github: https://github.com/SunDocker/SunDocker.github.io.git
-    gitee: https://gitee.com/sundocker/sundocker.git
-    # coding: https://EoNhzMOvoT:6829c286c7b9abce761614d1848193d954d446b4@e.coding.net/serverless-100025791419/blog/blog.git
-  branch: master
-# - type: baidu_url_submitter  # 百度主动推送
+  - type: git
+    repo:
+      github: https://github.com/SunDocker/SunDocker.github.io.git
+      gitee: https://gitee.com/sundocker/sundocker.git
+    branch: main
+#  - type: baidu_url_submitter  # 百度主动推送
 
 
 # abbrlink config
@@ -119,9 +119,9 @@ abbrlink:
 search:
   path: search.xml
   field: all
-#  content: true
-  format: html
-  limit: 10000
+  content: true
+#  format: html
+#  limit: 10000
 
 # Live2D
 ## https://github.com/EYHN/hexo-helper-live2d
@@ -151,21 +151,21 @@ sitemap:
 
 # https://github.com/coneycode/hexo-generator-baidu-sitemap
 baidusitemap:
-    path: baidusitemap.xml
+  path: baidusitemap.xml
 
 # https://github.com/hexojs/hexo-generator-feed
 #Feed Atom
 feed:
-    type: atom
-    path: atom.xml
-    limit: 20
+  type: atom
+  path: atom.xml
+  limit: 20
 rss: /atom.xml
 
 # Extensions
 plugins:
-    - hexo-generator-feed
-    - hexo-generator-baidu-sitemap
-    - hexo-generator-sitemap
+  - hexo-generator-feed
+  - hexo-generator-baidu-sitemap
+  - hexo-generator-sitemap
 
 # 追番插件
 # https://github.com/HCLonely/hexo-bilibili-bangumi
@@ -202,11 +202,11 @@ cinema: # 追剧设置
 
 # 百度主动推送
 # https://github.com/huiwang/hexo-baidu-url-submit
-# baidu_url_submit:
-#   count: 1        # 提交最新的多少个链接
-#   host: blog.anzhiy.cn  # 在百度站长平台中添加的域名
-#   token: Rgem9kAECSLflQq6   # 秘钥
-#   path: baidu_urls.txt   # 文本文档的地址， 新链接会保存在此文本文档里
+#baidu_url_submit:
+#  count: 1        # 提交最新的多少个链接
+#  host: blog.anzhiy.cn  # 在百度站长平台中添加的域名
+#  token: Rgem9kAECSLflQq6   # 秘钥
+#  path: baidu_urls.txt   # 文本文档的地址， 新链接会保存在此文本文档里
 
 # APlayer
 # https://github.com/MoePlayer/hexo-tag-aplayer/blob/master/docs/README-zh_cn.md

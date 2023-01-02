@@ -3,17 +3,17 @@
 # --------------------------------------
 
 menu:
-  主页: / || fas fa-home
-  归档: /archives/ || fas fa-archive
-  标签: /tags/ || fas fa-tags
-  分类: /categories/ || fas fa-folder-open
-  链接 || fas fa-list:
+  Home Page: / || fas fa-home
+  Categories: /categories/ || fas fa-folder-open
+  Tags: /tags/ || fas fa-tags
+  Archives: /archives/ || fas fa-archive
+  Links || fas fa-list:
+    Blogroll: /link/ || fas fa-link
+#    关于: /about/ || fas fa-heart
 #    Music: /music/ || fas fa-music
 #    Movie: /movies/ || fas fa-video
-    友情链接: /link/ || fas fa-link
-    关于: /about/ || fas fa-heart
-#  追番: /bangumis/index.html || fas fa-home
-#  追剧: /cinemas/index.html || fas fa-home
+  Bangumis: /bangumis/ || fas fa-home
+  Binge-Watch: /cinemas/ || fas fa-home
 
 # Hide the child menu items in mobile sidebar
 # hide_sidebar_menu_child: true
@@ -652,7 +652,7 @@ subtitle:
     - You complete me ...
     - Always ...
     - I love you three thousand ...
-    - Run Barry, Run ...
+    - Run Barry, run ...
     - We are Groot ...
     - With great power comes great responsibility ...
     - And I ... am ... Iron Man ...
@@ -683,7 +683,15 @@ aside:
       link: https://github.com/sundocker
   card_announcement:
     enable: true
-    content: "(づ｡◕‿‿◕｡)づ 欢迎光临！！！但博客还在建设中，现在这个样子属于是重灾区了~~o(>_<)o~~"
+    content: "<div align=\"center\">
+              (づ｡◕‿‿◕｡)づ<br> 
+              Welcome to my blog!!!<br> 
+              BUT the blog is still<br>
+              <b>IN CONSTRUCTION</b>,<br> 
+              now it's just like<br> 
+              <i>a hardest-hit area</i><br>
+              ~~o(>_<)o~~
+              </div>"
   card_recent_post:
     enable: true
     limit: 5 # if set 0 will show all
@@ -884,7 +892,9 @@ inject:
   bottom:
     # - <script src="xxxx"></script>
     # aplayer音乐
-    - <div class="aplayer no-destroy" data-id="7186096647" data-server="tencent" data-type="playlist" data-order="random" data-fixed="true" data-preload="auto" data-autoplay="true" data-mutex="true"></div>
+    - <div class="aplayer no-destroy" data-id="7186096647" data-server="tencent" data-type="playlist"
+      data-order="random" data-fixed="true" data-preload="auto" data-autoplay="true" 
+      data-mutex="true"></div>
 
 # CDN
 # Don't modify the following settings unless you know how they work

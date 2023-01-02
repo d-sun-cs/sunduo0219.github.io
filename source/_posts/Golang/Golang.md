@@ -3,6 +3,9 @@ title: Golang
 abbrlink: a8b02095
 date: 2023-01-02 15:05:35
 tags:
+    - Computer
+    - Golang
+category: Golang
 ---
 
 ## 1 快速入门

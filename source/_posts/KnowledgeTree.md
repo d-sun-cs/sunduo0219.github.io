@@ -1,7 +1,7 @@
 ---
 title: Knowledge Tree
 tags:
-  - computer
+  - Computer
 abbrlink: 6c24763b
 date: 2022-12-31 21:06:30
 sticky: 1
@@ -65,6 +65,18 @@ sticky: 1
 
 ## Frontend
 
+### [HTML](2eec1551.html)
+
+### [JavaScript](cc1b9611.html)
+
+### [CSS](ee69e452.html)
+
+### [AJAX](f3334fd0.html)
+
+### [Vue](f8e09374.html)
+
+### [uni-app](e19785da.html)
+
 
 
 ## Golang
@@ -77,15 +89,46 @@ sticky: 1
 
 
 
-## Deployment & Operations
+## Operations
+
+### [Linux](53d0684b.html)
+
+### [Docker](f5f9fa9b.html)
+
+### [Nginx](a477be03.html)
+
+### [Kubernetes](9acacb00.html)
 
 
 
-## Big Data
+## Project Management
+
+### [Git](69c3279c.html)
+
+### [Maven](7273cdc.html)
+
+### [Gradle](18596a3e.html)
 
 
 
 ## C & C++
 
-## [Linux System Programming](72802800.html)
+### [Linux System Programming](72802800.html)
 
+### [C++](caeaa4a1.html)
+
+
+
+## Big Data
+
+### [Hadoop](b3349d42.html)
+
+### [Data Mining](a9ab4cb3.html)
+
+
+
+## AI
+
+### [Data Analysis]()
+
+### [Machine Learning]()

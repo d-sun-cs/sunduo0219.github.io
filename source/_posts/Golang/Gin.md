@@ -3,8 +3,9 @@ title: Gin
 abbrlink: acec9806
 date: 2022-09-29 16:17:03
 tags:
-  - golang
-  - gin
+    - Computer
+    - Gin
+category: Golang
 ---
 
 ## 1 快速入门

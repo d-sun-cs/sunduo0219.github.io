@@ -1,10 +1,11 @@
 ---
-title: Go_gRPC
+title: Go gRPC
 abbrlink: 8f298335
 date: 2022-10-01 10:09:40
 tags:
-  - go
-  - gRPC
+    - Computer
+    - Go gRPC
+category: Golang
 ---
 
 ## 1 微服务

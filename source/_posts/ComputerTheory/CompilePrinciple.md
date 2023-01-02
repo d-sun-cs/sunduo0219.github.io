@@ -1,6 +1,5 @@
 ---
 title: 编译原理
-category: 计算机
 abbrlink: 118b8ca3
 date: 2022-11-18 10:22:28
 tags:

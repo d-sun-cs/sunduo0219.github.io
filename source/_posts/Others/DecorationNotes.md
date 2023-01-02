@@ -6,3 +6,147 @@ tags:
 ---
 
 >   Note down all the modification based on *butterfly theme*
+
+### Site Basic Info
+
+_config.yml:
+
+-   `title`
+-   `subtitle`
+-   `description`
+-   `keywords`
+-   `author`
+-   `language`
+-   `timezone`
+-   `deploy`
+    -   `type`
+    -   `repo`
+        -   `github`
+        -   `gitee`
+    -   `branch`
+
+### hexo-abbrlink
+
+_config.yml:
+
+-   `permalink`
+-   `abbrlink`
+    -   `alg`
+    -   `rep`
+
+### hexo-generator-search
+
+_config.yml:
+
+-   `search`
+    -   `path`
+    -   `field`
+    -   `content`
+
+_config.butterfly.yml
+
+-   `local_search`
+    -   `enalbe`
+
+### hexo-baidu-url-submit
+
+_config.yml:
+
+-   `deploy`
+    -   `type`
+-   `baidu_url_submit`
+    -   `const`
+    -   `host`
+    -   `token`
+    -   `path`
+
+### hexo-helper-live2d
+
+_config.yml:
+
+-   `live2d`
+    -   `enable`
+    -   `scriptForm`
+    -   `tagMode`
+    -   `debug`
+    -   `model`
+        -   `use`
+    -   `display`
+        -   `position`
+        -   `width`
+        -   `height`
+        -   `hOffset`
+    -   `mobile`
+        -   `show`
+
+### hexo-generator-sitemap、hexo-generator-feed
+
+_config.yml:
+
+-   `baidusitemap`
+    -   `path`
+-   `feed`
+    -   `type`
+    -   `path`
+    -   `limit`
+-   `rss`
+-   `plugins`
+
+### hexo-bilibili-bangumi
+
+_config.yml
+
+-   `bangumi`
+    -   `enable`
+    -   `path`
+    -   `vmid`
+    -   `title`
+    -   `quote`
+    -   `show`
+    -   `lazyload`
+    -   `loading`
+    -   `metaColor`
+    -   `color`
+    -   `webp`
+    -   `progress`
+    -   `extra_options`
+        -   `key`
+-   `cinema`
+    -   `enable`
+    -   `path`
+    -   `vmid`
+    -   `title`
+    -   `quote`
+    -   `show`
+    -   `lazyload`
+    -   `loading`
+    -   `metaColor`
+    -   `color`
+    -   `webp`
+    -   `progress`
+    -   `extra_options`
+        -   `key`
+
+_config.butterfly.yml
+
+-   `lazyload`
+    -   `enable`
+-   `menu`
+    -   
+
+### hexo-tag-aplayer
+
+_config.yml
+
+-   `aplayer`
+    -   `meting`
+    -   `asset_inject`
+
+_config.butterfly.yml
+
+-   `aplayerInject`
+    -   `enable`
+    -   `per_page`
+-   `inject`
+    -   `bottom`
+        -   `<div class="aplayer" ..></div>`
