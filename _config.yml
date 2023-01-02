@@ -170,7 +170,7 @@ plugins:
 # 追番插件
 # https://github.com/HCLonely/hexo-bilibili-bangumi
 bangumi: # 追番设置
-  enable: true
+  enable: false
   source: bili
   bgmInfoSource: 'bgmApi'
   path:
@@ -195,7 +195,7 @@ bangumi: # 追番设置
   extra_options:
     key: value
 cinema: # 追剧设置
-  enable: true
+  enable: false
   path:
   vmid: 11405463
   title: '追剧列表'

@@ -167,9 +167,9 @@ themes\butterfly\layout\includes\additional-js.pug:
 
 -   `theme.pwa.enable`
 
-img\*
+source\img\\*
 
-source\manifest.json
+source\pwa\\*
 
 _config.butterfly.yml:
 
