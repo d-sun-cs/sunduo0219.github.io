@@ -150,3 +150,34 @@ _config.butterfly.yml
 -   `inject`
     -   `bottom`
         -   `<div class="aplayer" ..></div>`
+
+### pwa
+
+package.json:
+
+-   `type`
+
+gulpfile.js
+
+sw-template.js
+
+themes\butterfly\layout\includes\third-party\pwanotice.pug
+
+themes\butterfly\layout\includes\additional-js.pug:
+
+-   `theme.pwa.enable`
+
+img\*
+
+source\manifest.json
+
+_config.butterfly.yml:
+
+-   `pwa`
+    -   `enable`
+    -   `manifest`
+    -   `apple_touch_icon`
+    -   `favicon_32_32`
+    -   `favicon_16_16`
+    -   `mask_icon`
+    -   `theme_color`

@@ -171,32 +171,45 @@ plugins:
 # https://github.com/HCLonely/hexo-bilibili-bangumi
 bangumi: # 追番设置
   enable: true
-  path: # 配置追番页面路径
+  source: bili
+  bgmInfoSource: 'bgmApi'
+  path:
   vmid: 11405463
   title: '追番列表'
   quote: '生命不息，追番不止！'
   show: 1
-  lazyload: false
+  lazyload: true
+  srcValue:
+  lazyloadAttrName:
   loading:
+  showMyComment: false
+  pagination: false
   metaColor:
   color:
   webp:
   progress:
+  extraOrder:
+  proxy:
+    host:
+    port:
   extra_options:
     key: value
 cinema: # 追剧设置
-  enable: false
+  enable: true
   path:
   vmid: 11405463
   title: '追剧列表'
   quote: '生命不息，追剧不止！'
   show: 1
   lazyload: true
+  srcValue:
+  lazyloadAttrName:
   loading:
   metaColor:
   color:
   webp:
   progress:
+  extraOrder:
   extra_options:
     key: value
 
