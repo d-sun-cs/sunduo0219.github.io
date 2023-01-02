@@ -3,9 +3,9 @@ title: 操作系统
 abbrlink: cf3a69eb
 date: 2022-09-23 10:31:06
 tags:
-  - 操作系统
-  - 计算机
-category: 学习资源
+  - Computer
+  - Operation System
+category: Computer Theory
 ---
 
 ## 1 操作系统概述

@@ -1,10 +1,11 @@
 ---
 title: 数据库系统
-tags:
-  - 计算机
-  - 数据库
 abbrlink: 27633ee8
 date: 2022-10-31 17:52:08
+tags:
+    - Computer
+    - Database System
+category: Computer Theory
 ---
 
 # 模型与语言

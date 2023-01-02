@@ -1,12 +1,8 @@
 ---
-title: golang
-category: 学习资源
+title: Golang
+abbrlink: a8b02095
+date: 2023-01-02 15:05:35
 tags:
-  - 计算机
-  - go
-  - golang
-abbrlink: af1c25a3
-date: 2022-09-28 09:45:40
 ---
 
 ## 1 快速入门
@@ -24,13 +20,13 @@ date: 2022-09-28 09:45:40
 
 - 查看go环境：go env
 
-  > Go1.11版本之后无需手动配置环境变量
+    > Go1.11版本之后无需手动配置环境变量
 
 go语言项目：
 
 - 使用go mod管理项目，可以在你磁盘的任何位置新建一个项目。
 
-  > 不需要非得把项目放到GOPATH指定目录下，Go1.13以后可以彻底不要GOPATH了
+    > 不需要非得把项目放到GOPATH指定目录下，Go1.13以后可以彻底不要GOPATH了
 
 > 修改GOPATH：
 >
@@ -59,9 +55,9 @@ func main(){ // 与包同名，为入口函数
 - `fmt.Println("xxx", "yyy", ...)`：输出若干个字符串，**中间用一个空格连接**，并在最后**换行**
 - `fmt.Print("xxx", "yyy", ...)`：**连接**并输出若干个字符串
 - `fmt.Printf("format string", format, ...)`：格式化输出
-  - `%v`：**数据值**
-  - `%d`：整型**数据**
-  - `%T`：输出**数据类型**
+    - `%v`：**数据值**
+    - `%d`：整型**数据**
+    - `%T`：输出**数据类型**
 
 *声明和定义变量*：
 
@@ -69,42 +65,42 @@ func main(){ // 与包同名，为入口函数
 
 - :star:`var 变量名 [类型] = 表达式`
 
-  - `类型`可以省略，自动推导；但声明时如果不赋值，则**必须指定类型**
+    - `类型`可以省略，自动推导；但声明时如果不赋值，则**必须指定类型**
 
-  - 一行声明或定义多个变量：
+    - 一行声明或定义多个变量：
 
-    - 可以一行**声明或定义**<u>同类型</u>的多个变量：`var id1, id2 type = exp1, exp2`
+        - 可以一行**声明或定义**<u>同类型</u>的多个变量：`var id1, id2 type = exp1, exp2`
 
-    - 一行**定义**类型可以不一致的多个变量：`var id1, id2 = exp1, exp2`
-    
-  - 批量**声明或定义**<u>类型可以不一致</u>的变量
+        - 一行**定义**类型可以不一致的多个变量：`var id1, id2 = exp1, exp2`
 
-    ```go
-    var (
-        变量名 [类型] = 表达式
-        变量名 类型
-        id1, id2 [类型] = exp1, exp1
-        id1, id2 类型
-    )
-    ```
-  
-    > `类型`可以省略，自动推导，但声明时如果不赋值，则**必须指定类型**
-  
+    - 批量**声明或定义**<u>类型可以不一致</u>的变量
+
+        ```go
+        var (
+            变量名 [类型] = 表达式
+            变量名 类型
+            id1, id2 [类型] = exp1, exp1
+            id1, id2 类型
+        )
+        ```
+
+        > `类型`可以省略，自动推导，但声明时如果不赋值，则**必须指定类型**
+
 - :star:`变量名1, 变量名2, 变量名3 := 表达式1, 表达式2, 表达式3`
 
-  > 这叫作“短变量声明法”；
-  >
-  > 类型自动推导，且多个变量同时定义时<u>类型可以不一致</u>
-  >
-  > 短变量只能用于定义**局部变量**，不能用于全局变量的定义；
-  >
-  > > 这是因为，函数外的每个语句都必须以关键字开始（var、const、func 等）
+    > 这叫作“短变量声明法”；
+    >
+    > 类型自动推导，且多个变量同时定义时<u>类型可以不一致</u>
+    >
+    > 短变量只能用于定义**局部变量**，不能用于全局变量的定义；
+    >
+    > > 这是因为，函数外的每个语句都必须以关键字开始（var、const、func 等）
 
-  > **<u>匿名变量</u>**：多重赋值时忽略某个值，占位
-  >
-  > `_, xxx = foo(...)`
-  >
-  > > 匿名变量不占用**命名空间**，不会**分配内存**，所以匿名变量之间不存在重复声明
+    > **<u>匿名变量</u>**：多重赋值时忽略某个值，占位
+    >
+    > `_, xxx = foo(...)`
+    >
+    > > 匿名变量不占用**命名空间**，不会**分配内存**，所以匿名变量之间不存在重复声明
 
 *定义常量*：
 
@@ -112,41 +108,41 @@ func main(){ // 与包同名，为入口函数
 
 - `const 变量名 [类型] = 表达式`
 
-  > 常量必须在声明的同时**赋值**
+    > 常量必须在声明的同时**赋值**
 
 - 一行定义多个常量（与变量用法一致）
 
 - 批量定义常量：
 
-  ```go
-  const (
-  	常量名 [类型] = 表达式
-      常量名 [类型]
-      常量名1, 常量名2 = exp1, exp2
-      常量名1, 常量名2 [类型]
-  )
-  ```
+    ```go
+    const (
+    	常量名 [类型] = 表达式
+        常量名 [类型]
+        常量名1, 常量名2 = exp1, exp2
+        常量名1, 常量名2 [类型]
+    )
+    ```
 
-  > const 同时声明多个常量时，如果**省略**了值则表示和**上面一行中同一列的值**相同，所以这样也必须保证**<u>列对齐</u>**（变量就不能这样省略）
+    > const 同时声明多个常量时，如果**省略**了值则表示和**上面一行中同一列的值**相同，所以这样也必须保证**<u>列对齐</u>**（变量就不能这样省略）
 
-  > 常量计数器`iota`：在批量定义常量时自动累加
-  >
-  > - 每次`const`出现时，都会让iota初始化为0，然后自增长
-  > - `iota`的值可以跳过
-  > - 也可以在同一行中使用`iota`
-  >
-  > ```go
-  > const a = iota // a=0
-  > const (
-  >     b = iota //b=0
-  >     c //c=1
-  >     d //2
-  >     e = iota //3
-  >     f = 100
-  >     g = iota //5
-  >     h, i = iota, iota //6, 6
-  > )
-  > ```
+    > 常量计数器`iota`：在批量定义常量时自动累加
+    >
+    > - 每次`const`出现时，都会让iota初始化为0，然后自增长
+    > - `iota`的值可以跳过
+    > - 也可以在同一行中使用`iota`
+    >
+    > ```go
+    > const a = iota // a=0
+    > const (
+    >     b = iota //b=0
+    >     c //c=1
+    >     d //2
+    >     e = iota //3
+    >     f = 100
+    >     g = iota //5
+    >     h, i = iota, iota //6, 6
+    > )
+    > ```
 
 *注释*：
 
@@ -163,36 +159,36 @@ func main(){ // 与包同名，为入口函数
 
 - 有符号整型：
 
-  `int8 int16 int32 int64`
+    `int8 int16 int32 int64`
 
 - 无符号整型：
 
-  `uint8 uint16 uint32 uint64`
+    `uint8 uint16 uint32 uint64`
 
-  > 赋值时不能是**负数**
+    > 赋值时不能是**负数**
 
 - 特殊规定的整型：
 
-  - `int`：32 位操作系统上就是`int32`，64 位操作系统上就是`int64`。这也是根据字面量**自动推导**出来的类型
-  - `uint`：32 位操作系统上就是`uint32`，64 位操作系统上就是`uint64`
-  - `uintptr`：无符号整型，用于存放一个**指针**
+    - `int`：32 位操作系统上就是`int32`，64 位操作系统上就是`int64`。这也是根据字面量**自动推导**出来的类型
+    - `uint`：32 位操作系统上就是`uint32`，64 位操作系统上就是`uint64`
+    - `uintptr`：无符号整型，用于存放一个**指针**
 
-  > 实际项目中整数类型、切片、`map`的元素数量等都可以用int 来表示。在涉及到二进制传输、为了保持文件的结构不会受到不同编译目标平台字节长度的影响，不要使用`int`和`uint`
+    > 实际项目中整数类型、切片、`map`的元素数量等都可以用int 来表示。在涉及到二进制传输、为了保持文件的结构不会受到不同编译目标平台字节长度的影响，不要使用`int`和`uint`
 
-  > `unsafe.Sizeof(var)`是`unsafe`包的一个函数，可以返回整型变量占用的**字节数**
+    > `unsafe.Sizeof(var)`是`unsafe`包的一个函数，可以返回整型变量占用的**字节数**
 
 - 不同长度类型的转换：`int8(numVar) int32(numVar) int(numVar)`
 
-  - 长度向更短转换时会**截断取低位**
+    - 长度向更短转换时会**截断取低位**
 
 - 数字字面量
 
-  - 二进制：`0b11010`，`%b`
-  - 八进制：`0o521`,`%o`
-  - 十进制：`996`，`%d`
-  - 十六进制：`0xc9`，`%x`
+    - 二进制：`0b11010`，`%b`
+    - 八进制：`0o521`,`%o`
+    - 十进制：`996`，`%d`
+    - 十六进制：`0xc9`，`%x`
 
-  > `%v`是自动推导的输出
+    > `%v`是自动推导的输出
 
 ---
 
@@ -203,23 +199,23 @@ func main(){ // 与包同名，为入口函数
 - `float32 float64`
 - `float`：32 位操作系统上就是`float32`，64 位操作系统上就是`float64`。这也是根据字面量**自动推导**出来的类型
 - 格式化输出
-  - `%v`
-  - `%f`：默认保留6位小数。`%.2f`为保留两位小数
+    - `%v`
+    - `%f`：默认保留6位小数。`%.2f`为保留两位小数
 - 科学计数法：`3.14e2`、`3.14E3`、`3.14e-4`、`0.0314E-5`
 - 精度丢失问题
-  - 可以使用第三方包解决：https://github.com/shopspring/decimal
+    - 可以使用第三方包解决：https://github.com/shopspring/decimal
 - 类型转换
-  - `float64(numVar) float32(numVar)`
-  - `float`和`int`也可以互相转换，截取至整数位，其他同理
+    - `float64(numVar) float32(numVar)`
+    - `float`和`int`也可以互相转换，截取至整数位，其他同理
 
 ---
 
 *布尔型*：
 
 - `bool`，只有`true`和`false`两个值
-  - 布尔类型变量的默认值为`false`
-  - 布尔型无法参与**数值运算**，也无法与其他**类型**进行转换
-  - 格式化输出为`%t`，就是字符串`“true”`或者`“false”`
+    - 布尔类型变量的默认值为`false`
+    - 布尔型无法参与**数值运算**，也无法与其他**类型**进行转换
+    - 格式化输出为`%t`，就是字符串`“true”`或者`“false”`
 
 ---
 
@@ -227,64 +223,64 @@ func main(){ // 与包同名，为入口函数
 
 - `string`，`“xxx”`
 
-  - Go语言中的字符串以**原生数据类型**出现
-  - Go语言里的字符串的内部实现使用**UTF-8编码**
+    - Go语言中的字符串以**原生数据类型**出现
+    - Go语言里的字符串的内部实现使用**UTF-8编码**
 
 - 转义符
 
-  | 转义符 | 换行符 |
-  | ------ | ------ |
-  | `\r`   | 回车   |
-  | `\n`   | 换行符 |
-  | `\t`   | 制表符 |
-  | `\'`   | 单引号 |
-  | `\"`   | 双引号 |
-  | `\\`   | 反斜杠 |
+    | 转义符 | 换行符 |
+    | ------ | ------ |
+    | `\r`   | 回车   |
+    | `\n`   | 换行符 |
+    | `\t`   | 制表符 |
+    | `\'`   | 单引号 |
+    | `\"`   | 双引号 |
+    | `\\`   | 反斜杠 |
 
 - 多行字符串：使用反引号``
 
-  - 反引号间换行将被作为字符串中的换行，但是所有的转义字符均无效，文本将会**原样输出**。
+    - 反引号间换行将被作为字符串中的换行，但是所有的转义字符均无效，文本将会**原样输出**。
 
 - 常用操作
 
-  - `len(str)`
+    - `len(str)`
 
-    > 注意一个utf8汉字占用三个字节；
-    >
-    > 不能用`unsafe.Sizeof`看字符串的长度，没有意义的
+        > 注意一个utf8汉字占用三个字节；
+        >
+        > 不能用`unsafe.Sizeof`看字符串的长度，没有意义的
 
-  - 拼接字符串：
+    - 拼接字符串：
 
-    - `+`：两边的数据类型都必须是**字符串**
-    - `fmt.Sprint("xxx", yyy, ...)`系列，会直接返回结果，而不是输出到控制台，所以可以用来拼接字符串
+        - `+`：两边的数据类型都必须是**字符串**
+        - `fmt.Sprint("xxx", yyy, ...)`系列，会直接返回结果，而不是输出到控制台，所以可以用来拼接字符串
 
-  - **分割**字符串：`strings.Split(s, sep string)`，根据`sep`将`s`拆分成切片
+    - **分割**字符串：`strings.Split(s, sep string)`，根据`sep`将`s`拆分成切片
 
-    > 需要引入`strings`包
+        > 需要引入`strings`包
 
-  - **合并**字符串：`strings.Join(elems []string, sep string)`，用`sep`将`elems`切片合并成字符串
+    - **合并**字符串：`strings.Join(elems []string, sep string)`，用`sep`将`elems`切片合并成字符串
 
-  - 子串
+    - 子串
 
-    - 截取：`str[begin:end]`
+        - 截取：`str[begin:end]`
 
-      > `begin`或`end`可以省略
+            > `begin`或`end`可以省略
 
-    - 子串出现的位置：
+        - 子串出现的位置：
 
-      `strings.Index(s, substr string)`
+            `strings.Index(s, substr string)`
 
-      `strings.LastIndex(s, substr string)`
+            `strings.LastIndex(s, substr string)`
 
-    - 是否包含子串：`strings.contains(s, substr string)`
+        - 是否包含子串：`strings.contains(s, substr string)`
 
-    - 是否有**前后缀**：
+        - 是否有**前后缀**：
 
-      `strings.HasPrefix(s, prefix string)`
-  
-      `strings.HasSuffix(s, suffix string)`
-  
-  - 转换为字符串：`string(var)`
+            `strings.HasPrefix(s, prefix string)`
+
+            `strings.HasSuffix(s, suffix string)`
+
+    - 转换为字符串：`string(var)`
 
 ---
 
@@ -294,11 +290,11 @@ func main(){ // 与包同名，为入口函数
 - `uint6`/`byte`类型：代表了ASCII码的一个字符，<u>ASCII码表中有</u>的**字符**默认用这种类型
 - `rune`/`int32`类型：代表一个UTF-8字符，<u>ASCII码表中没有</u>的**字符**默认用这种类型
 - 遍历字符串：
-  - `for i`：以`byte`类型遍历字符串，字符串可以直接用下标索引访问`str[i]`，但不能修改（can not assign）
-  - `for range`：以`rune`类型遍历字符串
+    - `for i`：以`byte`类型遍历字符串，字符串可以直接用下标索引访问`str[i]`，但不能修改（can not assign）
+    - `for range`：以`rune`类型遍历字符串
 - 修改字符串：转换成切片，用下标索引的方式修改，再用`string(arr)`转换回来
-  - 只有ASCII码表中的字符的字符串：转换为`[]byte(str)`
-  - 含有ASCII码表以外字符的字符串：转换为`[]rune(str)`
+    - 只有ASCII码表中的字符的字符串：转换为`[]byte(str)`
+    - 含有ASCII码表以外字符的字符串：转换为`[]rune(str)`
 
 ---
 
@@ -310,29 +306,29 @@ func main(){ // 与包同名，为入口函数
 
 - 字符串与其他类型的转换：
 
-  - `fmt.Sprint`系列
+    - `fmt.Sprint`系列
 
-  - `strconv`包
+    - `strconv`包
 
-    - `strconf.FormatInt(i int64, base int)`
+        - `strconf.FormatInt(i int64, base int)`
 
-      > 注意必须是`int64`类型，`int`类型都不可以；`base`表示的是进制
+            > 注意必须是`int64`类型，`int`类型都不可以；`base`表示的是进制
 
-    - `strconf.FormatInt(f float64, fmt byte, prec int, bitSize int)`
+        - `strconf.FormatInt(f float64, fmt byte, prec int, bitSize int)`
 
-      > 参数1：要转换的值
-      >
-      > 参数2：格式化类型，'f'（-ddd.dddd）、'b'（-ddddp±ddd，指数为二进制）、'e'（-d.dddde±dd，十进制指数）、'E'（-d.ddddE±dd，十进制指数）、'g'（指数很大时用'e'格式，否则'f'格式）、'G'（指数很大时用'E'格式，否则'f'格式）。
-      >
-      > 参数3：保留的小数点个数，-1表示不对小数点格式化
-      >
-      > 参数4：格式化的类型：64或者32
+            > 参数1：要转换的值
+            >
+            > 参数2：格式化类型，'f'（-ddd.dddd）、'b'（-ddddp±ddd，指数为二进制）、'e'（-d.dddde±dd，十进制指数）、'E'（-d.ddddE±dd，十进制指数）、'g'（指数很大时用'e'格式，否则'f'格式）、'G'（指数很大时用'E'格式，否则'f'格式）。
+            >
+            > 参数3：保留的小数点个数，-1表示不对小数点格式化
+            >
+            > 参数4：格式化的类型：64或者32
 
-    - `intVar, err := strconv.ParseInt(s string, base int, bitSize int)`
+        - `intVar, err := strconv.ParseInt(s string, base int, bitSize int)`
 
-      > 转换失败返回0；`err`代表转换失败，可以用`_`忽略
+            > 转换失败返回0；`err`代表转换失败，可以用`_`忽略
 
-    - `floatVal, err := strconv.ParseFloat(s string, bitSize int)`
+        - `floatVal, err := strconv.ParseFloat(s string, bitSize int)`
 
 
 
@@ -414,9 +410,9 @@ if exp1 {
 
 - 特殊写法：`if :=assginStmt; exp {...}`
 
-  >也就是说，可以在`if`表达式之前添加一个赋值语句，再根据变量值进行判断；注意必须是`:=`赋值，`var`和其他语句都不行
-  >
-  >在这种情况下，`stmt`会位于**`if…else…`内部的作用域**
+    >也就是说，可以在`if`表达式之前添加一个赋值语句，再根据变量值进行判断；注意必须是`:=`赋值，`var`和其他语句都不行
+    >
+    >在这种情况下，`stmt`会位于**`if…else…`内部的作用域**
 
 ---
 
@@ -433,19 +429,19 @@ for [:=assginStmt]; exp; eachEndStmt {
 
 - 注意：Go语言中是没有`while`语句的，我们可以通过`for`代替
 
-  ```go
-  for exp {
-      stmt
-  }
-  ```
+    ```go
+    for exp {
+        stmt
+    }
+    ```
 
 - 无限循环
 
-  ```go
-  for {
-      stmt
-  }
-  ```
+    ```go
+    for {
+        stmt
+    }
+    ```
 
 ---
 
@@ -484,18 +480,18 @@ default:
 
 - `case`分支上还可以使用表达式，表达式和值可以混用？？：
 
-  ```go
-  switch {
-  case exp1:
-      stmt
-  case exp2:
-      stmt
-  default:
-      stmt
-  }
-  ```
+    ```go
+    switch {
+    case exp1:
+        stmt
+    case exp2:
+        stmt
+    default:
+        stmt
+    }
+    ```
 
-  - 此时`switch`后不需要接标识符
+    - 此时`switch`后不需要接标识符
 
 ---
 
@@ -503,11 +499,11 @@ default:
 
 - `break`：
 
-  - 用于循环语句中**跳出<u>当前</u>整个循环**
+    - 用于循环语句中**跳出<u>当前</u>整个循环**
 
-  - 在**多重循环**中，可以用标号`label`标出想`break`的循环：`break label`
+    - 在**多重循环**中，可以用标号`label`标出想`break`的循环：`break label`
 
-    > 在语句的前一行左顶格加上一行`labelName:`即可用给该语句打上标签
+        > 在语句的前一行左顶格加上一行`labelName:`即可用给该语句打上标签
 
 - `continue`：只在`for`循环中使用，结束本次循环，开始下一次循环，也可以`continue label`
 
@@ -523,23 +519,23 @@ default:
 
 - 声明数组，元素为默认值：`var arr [len]type`
 
-  - `type`：数组中元素**数据类型**
+    - `type`：数组中元素**数据类型**
 
-  - `len`：数组**长度**
+    - `len`：数组**长度**
 
-    > 长度不同，类型也不同；
+        > 长度不同，类型也不同；
 
 - 定义数组：
 
-  - `var arr = [len]type{elem1, elem2, others}`
+    - `var arr = [len]type{elem1, elem2, others}`
 
-  - `arr := [len]type{elem1, elem2, others}`
+    - `arr := [len]type{elem1, elem2, others}`
 
-  - `arr := [len]type{idx1: elem1, idx2: elem2, idx3: elem3, others}`
+    - `arr := [len]type{idx1: elem1, idx2: elem2, idx3: elem3, others}`
 
-    > 指定索引，中间未指明的是默认值
+        > 指定索引，中间未指明的是默认值
 
-  > 数组长度可以自动推断：`var arr = [...]type{elems}`，这个`...`就是**三个点的语法**
+    > 数组长度可以自动推断：`var arr = [...]type{elems}`，这个`...`就是**三个点的语法**
 
 *访问数组*：
 
@@ -553,22 +549,22 @@ default:
 
 - 遍历：
 
-  - `for i := 0; i < len(arr); i++ {...}`
-  - `for idx, val := range arr {...}`
+    - `for i := 0; i < len(arr); i++ {...}`
+    - `for idx, val := range arr {...}`
 
 - **数组名不是引用**，数组互相赋值时会直接复制一个新数组
 
-  > Go中**基本数据类型和<u>数组</u>**都是值类型
+    > Go中**基本数据类型和<u>数组</u>**都是值类型
 
 *多维数组*：
 
 - `var arr [len1][len2]type`
 
-- `var arr = [len1][len2]type{{...},{...},...}`
+- `var arr = [len1][len2]type{ {...},{...},... }`
 
-  > 长度自动推导：`var arr = [...][len2]type{{...},{...},...}`
-  >
-  > > 注意，如果是二维数组，第二个维度的长度不能省略
+    > 长度自动推导：`var arr = [...][len2]type{ {...},{...},... }`
+    >
+    > > 注意，如果是二维数组，第二个维度的长度不能省略
 
 ### 3.2 切片
 
@@ -576,7 +572,7 @@ default:
 
 - 引用数据类型
 
-  > 引用数据类型必须先**分配好地址空间**才能访问
+    > 引用数据类型必须先**分配好地址空间**才能访问
 
 - 切片的本质是对底层数组的封装，包括底层数组的指针、切片的长度、切片的容量
 
@@ -584,29 +580,28 @@ default:
 
 - 声明：`var slc []type`
 
-  > 切片默认值为`nil`，因为是引用类型
+    > 切片默认值为`nil`，因为是引用类型
 
 - 定义：
 
-  - `var slc = []type{elems}`
+    - `var slc = []type{elems}`
 
-  - `var slc = []type{idx1: elem1, idx2: elem2, idx3: elem3, others}`
+    - `var slc = []type{idx1: elem1, idx2: elem2, idx3: elem3, others}`
 
-  - :star:基于数组定义切片：`arr[startIdx:endIdxExclude]`
+    - :star:基于数组定义切片：`arr[startIdx:endIdxExclude]`
 
-    > `startIdx`、`startIdx:endIdxExclude`可以省略，代表取到头
+        > `startIdx`、`startIdx:endIdxExclude`可以省略，代表取到头
 
-  - 基于切片定义切片：类似
+    - 基于切片定义切片：类似
 
-  - 基于字符串定义切片：`[]byte(str)`和`[]rune(str)`
+    - 基于字符串定义切片：`[]byte(str)`和`[]rune(str)`
 
-    > 前面字符串的部分讲过
+        > 前面字符串的部分讲过
 
-  - :star:`make([]T, size, cap)`函数创建切片
-  
-    - `size`：元素个数
-    - `cap`：底层数组容量
-  
+    - :star:`make([]T, size, cap)`函数创建切片
+
+        - `size`：元素个数
+        - `cap`：底层数组容量
 
 *访问切片*：
 
@@ -620,11 +615,11 @@ default:
 
 - 追加元素：`append(slc, newElems)`
 
-  > `append`是返回一个新的切片，并不是直接修改`slc`
+    > `append`是返回一个新的切片，并不是直接修改`slc`
 
 - 合并切片：`append(slc, anotherSlc...)`
 
-  > 这个`...`是三个点的语法
+    > 这个`...`是三个点的语法
 
 - 切片扩容策略：有较为复杂的策略
 
@@ -640,17 +635,17 @@ default:
 
 - 升序排序
 
-  - `sort.Ints(arrOrSlc)`
-  - `sort.Float64s(arrOrSlc)`
-  - `sort.Strings(arrOrSlc)`
+    - `sort.Ints(arrOrSlc)`
+    - `sort.Float64s(arrOrSlc)`
+    - `sort.Strings(arrOrSlc)`
 
 - 降序排序
 
-  > 使用`sort.Reverse(arrOrSlc)` 来调换`slice.Interface.Less `,也就是比较函数
+    > 使用`sort.Reverse(arrOrSlc)` 来调换`slice.Interface.Less `,也就是比较函数
 
-  - `sort.Sort(sort.Reverse(sort.IntSlice(intList)))`
-  - `sort.Sort(sort.Reverse(sort.Float64Slice(floatList)))`
-  - `sort.Sort(sort.Reverse(sort.StringSlice(stringList)))`
+    - `sort.Sort(sort.Reverse(sort.IntSlice(intList)))`
+    - `sort.Sort(sort.Reverse(sort.Float64Slice(floatList)))`
+    - `sort.Sort(sort.Reverse(sort.StringSlice(stringList)))`
 
 ### 3.3 map
 
@@ -660,7 +655,7 @@ default:
 
 - `make(map[keyType]valueType)`
 
-  > 后面可以再跟一个参数代表**长度**；`map`默认值为`nil`
+    > 后面可以再跟一个参数代表**长度**；`map`默认值为`nil`
 
 - `var mp = map[keyType]valueType{key1:value1, key2:value2, key3:value3,}`
 
@@ -674,10 +669,10 @@ default:
 
 - 查找键是否存在并尝试获取值：`value, isExist := mp[key]`
 
-  > 注意这种特殊的用法，也就是`mp[key]`返回的`isExist`可以接收也可以完全不接收
+    > 注意这种特殊的用法，也就是`mp[key]`返回的`isExist`可以接收也可以完全不接收
 
-  - 如果不存在，`value`为默认值，`isExist`为`false`
-  - 如果存在，`value`为`key`对应值，`isExist`为`true`
+    - 如果不存在，`value`为默认值，`isExist`为`false`
+    - 如果存在，`value`为`key`对应值，`isExist`为`true`
 
 - 删除键值对：`delete(mp, key)`
 
@@ -685,9 +680,9 @@ default:
 *`map`与切片：*
 
 - 元素为`map`类型的切片：
-  - `make([]map[keyType]valueType, size, cap)`
+    - `make([]map[keyType]valueType, size, cap)`
 - 值为切片类型的`map`
-  - `make(map[keyType][]valueType)`
+    - `make(map[keyType][]valueType)`
 
 
 
@@ -705,30 +700,30 @@ func 函数名(参数列表)(返回值列表) {
 
 - 参数列表：`argName argType, argName argType, ...`
 
-  - 如果所有参数的类型都相同：`arg1, arg2, arg3 sameType`
+    - 如果所有参数的类型都相同：`arg1, arg2, arg3 sameType`
 
-  - 如果是**可变参数**，则必须是参数列表的最后一个，且只能有一个：`variableArg ...type`
+    - 如果是**可变参数**，则必须是参数列表的最后一个，且只能有一个：`variableArg ...type`
 
-    > 本质是用一个**切片**接收
+        > 本质是用一个**切片**接收
 
 - 返回值列表：`retType, retType, ...`
 
-  - 如果只有一个返回值可以不要**括号**
+    - 如果只有一个返回值可以不要**括号**
 
-  - 返回值命名：`retName retType, retName retType`
+    - 返回值命名：`retName retType, retName retType`
 
-    > 相同类型也可以`ret1, ret2, ret3 sameType`
+        > 相同类型也可以`ret1, ret2, ret3 sameType`
 
-    - 相当于已经**声明**好了，可以直接在函数体内使用
-    - 返回的时候一行`return`就够了，其他的不用加
-    - 命名与不命名不要混用
+        - 相当于已经**声明**好了，可以直接在函数体内使用
+        - 返回的时候一行`return`就够了，其他的不用加
+        - 命名与不命名不要混用
 
 *变量/常量的作用域：*
 
 - 全局变量：全局变量是定义在**函数外部**的变量，它在**程序整个运行周期内**都有效。在函数中可以访问到全局变量
 - 局部变量：局部变量是**函数内部**定义的变量， 函数内定义的变量无法在该函数外使用
-  - 如果局部变量和全局变量重名，**优先访问局部变量**
-  - **语句块中定义的变量**也只在该语句块中生效（块作用域）
+    - 如果局部变量和全局变量重名，**优先访问局部变量**
+    - **语句块中定义的变量**也只在该语句块中生效（块作用域）
 
 *自定义类型与变量：*
 
@@ -736,24 +731,24 @@ func 函数名(参数列表)(返回值列表) {
 
 - 自定义函数类型变量的使用：
 
-  ```go
-  type calculation func(int, int) int
-  func add(x, y int) int {
-      return x + y
-  }
-  func sub(x, y int) int {
-      return x - y
-  }
-  func main() {
-      var c calculation // 声明一个calculation 类型的变量c
-      c = add // 把add 赋值给c
-      fmt.Printf("type of c:%T\n", c) // type of c:main.calculation
-      f := sub // 将函数add 赋值给变量f1
-      fmt.Printf("type of f:%T\n", f) // type of f:func(int, int) int
-  }
-  ```
+    ```go
+    type calculation func(int, int) int
+    func add(x, y int) int {
+        return x + y
+    }
+    func sub(x, y int) int {
+        return x - y
+    }
+    func main() {
+        var c calculation // 声明一个calculation 类型的变量c
+        c = add // 把add 赋值给c
+        fmt.Printf("type of c:%T\n", c) // type of c:main.calculation
+        f := sub // 将函数add 赋值给变量f1
+        fmt.Printf("type of f:%T\n", f) // type of f:func(int, int) int
+    }
+    ```
 
-  - 注意，**自定义**函数类型和类型**自动推导**的函数类型是不完全一样的
+    - 注意，**自定义**函数类型和类型**自动推导**的函数类型是不完全一样的
 
 - 自定义数据类型：`type 数据类型名 基本数据类型名`
 
@@ -768,30 +763,30 @@ func 函数名(参数列表)(返回值列表) {
 
 - 匿名自执行函数：
 
-  ```go
-  // 在某个函数内部
-  func(参数)(返回值){
-  	函数体
-  }(参数取值)
-  ```
+    ```go
+    // 在某个函数内部
+    func(参数)(返回值){
+    	函数体
+    }(参数取值)
+    ```
 
 - 闭包是指**有权访问另一个函数作用域中变量**的函数，是**将函数内部和函数外部连接起来**的桥梁。本质上，闭包是**函数及其引用环境的组合体**。
 
-  > 闭包里作用域返回的局部变量资源不会被立刻回收，会继续**常驻内存**，但**不会污染全局命名空间**
+    > 闭包里作用域返回的局部变量资源不会被立刻回收，会继续**常驻内存**，但**不会污染全局命名空间**
 
 - 定义闭包：
 
-  ```go
-  func adder() func(int) int {
-      var x int
-      return func(y int) int {
-          x += y
-          return x
-      }
-  }
-  ```
+    ```go
+    func adder() func(int) int {
+        var x int
+        return func(y int) int {
+            x += y
+            return x
+        }
+    }
+    ```
 
-  - 按照上例，若多次调用闭包，则`x`的值会累加
+    - 按照上例，若多次调用闭包，则`x`的值会累加
 
 
 *`defer`语句*：
@@ -808,11 +803,11 @@ func fn() {
 
 - 将`defer`后面紧跟的语句**延迟处理**。在`defer`归属的函数返回时，将延迟处理的语句按`defer`定义的**逆序执行**
 
-  >   函数返回的底层顺序：
-  >
-  >   1. 设置返回值
-  >   2. 运行`defer`
-  >   3. 执行`RET`命令
+    >   函数返回的底层顺序：
+    >
+    >   1. 设置返回值
+    >   2. 运行`defer`
+    >   3. 执行`RET`命令
 
 - 如果想要延迟执行一批语句，可以结合**匿名自执行函数**。
 
@@ -840,9 +835,9 @@ func fn() {
 
 - `panic(err)`：引发一个错误对象
 
-  - 创建一个错误：`errors.New("exception message")`
+    - 创建一个错误：`errors.New("exception message")`
 
-    >   需要`errors`包
+        >   需要`errors`包
 
 ---
 
@@ -866,7 +861,7 @@ func fn() {
 
 - `make`函数也是用于内存分配的，区别于`new`，它只用于`slice map channel`的内存创建，返回的类型就是这三个**类型本身**，而不是他们的指针类型
 
-  >   因为这三种类型就是引用类型，所以就没有必要返回他们的指针了。
+    >   因为这三种类型就是引用类型，所以就没有必要返回他们的指针了。
 
 ### 4.3 结构体
 
@@ -883,12 +878,12 @@ func fn() {
 
 - 类型别名与自定义类型不同，类型别名打印出来的类型还是原类型
 
-  >   `byte`和`rune`的底层定义：
-  >
-  >   ```go
-  >   type byte = uint8 
-  >   type rune = int32
-  >   ```
+    >   `byte`和`rune`的底层定义：
+    >
+    >   ```go
+    >   type byte = uint8 
+    >   type rune = int32
+    >   ```
 
 ---
 
@@ -917,9 +912,9 @@ type 类型名 struct {
     >
     >   ```go
     >   var msg struct { 
-    >       Name string
-    >       Message string 
-    >       Age int 
+    >      Name string
+    >      Message string 
+    >      Age int 
     >   }
     >   ```
     >
@@ -931,10 +926,10 @@ type 类型名 struct {
 
 - 键值对方式：
 
-  -   `strVar := strName{memKey: memValue, memKey: memValue, memKey: memValue,}`
-  -   `strPointer := &strName{memKey: memValue, memKey: memValue, memKey: memValue,}`
+    -   `strVar := strName{memKey: memValue, memKey: memValue, memKey: memValue,}`
+    -   `strPointer := &strName{memKey: memValue, memKey: memValue, memKey: memValue,}`
 
-  >   有些字段可以不赋值，这样就保持**默认值**；可以不写`memKey`，按顺序写`memValue`即可
+    >   有些字段可以不赋值，这样就保持**默认值**；可以不写`memKey`，按顺序写`memValue`即可
 
 ---
 
@@ -942,16 +937,16 @@ type 类型名 struct {
 
 - 格式化输出：
 
-  -   `%v`：只有属性值
-  -   `%#v`：更详细的信息
+    -   `%v`：只有属性值
+    -   `%#v`：更详细的信息
 
 - 访问成员：`.`运算符
 
-  - `strVar.memVar`
+    - `strVar.memVar`
 
-  - `strPointer.memVar`：在 Golang 中支持对**结构体指针**直接使用`.`来访问结构体的成员
+    - `strPointer.memVar`：在 Golang 中支持对**结构体指针**直接使用`.`来访问结构体的成员
 
-    >   底层其实是`(*strPointer).memVar`
+        >   底层其实是`(*strPointer).memVar`
 
 ---
 
@@ -961,18 +956,18 @@ type 类型名 struct {
 
 - 方法的定义：
 
-  ```go
-  func (接收者变量 接收者/结构体类型) 方法名(方法参数列表) (方法返回值列表) {
-    方法体 
-  }
-  ```
+    ```go
+    func (接收者变量 接收者/结构体类型) 方法名(方法参数列表) (方法返回值列表) {
+      方法体 
+    }
+    ```
 
-  -   方法本身定义在**全局作用域**，所有相同接收者类型的结构体变量都可以用`.`调用方法
+    -   方法本身定义在**全局作用域**，所有相同接收者类型的结构体变量都可以用`.`调用方法
 
 - 接收者类型
 
-  -   非指针类型接收者：只获取值不修改
-  -   指针类型接收者`接收者变量 *接收者结构体类型`：能获取值并修改结构体成员
+    -   非指针类型接收者：只获取值不修改
+    -   指针类型接收者`接收者变量 *接收者结构体类型`：能获取值并修改结构体成员
 
 >   在golang中也可以给任意自定义类型添加方法，用法与结构体接收者类似；
 >
@@ -984,12 +979,12 @@ type 类型名 struct {
 
 - 匿名字段
 
-  -   结构体允许其成员字段在声明时**没有字段名而只有类型**
-  -   匿名字段默认**采用类型名作为字段名**，结构体要求**字段名称必须唯一**，因此一个结构体中**同种类型的匿名字段只能有一个**
+    -   结构体允许其成员字段在声明时**没有字段名而只有类型**
+    -   匿名字段默认**采用类型名作为字段名**，结构体要求**字段名称必须唯一**，因此一个结构体中**同种类型的匿名字段只能有一个**
 
 - 一个结构体中可以<u>嵌套</u>包含**另一个结构体或结构体指针**作为字段，访问方式类似，通过多个`.`即可深入访问
 
-  >   指针和非指针的用法几乎完全相同，只是在赋值的时候需要取**地址**
+    >   指针和非指针的用法几乎完全相同，只是在赋值的时候需要取**地址**
 
 - <u>嵌套结构体可以结合匿名字段</u>，当访问**结构体成员**时会先在结构体中查找该字段，找不到再去**匿名结构体**中查找
 
@@ -1005,17 +1000,17 @@ type 类型名 struct {
 
 - 序列化：`json.Marshal(v interface{})`
 
-  >   需要`encoding/json`包
+    >   需要`encoding/json`包
 
-  - 直接传入结构体变量即可，返回的是**`byte`切片**：
+    - 直接传入结构体变量即可，返回的是**`byte`切片**：
 
-    `jsonBytes, err := json.Marshal(structVar)`
+        `jsonBytes, err := json.Marshal(structVar)`
 
-  - 还需要再将`byte`切片转换成**字符串**：`jsonStr := string(jsonBytes)`
+    - 还需要再将`byte`切片转换成**字符串**：`jsonStr := string(jsonBytes)`
 
 - 反序列化：`err = json.UnMarshal(date []byte, v interface{})`
 
-  -   要提前定义结构体变量，然后传入**结构体变量的地址**，才能修改到结构体成员
+    -   要提前定义结构体变量，然后传入**结构体变量的地址**，才能修改到结构体成员
 
 >   嵌套结构体的JSON序列化也相同
 
@@ -1027,22 +1022,22 @@ type 类型名 struct {
 
 - Tag由一个或多个**键值对**组成，用**反引号**包裹，写在结构体成员后面（同一行，用**空格**隔开）
 
-  -   键与值使用**冒号**分隔，值用**双引号**括起来
-  -   同一个结构体字段可以设置多个键值对Tag，不同的键值对之间使用**空格**分隔
+    -   键与值使用**冒号**分隔，值用**双引号**括起来
+    -   同一个结构体字段可以设置多个键值对Tag，不同的键值对之间使用**空格**分隔
 
-  >   为结构体编写Tag时，必须严格遵守键值对的规则。结构体标签的解析代码的容错能力很差，一旦格式写错，编译和运行时都不会提示任何错误，通过反射也无法正确取值
-  >
-  >   >   例如不要在 key 和 value 之间添加空格
+    >   为结构体编写Tag时，必须严格遵守键值对的规则。结构体标签的解析代码的容错能力很差，一旦格式写错，编译和运行时都不会提示任何错误，通过反射也无法正确取值
+    >
+    >   >   例如不要在 key 和 value 之间添加空格
 
 - 指定JSON反序列化时字段的标识符：
 
-  ```go
-  type Student struct { 
-    ID int `json:"id"` //通过指定 tag 实现 json 序列化该字段时的 key 
-    Gender string `json:"gender"` 
-    Name string Sno string 
-  }
-  ```
+    ```go
+    type Student struct { 
+      ID int `json:"id"` //通过指定 tag 实现 json 序列化该字段时的 key 
+      Gender string `json:"gender"` 
+      Name string Sno string 
+    }
+    ```
 
 
 
@@ -1064,19 +1059,19 @@ type 类型名 struct {
 
 - 初始化项目模块：在终端执行`go mod init`
 
-  -   会生成一个`go.mod`文件
+    -   会生成一个`go.mod`文件
 
 - 一般的项目结构：
 
-  ```
-  root
-  	|- go.mod
-  	|- main.go
-  	|- pkgdir1
-  				|- xxx.go
-    |- pkgdir2
-          |- xxx.go
-  ```
+    ```
+    root
+    	|- go.mod
+    	|- main.go
+    	|- pkgdir1
+    				|- xxx.go
+      |- pkgdir2
+            |- xxx.go
+    ```
 
 ---
 
@@ -1084,35 +1079,35 @@ type 类型名 struct {
 
 - 声明go文件所在包：`package 包名`
 
-  - 一个文件夹下面直接包含的文件只能归属一个`package`，同样一个`package`的文件不能在多个文件夹下
+    - 一个文件夹下面直接包含的文件只能归属一个`package`，同样一个`package`的文件不能在多个文件夹下
 
-  - 包名可以不和文件夹的名字一样，包名不能包含`-`符号
+    - 包名可以不和文件夹的名字一样，包名不能包含`-`符号
 
-  - 包名为main的包为应用程序的入口包，这种包编译后会得到一个**可执行文件**，而编译不包含main包的源代码则不会得到可执行文件
+    - 包名为main的包为应用程序的入口包，这种包编译后会得到一个**可执行文件**，而编译不包含main包的源代码则不会得到可执行文件
 
-    >   其中`main.go`的`main`方法就是**程序入口**
+        >   其中`main.go`的`main`方法就是**程序入口**
 
-  - 如果想在一个包中引用另外一个包里的标识符时，该标识符必须是对外可见的。在Go语言中只需要将**标识符的首字母大写**就可以让标识符对外可见了
+    - 如果想在一个包中引用另外一个包里的标识符时，该标识符必须是对外可见的。在Go语言中只需要将**标识符的首字母大写**就可以让标识符对外可见了
 
 - 引入自定义包：`import modelName/packageName`
 
-  - 多行导入：
+    - 多行导入：
 
-    ```go
-    import (
-    	"modelName/package1"
-    	"modelName/package2"
-    )
-    ```
+        ```go
+        import (
+        	"modelName/package1"
+        	"modelName/package2"
+        )
+        ```
 
-  - 匿名导入包：`import _ modelName/packageName`
+    - 匿名导入包：`import _ modelName/packageName`
 
-    -   如果只希望导入包，而**不使用包内部的数据**时，可以使用匿名导入包
-    -   匿名导入的包与其他方式导入的包一样都会被编译到可执行文件中
+        -   如果只希望导入包，而**不使用包内部的数据**时，可以使用匿名导入包
+        -   匿名导入的包与其他方式导入的包一样都会被编译到可执行文件中
 
 - 访问包中的**公有**数据：`packageName.PublicData`
 
-  >   同一个包中多个文件的公开数据都可以访问到
+    >   同一个包中多个文件的公开数据都可以访问到
 
 ---
 
@@ -1120,17 +1115,17 @@ type 类型名 struct {
 
 - 在Go语言程序**执行导入包语句时**会自动触发包内部`init()`函数的调用
 
-  >   init()函数在程序运行时自动被调用执行，不能在代码中主动调用它；
-  >
-  >   `main`包的`init`函数在`main`函数前执行
+    >   init()函数在程序运行时自动被调用执行，不能在代码中主动调用它；
+    >
+    >   `main`包的`init`函数在`main`函数前执行
 
 - `init()`函数没有参数也没有返回值，可以自己定义其内容
 
-  ```go
-  func init() {
-    stmt
-  }
-  ```
+    ```go
+    func init() {
+      stmt
+    }
+    ```
 
 ---
 
@@ -1140,24 +1135,24 @@ type 类型名 struct {
 
 - 安装包：
 
-  - `go get 包地址`（全局）
+    - `go get 包地址`（全局）
 
-  - `go mod download`（全局）
+    - `go mod download`（全局）
 
-    >   全局安装的依赖包会自动下载到$GOPATH/pkg/mod，多个项目可以共享缓存的mod；
-    >
-    >   使用 `go mod download` 的时候首先需要在你的项目里面**引入第三方包**，例如`import github.com/shopspring/decimal`，第一次运行时会建立关联
+        >   全局安装的依赖包会自动下载到$GOPATH/pkg/mod，多个项目可以共享缓存的mod；
+        >
+        >   使用 `go mod download` 的时候首先需要在你的项目里面**引入第三方包**，例如`import github.com/shopspring/decimal`，第一次运行时会建立关联
 
-  - `go mod vendor`（本项目）
+    - `go mod vendor`（本项目）
 
-    >   使用 `go mod vendor` 的时候首先需要在你的项目里面引入第三方包；
-    >
-    >   这样第一次运行之前就会关联好了
+        >   使用 `go mod vendor` 的时候首先需要在你的项目里面引入第三方包；
+        >
+        >   这样第一次运行之前就会关联好了
 
 - 管理依赖：
 
-  -   `go.mod`文件：`require xxxpackage version`
-  -   go.sum文件
+    -   `go.mod`文件：`require xxxpackage version`
+    -   go.sum文件
 
 
 
@@ -1169,7 +1164,7 @@ type 类型名 struct {
 
 - Golang中接口定义了对象的行为规范，只定义规范不实现。接口中定义的规范由具体的对象来实现
 
-  >   通俗的讲接口就一个标准，它是对一个对象的行为和规范进行约定，约定实现接口的对象必须得按照接口的规范
+    >   通俗的讲接口就一个标准，它是对一个对象的行为和规范进行约定，约定实现接口的对象必须得按照接口的规范
 
 ---
 
@@ -1195,28 +1190,28 @@ type 接口名 interface{
 
 - 定义**结构体**，并定义好**实现接口**的结构体方法和接收者后，还要在代码中书写：
 
-  ```go
-  structVar := structType{...}
-  var interfaceVar interfaceType
-  interfaceVar = structVar // 实现接口
-  interfaceVar.interfaceMethod
-  ```
+    ```go
+    structVar := structType{...}
+    var interfaceVar interfaceType
+    interfaceVar = structVar // 实现接口
+    interfaceVar.interfaceMethod
+    ```
 
-  -   给**接口变量赋值**就是代表**实现接口**了
+    -   给**接口变量赋值**就是代表**实现接口**了
 
-  >   如果要调用结构体本身特有的方法，就不能用接口变量了
+    >   如果要调用结构体本身特有的方法，就不能用接口变量了
 
 - 结构体**值接收者**和**指针接收者**实现接口的区别
 
-  -   如果结构体的方法是<u>值接收者</u>，那么实例化后的**结构体值类型和结构体指针类型**都可以赋值给**接口变量**
-  -   如果结构体中的方法是<u>指针接收者</u>，那么实例化后**结构体<u>指针类型可以</u>赋值给接口变量**，**结构体<u>值类型没法</u>赋值给接口变量**。
+    -   如果结构体的方法是<u>值接收者</u>，那么实例化后的**结构体值类型和结构体指针类型**都可以赋值给**接口变量**
+    -   如果结构体中的方法是<u>指针接收者</u>，那么实例化后**结构体<u>指针类型可以</u>赋值给接口变量**，**结构体<u>值类型没法</u>赋值给接口变量**。
 
 - 实现多个接口
 
-  ```go
-  var interfaceVar1 interfaceType1 = structVar
-  var interfaceVar2 interfaceType2 = interfaceVar1
-  ```
+    ```go
+    var interfaceVar1 interfaceType1 = structVar
+    var interfaceVar2 interfaceType2 = interfaceVar1
+    ```
 
 ---
 
@@ -1228,11 +1223,11 @@ type 接口名 interface{
 
 - 空接口的常见应用
 
-  - 空接口作为函数的参数，这样函数可以**接收任意类型参数**
+    - 空接口作为函数的参数，这样函数可以**接收任意类型参数**
 
-  - 空接口作为切片、map的值，这样切片和map中可以是容纳**任意类型元素(值)**
+    - 空接口作为切片、map的值，这样切片和map中可以是容纳**任意类型元素(值)**
 
-    >   :star:使用`interface{}`作为参数类型，存放结构体、切片等可索引取值的元素，则取出元素后不能直接索引取值，因为**`interface{}`类型不能被索引**，这要结合**类型断言**来弥补
+        >   :star:使用`interface{}`作为参数类型，存放结构体、切片等可索引取值的元素，则取出元素后不能直接索引取值，因为**`interface{}`类型不能被索引**，这要结合**类型断言**来弥补
 
 ---
 
@@ -1242,32 +1237,32 @@ type 接口名 interface{
 
 - 如果我们想要**判断空接口中值的类型**，那么这个时候就可以使用类型断言，其语法格式：
 
-  `blankInterfaceVarName.(typeName)`
+    `blankInterfaceVarName.(typeName)`
 
-  该语法返回两个参数:
+    该语法返回两个参数:
 
-  - 第一个返回值是`blankInterfaceVarName`转化为`typeName`类型后的变量
+    - 第一个返回值是`blankInterfaceVarName`转化为`typeName`类型后的变量
 
-    >   :star:注意这个变量已经转换为具体的类型了，如果是可索引的就可以直接索引了
+        >   :star:注意这个变量已经转换为具体的类型了，如果是可索引的就可以直接索引了
 
-  - 第二个返回值是一个布尔值
+    - 第二个返回值是一个布尔值
 
 - 类型断言与`switch`结合：
 
-  ```go
-  switch v := x.(type) { 
-  case string: 
-    fmt.Printf("x is a string，value is %v\n", v) 
-  case int: 
-    fmt.Printf("x is a int is %v\n", v) 
-  case bool: 
-    fmt.Printf("x is a bool is %v\n", v) 
-  default: 
-    fmt.Println("unsupport type！") 
-  }
-  ```
+    ```go
+    switch v := x.(type) { 
+    case string: 
+      fmt.Printf("x is a string，value is %v\n", v) 
+    case int: 
+      fmt.Printf("x is a int is %v\n", v) 
+    case bool: 
+      fmt.Printf("x is a bool is %v\n", v) 
+    default: 
+      fmt.Println("unsupport type！") 
+    }
+    ```
 
-  >   `x.(type)`这种语法只能结合`switch`一起写
+    >   `x.(type)`这种语法只能结合`switch`一起写
 
 - 当然，也可以判断非空接口的类型，也就是判断是哪个**结构体实现类型**
 
@@ -1300,13 +1295,13 @@ type interface3 interface {
 
 - 在一个 Golang 程序的**主进程**上可以起多个协程。Golang中**多协程**可以实现并行或者并发。
 
-  >   主进程结束后所有协程也强制结束
+    >   主进程结束后所有协程也强制结束
 
 - Golang 的一大特色就是从语言层面原生支持协程，在**函数或者方法调用前面加`go`关键字**就可创建一个协程（goroutine）
 
-  ```go
-  go fun()
-  ```
+    ```go
+    go fun()
+    ```
 
 - Golang 中每个 goroutine (协程) 默认占用内存远比 Java 、C 的线程少，只有2KB左右。且，**多协程** goroutine 切换调度开销方面也远比线程要少
 
@@ -1321,11 +1316,11 @@ type interface3 interface {
 
 - `sync.WaitGroup`：定义全局变量`var wg sync.WaitGroup`
 
-  >   `sync`包
+    >   `sync`包
 
-  -   `wg.Add(n)`：协程计数器加n
-  -   `wg.Done()`：协程计数器减1
-  -   `wg.Wait()`：等待直到协程计数器为0
+    -   `wg.Add(n)`：协程计数器加n
+    -   `wg.Done()`：协程计数器减1
+    -   `wg.Wait()`：等待直到协程计数器为0
 
 ### 6.2 管道channel
 
@@ -1333,9 +1328,9 @@ type interface3 interface {
 
 - 管道是 Golang 在语言级别上提供的 goroutine 间的通讯方式
 
-  >   Golang 的并发模型是 CSP（Communicating Sequential Processes），提倡**通过通信共享内** 
-  >
-  >   **存**而不是**通过共享内存而实现通信**
+    >   Golang 的并发模型是 CSP（Communicating Sequential Processes），提倡**通过通信共享内** 
+    >
+    >   **存**而不是**通过共享内存而实现通信**
 
 - Go 语言中的管道（channel）是一种特殊的类型，遵循**先入先出（First In First Out）**的规则
 
@@ -1349,9 +1344,9 @@ type interface3 interface {
 
 - 声明管道：`var chVar chan typeName`
 
-  >   这个声明不是必要的，直接按下面的方法创建也可以；
-  >
-  >   默认是双向的
+    >   这个声明不是必要的，直接按下面的方法创建也可以；
+    >
+    >   默认是双向的
 
 - 创建管道：`chVar = make(chan typeName, cap)`
 
@@ -1395,15 +1390,15 @@ type interface3 interface {
 
 - 定义：
 
-  - 只写管道：`chVar := make(chan<- typeName, cap)`
-  - 只读管道：`chVar := make(<-chan typeName, cap)`
+    - 只写管道：`chVar := make(chan<- typeName, cap)`
+    - 只读管道：`chVar := make(<-chan typeName, cap)`
 
-  > 当然也有类似的`var`语法，这里不列出了
+    > 当然也有类似的`var`语法，这里不列出了
 
 - 应用：限制(协程)**函数的参数**，表示该协程对该管道只读或只写
 
-  - `func fn(ch chan<- typeName)`
-  - `func fn(ch <-chan typeName)`
+    - `func fn(ch chan<- typeName)`
+    - `func fn(ch <-chan typeName)`
 
 
 
@@ -1447,9 +1442,9 @@ for {
 *互斥锁：*
 
 - 应用
-  - `var mutex sync.Mutex`
-  - `mutex.Lock()`
-  - `mutex.Unlock()`
+    - `var mutex sync.Mutex`
+    - `mutex.Lock()`
+    - `mutex.Unlock()`
 - 使用互斥锁能够保证同一时间有且只有一个goroutine进入临界区，其他的goroutine则在等待锁；多个goroutine同时等待一个锁时，**唤醒的策略是随机的**。
 - 虽然使用互斥锁能解决**资源争夺问题**，但降低了程序的并发性能，尤其是很多协程只是“**读**”，少数协程才“**写**”时，效率会降低很多
 
@@ -1459,11 +1454,11 @@ for {
 
 - 读写锁可以让多个读操作并发，同时读取，但是对于写操作与其他操作是完全互斥的
 - 应用
-  - `var rwMutex sync.RWMutex`
-  - 写锁定：`rwMutex.Lock()`
-  - 写解锁：`rwMutex.Unlock()`
-  - 读锁定：`rmMutex.RLock()`
-  - 读解锁：`rmMutex.RUnLock()`
+    - `var rwMutex sync.RWMutex`
+    - 写锁定：`rwMutex.Lock()`
+    - 写解锁：`rwMutex.Unlock()`
+    - 读锁定：`rmMutex.RLock()`
+    - 读解锁：`rmMutex.RUnLock()`
 
 
 
@@ -1483,17 +1478,17 @@ for {
 
 2. 读取文件：
 
-   - `for {n, err := file.Read([]byte)}`
+    - `for {n, err := file.Read([]byte)}`
 
-     > 当`err == io.EOF`时代表读取完毕；`buf[:n]`代表真正读取到的数据
+        > 当`err == io.EOF`时代表读取完毕；`buf[:n]`代表真正读取到的数据
 
-   - `reader = bufio.NewReader(file)`
+    - `reader = bufio.NewReader(file)`
 
-     `for {str, err = reader.Read([]byte)}`
+        `for {str, err = reader.Read([]byte)}`
 
-     `for {str, err = reader.ReadString('\n')}`
+        `for {str, err = reader.ReadString('\n')}`
 
-     > 以`\n`为分割读取字符串；当`err == io.EOF`时，`str`中可能还有返回值，也要记得取出
+        > 以`\n`为分割读取字符串；当`err == io.EOF`时，`str`中可能还有返回值，也要记得取出
 
 3. 关闭文件：`defer file.Close()`
 
@@ -1503,26 +1498,26 @@ for {
 
 1. 打开文件：`file, err := os.OpenFile("path", 权限, 0666)`
 
-   > 权限：用`|`分隔开，例如`os.O_CREATE|os.O_WRONLY|os.O_APPEND`
-   >
-   > - `os.O_RDWR`：读写
-   > - `os.O_TRUNC`：清空
-   >
-   > `0666`：`windows`下要这样写
+    > 权限：用`|`分隔开，例如`os.O_CREATE|os.O_WRONLY|os.O_APPEND`
+    >
+    > - `os.O_RDWR`：读写
+    > - `os.O_TRUNC`：清空
+    >
+    > `0666`：`windows`下要这样写
 
 2. 写入数据
 
-   - `file.Write([]byte)`
+    - `file.Write([]byte)`
 
-     `file.WriteString("str")`
+        `file.WriteString("str")`
 
-   - `writer := bufio.NewWriter(file)`
+    - `writer := bufio.NewWriter(file)`
 
-     `writer.write([]byte)`
+        `writer.write([]byte)`
 
-     `writer.WriteString("str")`
+        `writer.WriteString("str")`
 
-     `writer.Flush()`
+        `writer.Flush()`
 
 3. 关闭文件：`defer file.Close()`
 
@@ -1531,8 +1526,8 @@ for {
 *目录操作：*
 
 - 创建文件夹：
-  - `err := Mkdir("path", os.ModePerm)`
-  - `err := MkdirAll("path", os.ModePerm)`：允许直接递归创建
+    - `err := Mkdir("path", os.ModePerm)`
+    - `err := MkdirAll("path", os.ModePerm)`：允许直接递归创建
 
 
 
@@ -1566,35 +1561,35 @@ zip格式：`archive/zip`包
 
 - 服务端：
 
-  1. 监听端口：`listen, err := net.Listen("tcp", "127.0.0.1:20000")`
+    1. 监听端口：`listen, err := net.Listen("tcp", "127.0.0.1:20000")`
 
-  2. 接收客户端请求**建立连接**：`for { conn, err = listen.Accept() }`
+    2. 接收客户端请求**建立连接**：`for { conn, err = listen.Accept() }`
 
-  3. 创建**goroutine处理连接**：`for { go process(conn) }`
+    3. 创建**goroutine处理连接**：`for { go process(conn) }`
 
-     1. 读取数据：
+        1. 读取数据：
 
-        `reader := bufio.NewReader(conn)`
+            `reader := bufio.NewReader(conn)`
 
-        `for {n, err := reader.Read(buf []byte)}`
+            `for {n, err := reader.Read(buf []byte)}`
 
-     2. 发送数据：`conn.Write([]byte)`
+        2. 发送数据：`conn.Write([]byte)`
 
-     3. 关闭连接：`defer conn.Close()`
+        3. 关闭连接：`defer conn.Close()`
 
-  4. 结束监听：`defer listen.Close()`
+    4. 结束监听：`defer listen.Close()`
 
 - 客户端：
 
-  1. 建立与服务端的连接：`conn, err := net.Dial("tcp", "127.0.0.1:20000")`
+    1. 建立与服务端的连接：`conn, err := net.Dial("tcp", "127.0.0.1:20000")`
 
-  2. 进行数据收发：
+    2. 进行数据收发：
 
-     `n, err = conn.Write([]byte)`
+        `n, err = conn.Write([]byte)`
 
-     `for {n, err := conn.Read(buf []byte)}`
+        `for {n, err := conn.Read(buf []byte)}`
 
-  3. 关闭连接：`defer conn.Close()`
+    3. 关闭连接：`defer conn.Close()`
 
 
 ---
@@ -1603,25 +1598,24 @@ zip格式：`archive/zip`包
 
 - 服务端：
 
-  1. 监听端口：`listen, err := net.ListenUDP("udp", &net.UDPAddr{IP: new.IPv4(0, 0, 0, 0), Port: 3000,})`
-  2. 接收数据：`n, addr, err := listen.ReadFromUDP([]byte)`
-  3. 发送数据：`n, err = listen.WriteToUDP([]byte, addr)`
-  4. 结束监听：`defer listen.Close()`
+    1. 监听端口：`listen, err := net.ListenUDP("udp", &net.UDPAddr{IP: new.IPv4(0, 0, 0, 0), Port: 3000,})`
+    2. 接收数据：`n, addr, err := listen.ReadFromUDP([]byte)`
+    3. 发送数据：`n, err = listen.WriteToUDP([]byte, addr)`
+    4. 结束监听：`defer listen.Close()`
 
 - 客户端
 
-  1. 与服务端建立连接：`socket, err := net.DialUDP("udp", nil, &net.UDPAddr{IP: net.IPv4(0, 0, 0, 0), Port: 30000,})`
+    1. 与服务端建立连接：`socket, err := net.DialUDP("udp", nil, &net.UDPAddr{IP: net.IPv4(0, 0, 0, 0), Port: 30000,})`
 
-  2. 收发数据：
+    2. 收发数据：
 
-     ` n, err = socket.Write([]byte)`
+        ` n, err = socket.Write([]byte)`
 
-     `n, remoteAddr, err := socket.ReadFromUDP([]byte)`
+        `n, remoteAddr, err := socket.ReadFromUDP([]byte)`
 
-  3. 关闭连接：
-  
-     `defer socket.Close()`
-  
+    3. 关闭连接：
+
+        `defer socket.Close()`
 
 ### 8.2 HTTP编程
 
@@ -1638,62 +1632,62 @@ zip格式：`archive/zip`包
 
 1. **定义处理请求的逻辑**
 
-   1. handler函数：`func myHandler(w http.ResponseWriter, r *http.Request) {...}`
+    1. handler函数：`func myHandler(w http.ResponseWriter, r *http.Request) {...}`
 
-      关于`http.Request`结构体
+        关于`http.Request`结构体
 
-      ```go
-      type Request struct {
-      	Method string
-      	URL *url.URL
-      	Header Header
-      	Body io.ReadCloser
-      	ContentLength int64
-          /*omitted...*/
-      }
-      ```
+        ```go
+        type Request struct {
+        	Method string
+        	URL *url.URL
+        	Header Header
+        	Body io.ReadCloser
+        	ContentLength int64
+            /*omitted...*/
+        }
+        ```
 
-      - `q := r.URL.Query()`
-        - `q.Get("key")`
-      - `r.URL.EscapedPath()`：大部分情况下直接用这个得到**资源路径字符串**（`/`分隔的）
-      - `w.Header().Add("key", "value")`、`w.Header().Set("key", "value")`
-      - `w.WriteHeader(statusCode)`
-      - `w.Write([]byte)`
+        - `q := r.URL.Query()`
+            - `q.Get("key")`
+        - `r.URL.EscapedPath()`：大部分情况下直接用这个得到**资源路径字符串**（`/`分隔的）
+        - `w.Header().Add("key", "value")`、`w.Header().Set("key", "value")`
+        - `w.WriteHeader(statusCode)`
+        - `w.Write([]byte)`
 
-   2. 注册handler：`http.HandleFunc("/path", myHandlerFunc)`
+    2. 注册handler：`http.HandleFunc("/path", myHandlerFunc)`
 
-      - 也可以调用`http.Handle("/path", &myHandler)`，但这需要传入实现了`http.Handler`接口的结构体变量，用`handlerFunc`就可以自动通过**普通函数**转换成处理器，当然这个函数的**参数列表**是有要求的
+        - 也可以调用`http.Handle("/path", &myHandler)`，但这需要传入实现了`http.Handler`接口的结构体变量，用`handlerFunc`就可以自动通过**普通函数**转换成处理器，当然这个函数的**参数列表**是有要求的
 
-        > 见下面的例子：`w http.ResponseWriter, r *http.Request`
+            > 见下面的例子：`w http.ResponseWriter, r *http.Request`
 
 2. **创建服务器并监听端口**
 
-   - 方式一：`http.ListenAndServe("127.0.0.1:8000", nil)`
+    - 方式一：`http.ListenAndServe("127.0.0.1:8000", nil)`
 
-     - `nil`表示使用**默认的多路复用服务器**
+        - `nil`表示使用**默认的多路复用服务器**
 
-   - 方式二：实例化`http.Server`结构体，并调用`s.ListenAndServe()`方法
+    - 方式二：实例化`http.Server`结构体，并调用`s.ListenAndServe()`方法
 
-     ```go
-     type Server struct {
-     	// in the form "host:port". If empty, ":http" (port 80) is used.
-     	Addr string
-     	Handler Handler 
-     	ReadTimeout time.Duration
-     	ReadHeaderTimeout time.Duration
-     	WriteTimeout time.Duration
-     	MaxHeaderBytes int
-         /*omitted...*/
-     }
-     ```
-     
-   - 方式三：
-   
-     `mux := http.NewServerMux()`
-   
-     `mux.HandleFunc("/path", handler)`
-   
-     `http.ListenAndServe("ip:port", mux)`
+        ```go
+        type Server struct {
+        	// in the form "host:port". If empty, ":http" (port 80) is used.
+        	Addr string
+        	Handler Handler 
+        	ReadTimeout time.Duration
+        	ReadHeaderTimeout time.Duration
+        	WriteTimeout time.Duration
+        	MaxHeaderBytes int
+            /*omitted...*/
+        }
+        ```
+
+    - 方式三：
+
+        `mux := http.NewServerMux()`
+
+        `mux.HandleFunc("/path", handler)`
+
+        `http.ListenAndServe("ip:port", mux)`
 
 ---
 
@@ -1701,57 +1695,40 @@ zip格式：`archive/zip`包
 
 - **发起请求**
 
-  - Get请求：`resp, err := http.Get("url?key=value&")`
+    - Get请求：`resp, err := http.Get("url?key=value&")`
 
-  - Post请求：
+    - Post请求：
 
-    - `http.Post("url", "contentType", body io.Reader)`
+        - `http.Post("url", "contentType", body io.Reader)`
 
-    - `http.PostForm("url", data url.Values)`
+        - `http.PostForm("url", data url.Values)`
 
-      > The Content-Type header is set to application/x-www-form-urlencoded
+            > The Content-Type header is set to application/x-www-form-urlencoded
 
-  - 任意请求：
+    - 任意请求：
 
-    `client := http.Client{}`
-    
-    `req, err := http.NewRequest("GET", "urlStr", body io.Reader)`
-    
-    > `io.Reader`可以通过`bytes.NewReader([]byte)`构造
-    
-    `req.Header.Set("key", "value")`
-    
-    `resp, err := client.Do(req)`
-    
-    > 关于`url.Values`：
-    >
-    > `data := url.Values{}`
-    >
-    > `data.Set("key", "value")`
-    >
-    > `urlStr = data.Encode()`
+        `client := http.Client{}`
+
+        `req, err := http.NewRequest("GET", "urlStr", body io.Reader)`
+
+        > `io.Reader`可以通过`bytes.NewReader([]byte)`构造
+
+        `req.Header.Set("key", "value")`
+
+        `resp, err := client.Do(req)`
+
+        > 关于`url.Values`：
+        >
+        > `data := url.Values{}`
+        >
+        > `data.Set("key", "value")`
+        >
+        > `urlStr = data.Encode()`
 
 - **接收数据**
 
-  - `for {n, err := resp.Body.read(buf []byte)}`
+    - `for {n, err := resp.Body.read(buf []byte)}`
 
 - **关闭**
 
-  - `defer resp.Body.close()`
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    - `defer resp.Body.close()`

@@ -1,6 +1,9 @@
 ---
-title: DataStructure
+title: Data Structure
 abbrlink: ba907200
 date: 2022-12-31 22:16:40
 tags:
+    - Computer
+    - Data Structure
+category: Computer Theory
 ---
