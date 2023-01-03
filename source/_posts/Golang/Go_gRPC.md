@@ -4,7 +4,8 @@ abbrlink: 8f298335
 date: 2022-10-01 10:09:40
 tags:
     - Computer
-    - Go gRPC
+    - gRPC
+    - Golang
 category: Golang
 ---
 

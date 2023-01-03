@@ -4,7 +4,7 @@ abbrlink: 118b8ca3
 date: 2022-11-18 10:22:28
 tags:
     - Computer
-    - Comp
+    - Compile Principle
 category: Computer Theory
 ---
 

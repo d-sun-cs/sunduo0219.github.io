@@ -4,24 +4,35 @@
 
 menu:
   Home Page: / || fas fa-home
-  Categories: /categories/ || fas fa-folder-open
+#  Categories: /categories/ || fas fa-folder-open
+  Categories || fas fa-folder-open:
+    Computer Theory: /categories/Computer-Theory || fa-solid fa-book
+    Java & Kotlin: /categories/Java-Kotlin || fa-brands fa-java
+    Data Persistence: /categories/Data-Persistence || fa-solid fa-database
+    Frontend: /categories/Frontend || fa-solid fa-code
+    Golang: /categories/Golang || fas fa-brands fa-golang
+    Operations: /categories/Operations || fa-brands fa-docker
+    Project Management: /categories/Project-Management || fa-brands fa-git-alt
+    C & C++: /categories/C-C || fa-solid fa-c
+    Big Data: /categories/Big-Data || fa-solid fa-mountain-sun
+    AI: /categories/AI || fa-solid fa-robot
   Tags: /tags/ || fas fa-tags
   Archives: /archives/ || fas fa-archive
   Links || fas fa-list:
     Blogroll: /link/ || fas fa-link
-#    关于: /about/ || fas fa-heart
+    About: /about/ || fas fa-heart
 #    Music: /music/ || fas fa-music
 #    Movie: /movies/ || fas fa-video
 #  Bangumis: /bangumis/ || fas fa-home
 #  Binge-Watch: /cinemas/ || fas fa-home
 
 # Hide the child menu items in mobile sidebar
-# hide_sidebar_menu_child: true
+hide_sidebar_menu_child: true
 
 # Code Blocks (代碼相關)
 # --------------------------------------
 
-highlight_theme: light #  darker / pale night / light / ocean / mac / mac light / false
+highlight_theme: mac light #  darker / pale night / light / ocean / mac / mac light / false
 highlight_copy: true # copy button
 highlight_lang: true # show the code language
 highlight_shrink: false # true: shrink the code blocks / false: expand the code blocks | none: expand code blocks and hide the button
@@ -42,6 +53,7 @@ copy:
 social:
   fab fa-github: https://github.com/sundocker || Github
   fas fa-envelope: mailto:1075079562@qq.com || Email
+  fa-solid fa-blog: http://sundocker.online || Blog
 
 # search (搜索)
 # see https://butterfly.js.org/posts/ceeb73f/#搜索系統
@@ -85,17 +97,17 @@ favicon: /img/favicon.png
 
 # Avatar (頭像)
 avatar:
-  img: /bgs/bg4.jpg
+  img: /img/avatar.jpg
   effect: false
 
 # Disable all banner image
 disable_top_img: false
 
 # The banner image of home page
-index_img:
+index_img: /bgs/bg5.jpg
 
 # If the banner of page not setting, it will show the top_img
-default_top_img:
+default_top_img: /bgs/bg5.jpg
 
 # The banner image of archive page
 archive_img:
@@ -128,13 +140,22 @@ cover:
   position: both
   # When cover is not set, the default cover is displayed (當沒有設置cover時，默認的封面顯示)
   default_cover:
-    # - https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg
     - /bgs/bg1.jpg
     - /bgs/bg2.jpg
     - /bgs/bg3.png
     - /bgs/bg8.jpg
     - /bgs/bg6.jpg
     - /bgs/bg7.jpeg
+    - /bgs/bg9.jpg
+    - /bgs/bg10.jpg
+    - /bgs/bg11.jpg
+    - /bgs/bg12.jpg
+    - /bgs/bg13.jpg
+    - /bgs/bg14.jpg
+    - /bgs/bg15.jpg
+    - /bgs/bg16.jpeg
+    - /bgs/bg17.png
+    # - https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg
 
 
 
@@ -182,7 +203,7 @@ index_post_content:
 
 # anchor
 # when you scroll in post, the URL will update according to header id.
-anchor: false
+anchor: true
 
 # Post
 # --------------------------------------
@@ -204,14 +225,14 @@ post_copyright:
 
 # Sponsor/reward
 reward:
-  enable: false
+  enable: true
   QR_code:
-    # - img: /img/wechat.jpg
-    #   link:
-    #   text: wechat
-    # - img: /img/alipay.jpg
-    #   link:
-    #   text: alipay
+     - img: /img/wechat.jpg
+       link:
+       text: WeChat
+     - img: /img/alipay.jpg
+       link:
+       text: AliPay
 
 # Post edit
 # Easily browse and edit blog source code online.
@@ -225,7 +246,7 @@ post_edit:
 related_post:
   enable: true
   limit: 6 # Number of posts displayed
-  date_type: created # or created or updated 文章日期顯示創建日或者更新日
+  date_type: updated # or created or updated 文章日期顯示創建日或者更新日
 
 # figcaption (圖片描述文字)
 photofigcaption: true
@@ -434,11 +455,66 @@ messenger:
 footer:
   owner:
     enable: true
-    since: 2020
+    since: 2022
   custom_text: Nice to meet you !<br>
-    <a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral"><span>本网站由<img class="cdn-icon" src="/bgs/又拍云_logo6.png" width="2.5%">提供CDN加速/云存储服务</span></a><br>
-    <a href="icp链接"><img  class="icp-icon"  src="icp图片"><span>备案号:xxxxxx</span></a><br>
+    <a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral">
+      <div id="you-pai-cloud" align="center">
+        本网站由
+        <img 
+          class="cdn-icon" src="/img/又拍云_logo6.png" 
+          width="5%">
+        提供<b>CDN加速/云存储</b>服务
+      </div>
+    </a>
+#    <div>
+#      备案号:粤ICP备2022157052号-1
+#    </div>
   copyright: false # Copyright of theme and framework
+
+# footer_beautify
+# 页脚计时器：[Native JS Timer](https://akilar.top/posts/b941af/)
+# 页脚徽标：[Add Github Badge](https://akilar.top/posts/e87ad7f8/)
+footer_beautify:
+  enable:
+    timer: true # 计时器开关
+    bdage: true # 徽标开关
+  priority: 5 #过滤器优先权
+  enable_page: all # 应用页面
+  exclude:
+  # - /posts/
+  # - /about/
+  layout: # 挂载容器类型
+    type: id
+    name: footer-wrap
+    index: 0
+  # 计时器部分配置项
+  runtime_js: /js/footer.js
+#  runtime_css: https://npm.elemecdn.com/anzhiyu-blog@2.0.4/css/runtime/runtime.min.css
+  # 徽标部分配置项
+  swiperpara: 0 #若非0，则开启轮播功能，每行徽标个数
+  bdageitem:
+    - link: https://hexo.io/ #徽标指向网站链接
+      shields: https://img.shields.io/badge/Frame-Hexo-blue?style=flat&logo=hexo #徽标API
+      message: 博客框架为Hexo_v6.3.0 #徽标提示语
+    - link: https://butterfly.js.org/
+      shields: https://img.shields.io/badge/Theme-Butterfly-6513df?style=flat&logo=bitdefender
+      message: 主题版本Butterfly_v4.4.0
+    #    - link: https://www.jsdelivr.com/
+    #      shields: https://img.shields.io/badge/CDN-jsDelivr-orange?style=flat&logo=jsDelivr
+    #      message: 本站使用JsDelivr为静态资源提供CDN加速
+    - link: https://beian.miit.gov.cn/#/Integrated/index
+      shields: https://img.shields.io/badge/粤ICP备-2022157052号-e1d492?style=flat&logo=data:image/png;base64,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
+      message: 本站已在粤进行备案
+    - link: https://github.com/
+      shields: https://img.shields.io/badge/Source-Github-d021d6?style=flat&logo=GitHub
+      message: 本站项目由Github托管
+    - link: http://creativecommons.org/licenses/by-nc-sa/4.0/
+      shields: https://img.shields.io/badge/Copyright-BY--NC--SA%204.0-d42328?style=flat&logo=Claris
+      message: 本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可
+
+  # swiper_css: https://cdn.cbd.int/hexo-butterfly-swiper/lib/swiper.min.css
+  # swiper_js: https://cdn.cbd.int/hexo-butterfly-swiper/lib/swiper.min.js
+  # swiperbdage_init_js: https://cdn.cbd.int/hexo-butterfly-footer-beautify/lib/swiperbdage_init.min.js
 
 # Analysis
 # --------------------------------------
@@ -484,10 +560,10 @@ google_adsense:
 # --------------------------------------
 
 site_verification:
-  # - name: google-site-verification
-  #   content: xxxxxx
-  # - name: baidu-site-verification
-  #   content: xxxxxxx
+  - name: google-site-verification
+    content: IzmEN2qRcorqxCIoxoXqi3hYOR3lP0li6nPF0PZq21g
+  - name: baidu-site-verification
+    content: code-AGXLAKjYup
 
 # Beautify/Effect (美化/效果)
 # --------------------------------------
@@ -614,8 +690,8 @@ beautify:
 font:
   global-font-size: 16px
   code-font-size:
-  font-family:
-  code-font-family:
+  font-family: "Microsoft YaHei"
+  code-font-family: Consolas
 
 # Font settings for the site title and site subtitle
 # 左上角網站名字 主頁居中網站名字
@@ -650,12 +726,14 @@ subtitle:
   # 如果關閉打字效果，subtitle 只會顯示 sub 的第一行文字
   sub:
     - You complete me ...
+    - But every once in a while you find someone who's iridescent ...
     - Always ...
-    - I love you three thousand ...
     - Run Barry, run ...
+    - Some birds are not close, because the are too bright ...
     - We are Groot ...
     - With great power comes great responsibility ...
     - And I ... am ... Iron Man ...
+    - Life is like a box of chocolates, you never know what you're going to get ...
 
 # Loading Animation (加載動畫)
 preloader: true
@@ -692,19 +770,19 @@ aside:
               <i>a hardest-hit area</i><br>
               ~~o(>_<)o~~
               </div>"
-  card_recent_post:
+  card_categories:
     enable: true
+    limit: 0 # if set 0 will show all
+    expand: none # none/true/false
+    sort_order: # Don't modify the setting unless you know how it works
+  card_recent_post:
+    enable: false
     limit: 5 # if set 0 will show all
     sort: date # date or updated
     sort_order: # Don't modify the setting unless you know how it works
-  card_categories:
-    enable: true
-    limit: 8 # if set 0 will show all
-    expand: none # none/true/false
-    sort_order: # Don't modify the setting unless you know how it works
   card_tags:
     enable: true
-    limit: 40 # if set 0 will show all
+    limit: 10 # if set 0 will show all
     color: false
     sort_order: # Don't modify the setting unless you know how it works
   card_archives:
@@ -712,7 +790,7 @@ aside:
     type: monthly # yearly or monthly
     format: MMMM YYYY # eg: YYYY年MM月
     order: -1 # Sort of order. 1, asc for ascending; -1, desc for descending
-    limit: 8 # if set 0 will show all
+    limit: 5 # if set 0 will show all
     sort_order: # Don't modify the setting unless you know how it works
   card_webinfo:
     enable: true
@@ -852,7 +930,7 @@ instantpage: true
 # https://github.com/vinta/pangu.js
 # Insert a space between Chinese character and English character (中英文之間添加空格)
 pangu:
-  enable: false
+  enable: true
   field: site # site/post
 
 # Lazyload (圖片懶加載)
@@ -888,12 +966,12 @@ css_prefix: true
 inject:
   head:
     # - <link rel="stylesheet" href="/xxx.css">
-    # 自定义css
+    # 自定义 css
     - <link rel="stylesheet" href="/css/custom.css" media="defer" onload="this.media='all'">
   bottom:
     # - <script src="xxxx"></script>
     # aplayer音乐
-    - <div class="aplayer no-destroy" data-id="7186096647" data-server="tencent" data-type="playlist"
+    - <div class="aplayer no-destroy" data-id="8759530202" data-server="tencent" data-type="playlist"
       data-order="random" data-fixed="true" data-preload="auto" data-autoplay="true" 
       data-mutex="true"></div>
 
@@ -970,3 +1048,44 @@ CDN:
     # prismjs_autoloader:
     # artalk_js:
     # artalk_css:
+
+# electric_clock
+# see https://anzhiy.cn/posts/fc18.html
+electric_clock:
+  enable: true # 开关
+  priority: 5 #过滤器优先权
+  enable_page: / # 应用页面
+  exclude:
+  # - /posts/
+  # - /about/
+  layout: # 挂载容器类型
+    type: class
+    name: sticky_layout
+    index: 0
+  loading: https://cdn.cbd.int/hexo-butterfly-clock-anzhiyu/lib/loading.gif #加载动画自定义
+  clock_css: https://cdn.cbd.int/hexo-butterfly-clock-anzhiyu/lib/clock.min.css
+  clock_js: https://cdn.cbd.int/hexo-butterfly-clock-anzhiyu/lib/clock.min.js
+  ip_api: https://widget.qweather.net/simple/static/js/he-simple-common.js?v=2.0
+  qweather_key: 09f05ee29ba043a69e57ecde9f1852e1 # 和风天气key
+  gaud_map_key: a152cd225b0ee3daa90af4b09bdad828 # 高得地图web服务key
+  default_rectangle: false # 开启后将一直显示rectangle位置的天气，否则将获取访问者的地理位置与天气
+  rectangle: 116.3,39.9 # 获取访问者位置失败时会显示该位置的天气，同时该位置为开启default_rectangle后的位置
+
+# hexo-butterfly-swiper-anzhiyu
+# see https://akilar.top/posts/8e1264d1/
+# hexo-butterfly-swiper
+# see https://akilar.top/posts/8e1264d1/
+swiper:
+  enable: true # 开关
+  priority: 5 #过滤器优先权
+  enable_page: / # 应用页面
+  timemode: updated #date/updated
+  layout: # 挂载容器类型
+    type: id
+    name: recent-posts
+    index: 0
+  default_descr: No description now, why not come in to have a look?
+  swiper_css: https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.css #swiper css依赖
+  swiper_js: https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.js #swiper js依赖
+  custom_css: https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiperstyle.css # 适配主题样式补丁
+  custom_js: https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper_init.js # swiper初始化方法

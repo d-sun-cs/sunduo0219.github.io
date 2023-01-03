@@ -6,6 +6,7 @@ tags:
     - Computer
     - Golang
 category: Golang
+swiper_index: 1
 ---
 
 ## 1 快速入门

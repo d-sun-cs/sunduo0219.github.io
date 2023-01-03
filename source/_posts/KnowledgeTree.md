@@ -5,6 +5,7 @@ tags:
 abbrlink: 6c24763b
 date: 2022-12-31 21:06:30
 sticky: 1
+swiper_index: 5
 ---
 
 ## Computer Theory

@@ -6,6 +6,7 @@ tags:
     - Computer
     - Database System
 category: Computer Theory
+swiper_index: 3
 ---
 
 # 模型与语言
