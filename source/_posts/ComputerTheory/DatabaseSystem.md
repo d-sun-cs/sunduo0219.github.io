@@ -788,7 +788,7 @@ swiper_index: 3
 
 ## 1 Data Modeling
 
-### 1.1 Three worlds with levels of abstraction
+### 1.1 Three Worlds With Levels of Abstraction
 
 #### *Real world:*
 
@@ -811,7 +811,7 @@ swiper_index: 3
 
 #### *Conceptual / Information world:*
 
--   <u>Ways abstracting</u> from real world to conceptual world: **Data Modeling**
+-   <u>Ways abstracting</u> from *real world* to *conceptual world*: **Data Modeling**
 
 -   <u>Abstraction level</u>: **Conceptual** Level
 
@@ -821,7 +821,7 @@ swiper_index: 3
 
         >   Conceptual model is short for conceptual data model
 
-    -   Independence: independent of **computer system**
+    -   **Independence**: independent of **computer system**
 
     -   Representing the **essential relationship of information**
 
@@ -830,11 +830,11 @@ swiper_index: 3
 
 #### *Data / Computer world:*
 
--   <u>Ways abstracting</u> from real world to conceptual world: **Database Design**
+-   <u>Ways abstracting</u> from *conceptual world* to *computer world*: **Database Design**
 -   <u>Abstraction level</u>: **Implement** Level
 -   <u>Key</u> of this level: **Data Model**
     -   **Concept** of data model: the model **expressing computer world**
-    -   Independence: independent of **physical system**
+    -   **Independence**: independent of **physical system**
 -   Two levels in computer world itself:
     -   **Logic level**, which contains **data model**
     -   **Physical level**, arrived from logic level

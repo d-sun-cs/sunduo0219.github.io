@@ -6,7 +6,7 @@
     "build": "hexo clean && hexo generate",
     "clean": "hexo clean",
     "deploy": "hexo clean && hexo generate && hexo deploy",
-    "server": "hexo clean && hexo generate && hexo server",
+    "serve": "hexo clean && hexo generate && hexo server",
     "push": "git add . && git commit -m update && git push gitee && git push github",
     "pull": "git pull gitee main && git pull github main"
   },
