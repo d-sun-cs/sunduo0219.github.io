@@ -1,0 +1,740 @@
+<!DOCTYPE html><html lang="default" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>Go gRPC | SunDocker's Personal Blog</title><meta name="keywords" content="Computer,gRPC,Golang"><meta name="author" content="SunDocker"><meta name="copyright" content="SunDocker"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="1 微服务  https:&#x2F;&#x2F;www.mszlu.com&#x2F;grpc&#x2F;01&#x2F;01.html  2 protobuf 2.1 概述 protobuf是谷歌开源的一种数据格式，适合高性能，对响应速度有要求的数据传输场景。 profobuf是二进制数据格式，需要编码和解码，数据本身不具有可读性。因此只能反序列化之后得到真正可读的数据。 优势：  序列化后体积相比Json和XML很小，适合网络传输 支持跨平">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Go gRPC">
+<meta property="og:url" content="https://sundocker.online/posts/8f298335.html">
+<meta property="og:site_name" content="SunDocker&#39;s Personal Blog">
+<meta property="og:description" content="1 微服务  https:&#x2F;&#x2F;www.mszlu.com&#x2F;grpc&#x2F;01&#x2F;01.html  2 protobuf 2.1 概述 protobuf是谷歌开源的一种数据格式，适合高性能，对响应速度有要求的数据传输场景。 profobuf是二进制数据格式，需要编码和解码，数据本身不具有可读性。因此只能反序列化之后得到真正可读的数据。 优势：  序列化后体积相比Json和XML很小，适合网络传输 支持跨平">
+<meta property="og:locale">
+<meta property="og:image" content="https://sundocker.online/bgs/bg16.jpeg">
+<meta property="article:published_time" content="2022-10-01T02:09:40.000Z">
+<meta property="article:modified_time" content="2023-01-02T13:07:07.987Z">
+<meta property="article:author" content="SunDocker">
+<meta property="article:tag" content="Computer">
+<meta property="article:tag" content="gRPC">
+<meta property="article:tag" content="Golang">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://sundocker.online/bgs/bg16.jpeg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://sundocker.online/posts/8f298335"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta name="google-site-verification" content="IzmEN2qRcorqxCIoxoXqi3hYOR3lP0li6nPF0PZq21g"/><meta name="baidu-site-verification" content="code-AGXLAKjYup"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"languages":{"hits_empty":"We didn't find any results for the search: ${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":300},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"Traditional Chinese Activated Manually","cht_to_chs":"Simplified Chinese Activated Manually","day_to_night":"Dark Mode Activated Manually","night_to_day":"Light Mode Activated Manually","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"top-center"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: true,
+  islazyload: true,
+  isAnchor: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Go gRPC',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-01-02 21:07:07'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const now = new Date()
+          const hour = now.getHours()
+          const isNight = hour <= 6 || hour >= 18
+          if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+          else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/custom.css" media="defer" onload="this.media='all'"><!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-double-row-display@1.00/cardlistpost.min.css"/>
+                        <style>
+                        #recent-posts > .recent-post-item >.recent-post-info > .article-meta-wrap > .tags:before {
+                            content:"\A";
+                            white-space: pre;
+                        }
+                        #recent-posts > .recent-post-item >.recent-post-info > .article-meta-wrap > .tags > .article-meta__separator {
+                            display:none
+                        }
+                        </style>
+<link rel="stylesheet" href="/css/categorybar.css"><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-clock-anzhiyu/lib/clock.min.css" /><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiperstyle.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://unpkg.zhimg.com/hexo-butterfly-footer-beautify@1.0.0/lib/runtime.min.css" media="print" onload="this.media='all'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="SunDocker's Personal Blog" type="application/atom+xml">
+</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">Loading...</div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">55</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">45</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">14</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home Page</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa-solid fa-warehouse"></i><span> Knowledge Repository</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/Computer-Theory"><i class="fa-fw fa-solid fa-book"></i><span> Computer Theory</span></a></li><li><a class="site-page child" href="/categories/Java-Kotlin"><i class="fa-fw fa-brands fa-java"></i><span> Java &amp; Kotlin</span></a></li><li><a class="site-page child" href="/categories/Data-Persistence"><i class="fa-fw fa-solid fa-database"></i><span> Data Persistence</span></a></li><li><a class="site-page child" href="/categories/Frontend"><i class="fa-fw fa-solid fa-code"></i><span> Frontend</span></a></li><li><a class="site-page child" href="/categories/Golang"><i class="fa-fw fas fa-brands fa-golang"></i><span> Golang</span></a></li><li><a class="site-page child" href="/categories/Operations"><i class="fa-fw fa-brands fa-docker"></i><span> Operations</span></a></li><li><a class="site-page child" href="/categories/Project-Management"><i class="fa-fw fa-brands fa-git-alt"></i><span> Project Management</span></a></li><li><a class="site-page child" href="/categories/C-C"><i class="fa-fw fa-solid fa-c"></i><span> C &amp; C++</span></a></li><li><a class="site-page child" href="/categories/Big-Data"><i class="fa-fw fa-solid fa-mountain-sun"></i><span> Big Data</span></a></li><li><a class="site-page child" href="/categories/AI"><i class="fa-fw fa-solid fa-robot"></i><span> AI</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa-solid fa-sun"></i><span> Life Sharing</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/Life-Sharing"><i class="fa-fw fa-solid fa-book-open"></i><span> Paper Reading</span></a></li><li><a class="site-page child" href="/categories/Life-Sharing"><i class="fa-fw fa-solid fa-music"></i><span> Pop Music Keyboard</span></a></li><li><a class="site-page child" href="/categories/Life-Sharing"><i class="fa-fw fa-solid fa-film"></i><span> Movie Review</span></a></li><li><a class="site-page child" href="/categories/Life-Sharing"><i class="fa-fw fa-solid fa-comment"></i><span> Life By-talk</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> Links</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/posts/6c24763b.html"><i class="fa-fw fa-solid fa-folder-tree"></i><span> Knowledge Tree</span></a></li><li><a class="site-page child" href="/posts/ed318fdc.html"><i class="fa-fw fa-solid fa-blog"></i><span> About This Blog</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About Me</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></li><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> Blogroll</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/bgs/bg16.jpeg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">SunDocker's Personal Blog</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home Page</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa-solid fa-warehouse"></i><span> Knowledge Repository</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/Computer-Theory"><i class="fa-fw fa-solid fa-book"></i><span> Computer Theory</span></a></li><li><a class="site-page child" href="/categories/Java-Kotlin"><i class="fa-fw fa-brands fa-java"></i><span> Java &amp; Kotlin</span></a></li><li><a class="site-page child" href="/categories/Data-Persistence"><i class="fa-fw fa-solid fa-database"></i><span> Data Persistence</span></a></li><li><a class="site-page child" href="/categories/Frontend"><i class="fa-fw fa-solid fa-code"></i><span> Frontend</span></a></li><li><a class="site-page child" href="/categories/Golang"><i class="fa-fw fas fa-brands fa-golang"></i><span> Golang</span></a></li><li><a class="site-page child" href="/categories/Operations"><i class="fa-fw fa-brands fa-docker"></i><span> Operations</span></a></li><li><a class="site-page child" href="/categories/Project-Management"><i class="fa-fw fa-brands fa-git-alt"></i><span> Project Management</span></a></li><li><a class="site-page child" href="/categories/C-C"><i class="fa-fw fa-solid fa-c"></i><span> C &amp; C++</span></a></li><li><a class="site-page child" href="/categories/Big-Data"><i class="fa-fw fa-solid fa-mountain-sun"></i><span> Big Data</span></a></li><li><a class="site-page child" href="/categories/AI"><i class="fa-fw fa-solid fa-robot"></i><span> AI</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa-solid fa-sun"></i><span> Life Sharing</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/Life-Sharing"><i class="fa-fw fa-solid fa-book-open"></i><span> Paper Reading</span></a></li><li><a class="site-page child" href="/categories/Life-Sharing"><i class="fa-fw fa-solid fa-music"></i><span> Pop Music Keyboard</span></a></li><li><a class="site-page child" href="/categories/Life-Sharing"><i class="fa-fw fa-solid fa-film"></i><span> Movie Review</span></a></li><li><a class="site-page child" href="/categories/Life-Sharing"><i class="fa-fw fa-solid fa-comment"></i><span> Life By-talk</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> Links</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/posts/6c24763b.html"><i class="fa-fw fa-solid fa-folder-tree"></i><span> Knowledge Tree</span></a></li><li><a class="site-page child" href="/posts/ed318fdc.html"><i class="fa-fw fa-solid fa-blog"></i><span> About This Blog</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About Me</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></li><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> Blogroll</span></a></li></ul></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Go gRPC</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2022-10-01T02:09:40.000Z" title="Created 2022-10-01 10:09:40">2022-10-01</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2023-01-02T13:07:07.987Z" title="Updated 2023-01-02 21:07:07">2023-01-02</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Golang/">Golang</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word count:</span><span class="word-count">2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading time:</span><span>7min</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Go gRPC"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="1-微服务">1 微服务</h2>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.mszlu.com/grpc/01/01.html">https://www.mszlu.com/grpc/01/01.html</a></p>
+</blockquote>
+<h2 id="2-protobuf">2 protobuf</h2>
+<h3 id="2-1-概述">2.1 概述</h3>
+<p>protobuf是谷歌开源的一种数据格式，适合高性能，对响应速度有要求的数据传输场景。</p>
+<p>profobuf是二进制数据格式，需要编码和解码，数据本身不具有可读性。因此只能<strong>反序列化</strong>之后得到真正可读的数据。</p>
+<p>优势：</p>
+<ul>
+<li>序列化后体积相比Json和XML很小，适合网络传输</li>
+<li>支持跨平台多语言</li>
+<li>消息格式升级和兼容性还不错</li>
+<li>序列化反序列化速度很快</li>
+</ul>
+<p>安装：</p>
+<ol>
+<li>
+<p>下载通用编译器：<a target="_blank" rel="noopener" href="https://github.com/protocolbuffers/protobuf/releases">https://github.com/protocolbuffers/protobuf/releases</a></p>
+<blockquote>
+<p>下这个<code>protoc-21.7-win64.zip</code></p>
+</blockquote>
+</li>
+<li>
+<p>配置环境变量</p>
+<blockquote>
+<p>举例：<code>F:\ProgramFiles\protoc-21.7-win64\bin</code></p>
+</blockquote>
+</li>
+<li>
+<p>安装go专用的protoc的生成器：</p>
+<p><code>go install github.com/golang/protobuf/protoc-gen-go</code></p>
+<p><code>go install google.golang.org/grpc/cmd/protoc-gen-go-grpc</code></p>
+<blockquote>
+<p>安装后会在<code>GOPATH\bin</code>目录下生成可执行文件<code>protoc-gen-go</code>和<code>protoc-gen-go-grpc</code>，执行<code>protoc</code>命令会自动调用这个插件</p>
+</blockquote>
+<blockquote>
+<p>Goland中也要安装Protocol Buffers插件</p>
+</blockquote>
+</li>
+</ol>
+<p>生成文件：</p>
+<ul>
+<li>
+<p><code>protoc --go_out=./xxxDir --go-grpc_out=./xxxDir ./pbfile/xxx.proto</code></p>
+<blockquote>
+<p>这个会生成两个文件，一个对应<code>message</code>，一个对应<code>service</code></p>
+<p>这样写的话服务端需要额外实现一个接口，生成的proto文件里已经提供了默认实现类：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> grpcServer <span class="keyword">struct</span> &#123;</span><br><span class="line">	pb.UnimplementedXxxServer</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</blockquote>
+</li>
+<li>
+<p><code>protoc --go_out=plugins=grpc:./ ./xxx.proto </code></p>
+<blockquote>
+<p>这样只会生成一个文件</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="2-2-语法">2.2 语法</h3>
+<p><em>“头部”：</em></p>
+<figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 指定的当前proto语法的版本，有2和3</span></span><br><span class="line">syntax = <span class="string">&quot;proto3&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 从执行protoc命令的当前目录开始算起</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;pbfile/xxx.proto&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// option go_package = &quot;path;name&quot;; </span></span><br><span class="line"><span class="comment">// path 表示生成的go文件的存放地址，会自动生成目录的，一般与package一致</span></span><br><span class="line"><span class="comment">// name 表示生成的go文件所属的包名，如果不配置就按下面的package生成</span></span><br><span class="line"><span class="keyword">option</span> go_package=<span class="string">&quot;../service&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 指定go文件生成出来的package</span></span><br><span class="line"><span class="keyword">package</span> service;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<hr>
+<p><em><code>message</code>：</em></p>
+<ul>
+<li>消息就是需要传输的<strong>数据格式</strong>的定义，通过<code>message</code>关键字指定</li>
+</ul>
+<figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">message &#123;</span><br><span class="line">	字段规则 字段类型 字段名 = 标识号</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>
+<p><strong>字段规则</strong>：</p>
+<ul>
+<li><code>required</code>：消息体中<strong>必填字段</strong>，<code>proto3</code>中不需要显式写明<code>required</code>了</li>
+<li><code>optional</code>：消息体中<strong>可选字段</strong>，在go中会生成指针</li>
+<li><code>repeated</code>：消息体中<strong>可重复字段</strong>，在go中重复的会被定义为<strong>切片</strong></li>
+</ul>
+</li>
+<li>
+<p><strong>标识号</strong>：在消息体的定义中，每个字段都必须要有一个唯一的标识号，标识号是<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">[</mo><mn>0</mn><mo separator="true">,</mo><msup><mn>2</mn><mn>29</mn></msup><mo>−</mo><mn>1</mn><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">[0,2^{29}-1]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0641em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">29</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">]</span></span></span></span>范围内的一个整数。</p>
+</li>
+<li>
+<p><strong>字段映射类型</strong>：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">.proto Type</th>
+<th style="text-align:center">Notes</th>
+<th style="text-align:center">Go Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><code>double</code></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"><code>float64</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>float</code></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"><code>float32</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>int32</code></td>
+<td style="text-align:center">使用变长编码，对于负值的效率很低，如果可能有负值，请使用sint64替代</td>
+<td style="text-align:center"><code>int32</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>int64</code></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"><code>int64</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>bool</code></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"><code>bool</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>string</code></td>
+<td style="text-align:center">一个字符串必须是UTF-8编码或者7-bit ASCII编码的文 本。</td>
+<td style="text-align:center"><code>string</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>bytes</code></td>
+<td style="text-align:center">可能包含任意顺序的字节数据。</td>
+<td style="text-align:center"><code>[]byte</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>uint32</code></td>
+<td style="text-align:center">使用变长编码</td>
+<td style="text-align:center"><code>uint32</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>uint64</code></td>
+<td style="text-align:center">使用变长编码</td>
+<td style="text-align:center"><code>uint64</code></td>
+</tr>
+<tr>
+<td style="text-align:center">sint32</td>
+<td style="text-align:center">使用变长编码，这些编码在负值时比int32高效的多</td>
+<td style="text-align:center">int32</td>
+</tr>
+<tr>
+<td style="text-align:center">sint64</td>
+<td style="text-align:center">使用变长编码，有符号的整型值。编码时比通常的int64高效。</td>
+<td style="text-align:center">int64</td>
+</tr>
+<tr>
+<td style="text-align:center">fixed32</td>
+<td style="text-align:center">总是4个字节，如果数值总是比总是比128大的话，这个类型会比uint32高效。</td>
+<td style="text-align:center">uint32</td>
+</tr>
+<tr>
+<td style="text-align:center">fixed64</td>
+<td style="text-align:center">总是8个字节，如果数值总是比总是比256大的话，这个类型会比uint64高效。</td>
+<td style="text-align:center">uint64</td>
+</tr>
+<tr>
+<td style="text-align:center">sfixed32</td>
+<td style="text-align:center">总是4个字节</td>
+<td style="text-align:center">int32</td>
+</tr>
+<tr>
+<td style="text-align:center">sfixed64</td>
+<td style="text-align:center">总是8个字节</td>
+<td style="text-align:center">int64</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<blockquote>
+<p><code>enum</code>类型：</p>
+<p>和<code>message</code>一样定义在外面</p>
+<figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">enum </span><span class="title class_">enumType</span> &#123;</span><br><span class="line">	enumElement0 = <span class="number">0</span></span><br><span class="line">	enumElement1 = <span class="number">1</span></span><br><span class="line">	enumElement2 = <span class="number">2</span></span><br><span class="line">	...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<blockquote>
+<p>默认值：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">类型</th>
+<th style="text-align:center">默认值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">bool</td>
+<td style="text-align:center">false</td>
+</tr>
+<tr>
+<td style="text-align:center">整型</td>
+<td style="text-align:center">0</td>
+</tr>
+<tr>
+<td style="text-align:center">string</td>
+<td style="text-align:center">空字符串&quot;&quot;</td>
+</tr>
+<tr>
+<td style="text-align:center">枚举enum</td>
+<td style="text-align:center">第一个枚举元素的值，因为Protobuf3强制要求第一个枚举元素的值必须是0，所以枚举的默认值就是0；</td>
+</tr>
+<tr>
+<td style="text-align:center">message</td>
+<td style="text-align:center">不是null，而是DEFAULT_INSTANCE</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<blockquote>
+<p><code>Any</code>类型：</p>
+<ul>
+<li><code>import &quot;google/protobuf/any.proto&quot;;</code></li>
+<li><code>google.protobuf.Any</code></li>
+</ul>
+<p>…</p>
+</blockquote>
+<ul>
+<li>
+<p><strong>嵌套消息</strong></p>
+<ul>
+<li><code>message</code>定义出来的消息本身也可以作为一种<strong>字段类型</strong></li>
+<li>在外部引用嵌套消息类型可以用<code>.</code></li>
+</ul>
+<figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">message </span><span class="title class_">Father</span> &#123;</span><br><span class="line">    <span class="keyword">message </span><span class="title class_">Son</span> &#123;</span><br><span class="line">    &#125; </span><br><span class="line">	<span class="keyword">repeated</span> Son info = <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">message </span><span class="title class_">PersonMessage</span> &#123;</span><br><span class="line">	Father.Son info = <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>go语言中消息的<strong>序列化与反序列化</strong>：（<code>[]byte</code>）</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// service.User是protobuf message 生成的</span></span><br><span class="line">user := &amp;service.User&#123;</span><br><span class="line">    Username: <span class="string">&quot;mszlu&quot;</span>,</span><br><span class="line">    Age: <span class="number">20</span>,</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 序列化</span></span><br><span class="line">marshal, err := proto.Marshal(user)</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">    <span class="built_in">panic</span>(err)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 反序列化</span></span><br><span class="line">newUser := &amp;service.User&#123;&#125;</span><br><span class="line">err = proto.Unmarshal(marshal, newUser)</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">    <span class="built_in">panic</span>(err)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<p><em><code>service</code>：</em></p>
+<figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">service </span><span class="title class_">SearchService</span> &#123;</span><br><span class="line">	<span class="function"><span class="keyword">rpc</span> 方法名([stream]参数消息类型) <span class="keyword">returns</span> ([stream]返回值消息类型)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>
+<p>如果想要将<strong>消息类型</strong>用在RPC系统中，可以在.proto文件中定义一个RPC服务接口，在go语言中会生成<code>interface</code>，这就是要进行的<strong>远程过程调用</strong></p>
+<blockquote>
+<p>注意这个参数和返回值类型<strong>只能是<code>message</code></strong>，而且都<strong>只能有一个</strong></p>
+</blockquote>
+</li>
+<li>
+<p><code>stream</code>代表<strong>流式</strong>通信，即会有多次请求或响应，而不是一次直接结束，下文会具体讲</p>
+</li>
+<li>
+<p>protoc-gen后会生成比较复杂的<strong>存根和方法</strong>，具体用法见下文</p>
+</li>
+</ul>
+<h2 id="3-通信">3 通信</h2>
+<h3 id="3-1-一元通信">3.1 一元通信</h3>
+<p><em>服务端：</em></p>
+<ol>
+<li>
+<p>实现服务逻辑</p>
+<ul>
+<li>找到生成的.pb.go文件的<code>XxxxServer</code>接口，在自定义go文件中实现这个接口中的rpc方法</li>
+</ul>
+</li>
+<li>
+<p>注册服务</p>
+<p><code>rpcServer := grpc.NewServer()</code></p>
+<blockquote>
+<p><code>grpc</code>是包名</p>
+</blockquote>
+<p><code>xxxPackage.RegisterXxxxServer(rpcServer, &amp;XxxImpl)</code></p>
+<blockquote>
+<p><code>xxxPackage</code>是<strong>自定义proto文件中指定的包名</strong></p>
+</blockquote>
+</li>
+<li>
+<p>启动服务：</p>
+<p><code>listener, err := net.Listen(&quot;tcp&quot;, &quot;:port&quot;)</code></p>
+<p><code>err := rpcServer.Serve(listener)</code></p>
+</li>
+</ol>
+<hr>
+<p><em>客户端：</em></p>
+<ol>
+<li>
+<p>新建连接</p>
+<p><code>conn, err := grpc.Dial(&quot;ip:port&quot;, grpc.WithTransportCredentials(insecure.NewCredentials()))</code></p>
+<blockquote>
+<p>第二个参数是安全证书</p>
+</blockquote>
+</li>
+<li>
+<p>生成客户端并调用存根</p>
+<p><code>xxxClient := xxxPackage.NewXxxClient(conn)</code></p>
+<p><code>respMessage, err:= xxxClient.XxxMethod(context.Background(), &amp;xxxPackage.XxxMessage)</code></p>
+<blockquote>
+<p>这个<code>XxxMethod</code>就是在proto文件中定义的rpc方法，<code>XxxMessage</code>和<code>respMessage</code>就是在proto文件中定义的消息类型在go语言中的实例</p>
+</blockquote>
+</li>
+<li>
+<p>关闭连接：<code>defer conn.Close()</code></p>
+</li>
+</ol>
+<h3 id="3-2-流式通信">3.2 流式通信</h3>
+<p><em><code>stream</code>概述：</em></p>
+<ul>
+<li>
+<p>在 HTTP/1.1 的时代，同一个时刻只能对一个请求进行处理或者响应，换句话说，下一个请求必须要等当前请求处理完才能继续进行</p>
+<blockquote>
+<p>HTTP/1.1需要注意的是，在服务端没有response的时候，客户端是可以发起多个request的，但服务端依旧是顺序对请求进行处理, 并按照收到请求的次序予以返回。</p>
+</blockquote>
+</li>
+<li>
+<p>HTTP/2 的时代，<strong>多路复用</strong>的特性让一次同时处理多个请求成为了现实，并且同一个 TCP 通道中的请求不分先后、不会阻塞</p>
+</li>
+<li>
+<p>HTTP/2 中引入了<strong>流(Stream)和帧(Frame)<strong>的概念，当 TCP 通道建立以后，后续的所有操作都是以</strong>流</strong>的方式发送的，而<strong>二进制帧是组成流的最小单位</strong>，属于协议层上的流式传输。</p>
+<blockquote>
+<p>HTTP/2 在一个 TCP 连接的基础上虚拟出多个 Stream, Stream 之间可以并发的请求和处理, 并且 HTTP/2 以二进制帧 (frame) 的方式进行数据传送, 并引入了头部压缩 (HPACK), 大大提升了交互效率</p>
+</blockquote>
+</li>
+</ul>
+<hr>
+<p><em>双向<code>stream</code>的服务端：</em></p>
+<ol>
+<li>
+<p>实现服务逻辑</p>
+<ul>
+<li>找到生成的.pb.go文件的<code>XxxxServer</code>接口，在自定义go文件中实现这个接口中的rpc方法，方法的参数对应了<strong>流式参数类型</strong>，一般类型名为：<code>xxxPackage.Xxx_XxxServer</code></li>
+<li>接收请求：<code>for &#123;recv, err := streamMessage.Recv()&#125;</code>
+<ul>
+<li><code>recv</code>就是<strong>消息类型实例</strong></li>
+<li>当<code>err == io.EOF</code>时代表请求结束</li>
+</ul>
+</li>
+<li>响应数据：<code>err := streamMessage.Send(&amp;xxxPackage.XxxMessage&#123;&#125;)</code></li>
+</ul>
+</li>
+<li>
+<p>注册服务</p>
+<p><code>rpcServer := grpc.NewServer()</code></p>
+<blockquote>
+<p><code>grpc</code>是包名</p>
+</blockquote>
+<p><code>xxxPackage.RegisterXxxxServer(rpcServer, &amp;XxxImpl)</code></p>
+<blockquote>
+<p><code>xxxPackage</code>是<strong>自定义proto文件中指定的包名</strong></p>
+</blockquote>
+</li>
+<li>
+<p>启动服务：</p>
+<p><code>listener, err := net.Listen(&quot;tcp&quot;, &quot;:port&quot;)</code></p>
+<p><code>err := rpcServer.Serve(listener)</code></p>
+</li>
+</ol>
+<hr>
+<p><em>双向<code>stream</code>的客户端：</em></p>
+<ol>
+<li>
+<p>新建连接</p>
+<p><code>conn, err := grpc.Dial(&quot;ip:port&quot;, grpc.WithTransportCredentials(insecure.NewCredentials()))</code></p>
+<blockquote>
+<p>第二个参数是安全证书</p>
+</blockquote>
+</li>
+<li>
+<p>生成客户端并调用存根</p>
+<p><code>xxxClient := xxxPackage.NewXxxClient(conn)</code></p>
+<p><code>reqStream, err := xxxClient.XxxMethod(context.Background())</code></p>
+<blockquote>
+<p>这里返回的<code>reqStrem</code>对应了<strong>流式参数类型</strong>，一般类型名为：<code>xxxPackage.Xxx_XxxClient</code></p>
+</blockquote>
+</li>
+<li>
+<p>(开启协程)发送流式请求</p>
+<ul>
+<li>发送请求：<code>reqStream.Send(&amp;xxxPackage.XxxMessage&#123;&#125;)</code></li>
+<li>处理响应：<code>recv, err := reqStream.Recv()</code>
+<ul>
+<li><code>recv</code>就是<strong>消息类型实例</strong></li>
+<li>当<code>err == io.EOF</code>时代表请求结束</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>关闭连接：<code>defer conn.Close()</code></p>
+</li>
+</ol>
+<h2 id="4-安全传输">4 安全传输</h2>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="https://sundocker.online">SunDocker</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://sundocker.online/posts/8f298335.html">https://sundocker.online/posts/8f298335.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Computer/">Computer</a><a class="post-meta__tags" href="/tags/gRPC/">gRPC</a><a class="post-meta__tags" href="/tags/Golang/">Golang</a></div><div class="post_share"><div class="social-share" data-image="/bgs/bg16.jpeg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i> Donate</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.jpg" target="_blank"><img class="post-qr-code-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/wechat.jpg" alt="WeChat"/></a><div class="post-qr-code-desc">WeChat</div></li><li class="reward-item"><a href="/img/alipay.jpg" target="_blank"><img class="post-qr-code-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/alipay.jpg" alt="AliPay"/></a><div class="post-qr-code-desc">AliPay</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/posts/72802800.html"><img class="prev-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/bgs/bg2.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">Linux系统编程</div></div></a></div><div class="next-post pull-right"><a href="/posts/acec9806.html"><img class="next-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/bgs/bg1.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">Gin</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><div><a href="/posts/acec9806.html" title="Gin"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/bgs/bg1.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="fas fa-history fa-fw"></i> 2023-01-02</div><div class="title">Gin</div></div></a></div><div><a href="/posts/db0024fc.html" title="Java gRPC"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/bgs/bg7.jpeg" alt="cover"><div class="content is-center"><div class="date"><i class="fas fa-history fa-fw"></i> 2023-01-18</div><div class="title">Java gRPC</div></div></a></div><div><a href="/posts/a8b02095.html" title="Golang"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/bgs/bg2.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="fas fa-history fa-fw"></i> 2023-01-22</div><div class="title">Golang</div></div></a></div><div><a href="/posts/a9ab4cb3.html" title="Data Mining"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/bgs/bg10.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="fas fa-history fa-fw"></i> 2023-01-02</div><div class="title">Data Mining</div></div></a></div><div><a href="/posts/cc8189c7.html" title="Machine Learning"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/bgs/bg2.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="fas fa-history fa-fw"></i> 2023-01-02</div><div class="title">Machine Learning</div></div></a></div><div><a href="/posts/caeaa4a1.html" title="C++"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/bgs/bg10.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="fas fa-history fa-fw"></i> 2023-01-22</div><div class="title">C++</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%BE%AE%E6%9C%8D%E5%8A%A1"><span class="toc-text">1 微服务</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-protobuf"><span class="toc-text">2 protobuf</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E6%A6%82%E8%BF%B0"><span class="toc-text">2.1 概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E8%AF%AD%E6%B3%95"><span class="toc-text">2.2 语法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E9%80%9A%E4%BF%A1"><span class="toc-text">3 通信</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E4%B8%80%E5%85%83%E9%80%9A%E4%BF%A1"><span class="toc-text">3.1 一元通信</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E6%B5%81%E5%BC%8F%E9%80%9A%E4%BF%A1"><span class="toc-text">3.2 流式通信</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%AE%89%E5%85%A8%E4%BC%A0%E8%BE%93"><span class="toc-text">4 安全传输</span></a></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2022 - 2023 By SunDocker</div><div class="footer_custom_text">Nice to meet you !<br> <a target="_blank" rel="noopener" href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral"> <div id="you-pai-cloud" align="center"> 本网站由 <img class="cdn-icon" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/又拍云_logo6.png" width="5%"> 提供<b>CDN加速/云存储</b>服务 </div> </a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading the Database</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><script src="/js/search/local-search.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex/dist/contrib/copy-tex.min.js"></script><script>(() => {
+  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
+    btf.wrap(item, 'div', { class: 'katex-wrap'})
+  })
+})()</script></div><div class="aplayer no-destroy" data-id="8759530202" data-server="tencent" data-type="playlist" data-order="random" data-fixed="true" data-preload="auto" data-autoplay="true" data-mutex="true"></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/metingjs/dist/Meting.min.js"></script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener scroll 
+  window.tocScrollFn && window.removeEventListener('scroll', window.tocScrollFn)
+  window.scrollCollect && window.removeEventListener('scroll', scrollCollect)
+
+  typeof preloader === 'object' && preloader.initLoading()
+  document.getElementById('rightside').style.cssText = "opacity: ''; transform: ''"
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+  typeof disqusjs === 'object' && disqusjs.destroy()
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+
+  typeof preloader === 'object' && preloader.endLoading()
+})
+
+document.addEventListener('pjax:error', (e) => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --><script data-pjax>
+    function butterfly_categories_card_injector_config(){
+      var parent_div_git = document.getElementById('recent-posts');
+      var item_html = '<style>li.categoryBar-list-item{width:32.3%;}.categoryBar-list{max-height: 380px;overflow:auto;}.categoryBar-list::-webkit-scrollbar{width:0!important}@media screen and (max-width: 650px){.categoryBar-list{max-height: 320px;}}</style><div class="recent-post-item" style="height:auto;width:100%;padding:0px;"><div id="categoryBar"><ul class="categoryBar-list"><li class="categoryBar-list-item" style="background:url(/bgs/bg2.jpg);"> <a class="categoryBar-list-link" onclick="pjax.loadUrl(&quot;categories/Computer-Theory/&quot;);" href="javascript:void(0);">Computer Theory</a><span class="categoryBar-list-count">8</span><span class="categoryBar-list-descr">OS, DB, Network, ...</span></li><li class="categoryBar-list-item" style="background:url(/bgs/bg7.jpeg);"> <a class="categoryBar-list-link" onclick="pjax.loadUrl(&quot;categories/Java-Kotlin/&quot;);" href="javascript:void(0);">Java &amp; Kotlin</a><span class="categoryBar-list-count">13</span><span class="categoryBar-list-descr">JavaEE, Spring, ...</span></li><li class="categoryBar-list-item" style="background:url(/bgs/bg1.jpg);"> <a class="categoryBar-list-link" onclick="pjax.loadUrl(&quot;categories/Data-Persistence/&quot;);" href="javascript:void(0);">Data Persistence</a><span class="categoryBar-list-count">2</span><span class="categoryBar-list-descr">MySQL, Redis, ...</span></li><li class="categoryBar-list-item" style="background:url(/bgs/bg11.jpg);"> <a class="categoryBar-list-link" onclick="pjax.loadUrl(&quot;categories/Frontend/&quot;);" href="javascript:void(0);">Frontend</a><span class="categoryBar-list-count">6</span><span class="categoryBar-list-descr">HTML, JS, Vue, ...</span></li><li class="categoryBar-list-item" style="background:url(/bgs/bg13.jpg);"> <a class="categoryBar-list-link" onclick="pjax.loadUrl(&quot;categories/Golang/&quot;);" href="javascript:void(0);">Golang</a><span class="categoryBar-list-count">3</span><span class="categoryBar-list-descr">Go, Gin, gRPC, ...</span></li><li class="categoryBar-list-item" style="background:url(/bgs/bg10.jpg);"> <a class="categoryBar-list-link" onclick="pjax.loadUrl(&quot;categories/Operations/&quot;);" href="javascript:void(0);">Operations</a><span class="categoryBar-list-count">4</span><span class="categoryBar-list-descr">Linux, Docker, ...</span></li><li class="categoryBar-list-item" style="background:url(/bgs/bg14.jpg);"> <a class="categoryBar-list-link" onclick="pjax.loadUrl(&quot;categories/Project-Management/&quot;);" href="javascript:void(0);">Project Management</a><span class="categoryBar-list-count">3</span><span class="categoryBar-list-descr">Git, Maven, Gradle, ...</span></li></ul></div></div>';
+      console.log('已挂载butterfly_categories_card')
+      parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+      }
+    if( document.getElementById('recent-posts') && (location.pathname ==='/'|| '/' ==='all')){
+    butterfly_categories_card_injector_config()
+    }
+  </script><script data-pjax>
+  function butterfly_clock_anzhiyu_injector_config(){
+    var parent_div_git = document.getElementById('aside-content');
+    var item_html = '<div class="card-widget card-clock"><div class="card-glass"><div class="card-background"><div class="card-content"><div id="hexo_electric_clock"><img class="entered loading" id="card-clock-loading" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.cbd.int/hexo-butterfly-clock-anzhiyu/lib/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading"/></div></div></div></div></div>';
+    console.log('已挂载butterfly_clock_anzhiyu')
+    if(parent_div_git) {
+      parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  }
+  var elist = 'null'.split(',');
+  var cpage = location.pathname;
+  var epage = '/';
+  var qweather_key = '09f05ee29ba043a69e57ecde9f1852e1';
+  var gaud_map_key = 'a152cd225b0ee3daa90af4b09bdad828';
+  var baidu_ak_key = 'undefined';
+  var flag = 0;
+  var clock_rectangle = '116.3,39.9';
+  var clock_default_rectangle_enable = 'false';
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_clock_anzhiyu_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_clock_anzhiyu_injector_config();
+  }
+  </script><script src="https://widget.qweather.net/simple/static/js/he-simple-common.js?v=2.0"></script><script data-pjax src="https://cdn.cbd.int/hexo-butterfly-clock-anzhiyu/lib/clock.min.js"></script><script data-pjax>
+  function butterfly_swiper_injector_config(){
+    var parent_div_git = document.getElementById('recent-posts');
+    var item_html = '<div class="recent-post-item" style="height: auto;width: 100%"><div class="blog-slider swiper-container-fade swiper-container-horizontal" id="swiper_container"><div class="blog-slider__wrp swiper-wrapper" style="transition-duration: 0ms;"><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" onclick="pjax.loadUrl(&quot;posts/6c24763b.html&quot;);" href="javascript:void(0);" alt=""><img width="48" height="48" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/bgs/bg6.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-01-04</span><a class="blog-slider__title" onclick="pjax.loadUrl(&quot;posts/6c24763b.html&quot;);" href="javascript:void(0);" alt="">Knowledge Tree</a><div class="blog-slider__text">No description now, why not come in to have a look?</div><a class="blog-slider__button" onclick="pjax.loadUrl(&quot;posts/6c24763b.html&quot;);" href="javascript:void(0);" alt="">详情       </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" onclick="pjax.loadUrl(&quot;posts/ed318fdc.html&quot;);" href="javascript:void(0);" alt=""><img width="48" height="48" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/bgs/bg10.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-01-04</span><a class="blog-slider__title" onclick="pjax.loadUrl(&quot;posts/ed318fdc.html&quot;);" href="javascript:void(0);" alt="">Quickly Learn About This Blog</a><div class="blog-slider__text">Come to see what exactly the blog contains and what can you get</div><a class="blog-slider__button" onclick="pjax.loadUrl(&quot;posts/ed318fdc.html&quot;);" href="javascript:void(0);" alt="">详情       </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" onclick="pjax.loadUrl(&quot;posts/d33aa198.html&quot;);" href="javascript:void(0);" alt=""><img width="48" height="48" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/bgs/bg8.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-01-04</span><a class="blog-slider__title" onclick="pjax.loadUrl(&quot;posts/d33aa198.html&quot;);" href="javascript:void(0);" alt="">Life Sharing Tree</a><div class="blog-slider__text">No description now, why not come in to have a look?</div><a class="blog-slider__button" onclick="pjax.loadUrl(&quot;posts/d33aa198.html&quot;);" href="javascript:void(0);" alt="">详情       </a></div></div></div><div class="blog-slider__pagination swiper-pagination-clickable swiper-pagination-bullets"></div></div></div>';
+    console.log('已挂载butterfly_swiper')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = '/';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_swiper_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_swiper_injector_config();
+  }
+  </script><script defer src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.js"></script><script defer data-pjax src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper_init.js"></script><script data-pjax>
+  function butterfly_footer_beautify_injector_config(){
+    var parent_div_git = document.getElementById('footer-wrap');
+    var item_html = '<div id="workboard"></div><p id="ghbdages"><a class="github-badge" target="_blank" href="https://hexo.io/" style="margin-inline:5px" data-title="博客框架为Hexo_v6.3.0" title=""><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Frame-Hexo-blue?style=flat&amp;logo=hexo" alt=""/></a><a class="github-badge" target="_blank" href="https://butterfly.js.org/" style="margin-inline:5px" data-title="主题版本Butterfly_v4.4.0" title=""><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Theme-Butterfly-6513df?style=flat&amp;logo=bitdefender" alt=""/></a><a class="github-badge" target="_blank" href="https://beian.miit.gov.cn/#/Integrated/index" style="margin-inline:5px" data-title="本站已在粤进行备案" title=""><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/粤ICP备-2022157052号-e1d492?style=flat&amp;logo=data:image/png;base64,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" alt=""/></a><a class="github-badge" target="_blank" href="https://github.com/" style="margin-inline:5px" data-title="本站项目由Github托管" title=""><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Source-Github-d021d6?style=flat&amp;logo=GitHub" alt=""/></a><a class="github-badge" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" style="margin-inline:5px" data-title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可" title=""><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Copyright-BY--NC--SA%204.0-d42328?style=flat&amp;logo=Claris" alt=""/></a></p>';
+    console.log('已挂载butterfly_footer_beautify')
+    parent_div_git.insertAdjacentHTML("beforeend",item_html)
+    }
+  var elist = 'null'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_footer_beautify_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_footer_beautify_injector_config();
+  }
+  </script><script async src="/js/footer.js"></script><!-- hexo injector body_end end --><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"position":"right","width":120,"height":240,"hOffset":50},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/"});</script></body></html>
