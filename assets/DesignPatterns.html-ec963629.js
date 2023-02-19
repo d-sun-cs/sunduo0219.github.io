@@ -1,1 +1,0 @@
-import{_ as t,V as s,W as n,X as e,Y as a}from"./framework-1f74d948.js";const r={},c=e("h1",{id:"design-patterns",tabindex:"-1"},[e("a",{class:"header-anchor",href:"#design-patterns","aria-hidden":"true"},"#"),a(" Design Patterns")],-1),o=[c];function i(_,d){return s(),n("div",null,o)}const l=t(r,[["render",i],["__file","DesignPatterns.html.vue"]]);export{l as default};

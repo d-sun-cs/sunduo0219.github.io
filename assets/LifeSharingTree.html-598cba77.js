@@ -1,1 +1,0 @@
-import{_ as r,V as a,W as t,X as e,Y as i}from"./framework-1f74d948.js";const n={},s=e("h1",{id:"life-sharing-tree",tabindex:"-1"},[e("a",{class:"header-anchor",href:"#life-sharing-tree","aria-hidden":"true"},"#"),i(" Life Sharing Tree")],-1),c=[s];function o(_,h){return a(),t("div",null,c)}const f=r(n,[["render",o],["__file","LifeSharingTree.html.vue"]]);export{f as default};

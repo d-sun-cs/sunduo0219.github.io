@@ -1,1 +1,0 @@
-import{_ as t,V as r,W as o,X as e,Y as a}from"./framework-1f74d948.js";const c={},n=e("h1",{id:"computer-theory",tabindex:"-1"},[e("a",{class:"header-anchor",href:"#computer-theory","aria-hidden":"true"},"#"),a(" Computer Theory")],-1),s=[n];function _(d,h){return r(),o("div",null,s)}const l=t(c,[["render",_],["__file","index.html.vue"]]);export{l as default};
