@@ -1,1 +1,0 @@
-import{_ as t,W as a,X as o,Y as e,Z as c}from"./framework-3800c176.js";const r={},s=e("h1",{id:"about-me",tabindex:"-1"},[e("a",{class:"header-anchor",href:"#about-me","aria-hidden":"true"},"#"),c(" About Me")],-1),n=[s];function _(d,i){return a(),o("div",null,n)}const h=t(r,[["render",_],["__file","AboutMe.html.vue"]]);export{h as default};
