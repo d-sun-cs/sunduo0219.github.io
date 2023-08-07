@@ -6,21 +6,18 @@ heroImage: /logo.svg
 heroText: 孙铎的个人网站
 tagline: 记录学习与生活
 actions:
-  - text: 个人简介
-    link: /profile/
-
   - text: 计算机基础
     link: /cs/
 
   - text: 高性能计算
     link: /hpc/
 
+  - text: GPGPU编程
+    link: /gpgpu/
+
   - text: 机器学习系统
     link: /mlsys/
-  
-  - text: GPGPU编程
-    link: /gpgu/
-  
+    
   - text: 流行爵士钢琴
     link: /piano/
     

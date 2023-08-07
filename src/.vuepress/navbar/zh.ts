@@ -6,6 +6,6 @@ export const zhNavbar = navbar([
   "/cs/",
   "/hpc/",
   "/mlsys/",
-  "/gpgu/",
+  "/gpgpu/",
   "/piano/",
 ]);

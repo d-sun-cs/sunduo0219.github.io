@@ -1,1 +1,11 @@
 // place your custom styles here
+@page {
+    size: 1600px 900px !important;
+}
+
+.two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 5px;
+    text-align: center;
+}
